@@ -1,13 +1,13 @@
-package com.apapedia.frontend;
+package com.apapedia.frontendwebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FrontendApplication {
+public class FrontendWebappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FrontendApplication.class, args);
+		SpringApplication.run(FrontendWebappApplication.class, args);
 	}
 
 }

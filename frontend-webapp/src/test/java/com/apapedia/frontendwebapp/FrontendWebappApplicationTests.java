@@ -1,10 +1,10 @@
-package com.apapedia.frontend;
+package com.apapedia.frontendwebapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FrontendApplicationTests {
+class FrontendWebappApplicationTests {
 
 	@Test
 	void contextLoads() {
