@@ -11,10 +11,10 @@
 
 | NPM | Nama Lengkap | Fitur yang akan diselesaikan  |
 | ----------| --- | ---------- | 
-| 2106639485 | Mazaya Nur Labiba | - Catalog Service #1  - User Service #1  - Frontend #5, #7, #8 |
+| 2106639485 | Mazaya Nur Labiba | - Catalog Service #1  - User Service #1  - Frontend #7, #8 |
 | 2106637265 | Andi Ayuna Rymang | - Catalog Service #2  - Frontend #2, #3, #11 |
 | 2106751524 | Aulia Najwa Salsabila | - User Service #2  - Frontend #1, #9 |
-| 2106705543 | Marc Salvadore Silitonga | - Order Service #1  - Frontend #15 |
+| 2106705543 | Marc Salvadore Silitonga | - Order Service #1  - Frontend #5, #15 |
 | 2106653344 | Rizka Nisrina Nabila | - Order Service #2 |
 ---
 **Kontrak Tahap 2 Tugas Akhir**
