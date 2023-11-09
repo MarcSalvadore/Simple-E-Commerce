@@ -1,5 +1,8 @@
 package com.apapedia.catalog.restservice;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +20,9 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     // @Transactional
     @Override
     public void createRestCatalog(Catalog catalog) { catalogDb.save(catalog); }
+
+    @Override
+    public List<Catalog> getRestAllCatalogBySellerId(UUID idSeller) {
+        return catalogDb.findBySeller(idSeller);
+    }
 }

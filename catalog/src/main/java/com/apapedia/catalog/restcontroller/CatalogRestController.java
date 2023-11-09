@@ -1,8 +1,13 @@
 package com.apapedia.catalog.restcontroller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +41,11 @@ public class CatalogRestController {
             catalogRestService.createRestCatalog(catalog);
             return catalog;
         }
+    }
+
+    @GetMapping(value = "/catalog/viewall/{idSeller}")
+    public List<Catalog> getAllCatalogBySellerId(@PathVariable("idSeller") UUID idSeller){
+        return catalogRestService.getRestAllCatalogBySellerId(idSeller);
     }
 
 }
