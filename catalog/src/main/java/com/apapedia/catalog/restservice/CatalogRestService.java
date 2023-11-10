@@ -15,4 +15,6 @@ public interface CatalogRestService {
     Catalog getRestCatalogById(UUID id);
 
     Catalog updateRestCatalog(Catalog catalogFromDTO);
+
+    void deleteRestCatalog(Catalog catalog);
 }

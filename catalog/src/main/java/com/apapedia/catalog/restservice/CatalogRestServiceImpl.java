@@ -37,7 +37,7 @@ public class CatalogRestServiceImpl implements CatalogRestService {
 
     @Override
     public List<Catalog> getAllCatalog() {
-        return catalogDb.findAllByOrderByProductNameAsc();
+        return catalogDb.findByIsDeletedFalseOrderByProductNameAsc();
     }
 
     @Override
@@ -59,5 +59,12 @@ public class CatalogRestServiceImpl implements CatalogRestService {
         }
 
         return catalog;
+    }
+
+    @Override
+    public void deleteRestCatalog(Catalog catalog) {
+        catalog.setIsDeleted(true);
+        catalog.setSeller(null);
+        catalogDb.save(catalog);
     }
 }
