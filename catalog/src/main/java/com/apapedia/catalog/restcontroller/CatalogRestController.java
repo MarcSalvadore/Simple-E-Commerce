@@ -51,6 +51,9 @@ public class CatalogRestController {
         return catalogRestService.getRestAllCatalogBySellerId(idSeller);
     }
 
+    @GetMapping(value = "/catalog/viewall")
+    public List<Catalog> retrieveAllCatalog() { return catalogRestService.getAllCatalog(); }
+
     @GetMapping(value = "/catalog/detail/{idCatalog}")
     public Catalog getCatalog(@PathVariable("idCatalog") UUID idCatalog){
         try{
@@ -62,30 +65,14 @@ public class CatalogRestController {
         }
     }
 
-    
-
-    @PutMapping(value = "catalog/update/{idCatalog}")
-    private Catalog updateRestCatalog(@Valid @RequestBody UpdateCatalogRequestDTO catalogDTO, @PathVariable("idCatalog") UUID idCatalog, BindingResult bindingResult){
+    @PutMapping(value = "catalog/update")
+    private Catalog updateRestCatalog(@Valid @RequestBody UpdateCatalogRequestDTO catalogDTO, BindingResult bindingResult){
         if (bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
         } else{
-            // mengambil id Catalog
-            // var idCatalog = catalogDTO.getId();
-
-            // mengambil data catalog yang ingin diupdate b'dasarkan id nya
-            var existingCatalog = catalogRestService.getRestCatalogById(idCatalog);
-
-            if (existingCatalog == null){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Catalog with ID " + idCatalog + " not found");
-            }
-
-            // mengambil data catalog baru
-            var updateCatalog = catalogMapper.updateCatalogRequestDTOToCatalog(catalogDTO);
-
-            //memanggil service update
-            var catalog = catalogRestService.updateRestCatalog(existingCatalog, updateCatalog);
-
+            Catalog catalogFromDto = catalogMapper.updateCatalogRequestDTOToCatalog(catalogDTO);
+            Catalog catalog = catalogRestService.updateRestCatalog(catalogFromDto);
             return catalog;
         }
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.apapedia.catalog.model.Catalog;
 import com.apapedia.catalog.repository.CatalogDb;
-import com.github.javafaker.Cat;
 
 import jakarta.transaction.Transactional;
 
@@ -18,7 +17,6 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     @Autowired
     CatalogDb catalogDb;
 
-    // @Transactional
     @Override
     public void createRestCatalog(Catalog catalog) { catalogDb.save(catalog); }
 
@@ -43,21 +41,23 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     }
 
     @Override
-    public Catalog updateRestCatalog(Catalog catalogFromDTO, Catalog newCatalog) {
+    public Catalog updateRestCatalog(Catalog catalogFromDTO) {
         // ambil catalog lama
         Catalog catalog = getRestCatalogById(catalogFromDTO.getId());
 
         // set catalog baru ke catalog lama
         if (catalog != null){
-            catalog.setProductName(newCatalog.getProductName());
-            catalog.setPrice(newCatalog.getPrice());
-            catalog.setProductDescription(newCatalog.getProductDescription());
-            catalog.setStock(newCatalog.getStock());
-            catalog.setImage(newCatalog.getImage());
-            catalog.setCategory(newCatalog.getCategory());
+            catalog.setProductName(catalogFromDTO.getProductName());
+            catalog.setPrice(catalogFromDTO.getPrice());
+            catalog.setProductDescription(catalogFromDTO.getProductDescription());
+            catalog.setStock(catalogFromDTO.getStock());
+            catalog.setImage(catalogFromDTO.getImage());
+            catalog.setCategory(catalogFromDTO.getCategory());
+            catalog.setSeller(catalogFromDTO.getSeller());
 
             catalogDb.save(catalog);
         }
+
         return catalog;
     }
 }
