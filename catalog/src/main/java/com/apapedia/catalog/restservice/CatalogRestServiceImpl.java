@@ -22,7 +22,7 @@ public class CatalogRestServiceImpl implements CatalogRestService {
 
     @Override
     public List<Catalog> getRestAllCatalogBySellerId(UUID idSeller) {
-        return catalogDb.findBySeller(idSeller);
+        return catalogDb.findBySellerAndIsDeletedFalse(idSeller);
     }
 
     @Override
