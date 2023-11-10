@@ -17,4 +17,7 @@ public interface CatalogRestService {
     Catalog updateRestCatalog(Catalog catalogFromDTO);
 
     void deleteRestCatalog(Catalog catalog);
+
+    // Catalog #8
+    List<Catalog> getRestCatalogByPrice(Integer price);
 }

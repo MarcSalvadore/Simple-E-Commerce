@@ -90,4 +90,16 @@ public class CatalogRestController {
         //Mengembalikan response pesan
         return ResponseEntity.ok("Catalog has been deleted");
     }
+
+    // Catalog #8
+    @GetMapping(value = "/catalog/price/{price}")
+    public List<Catalog> getCatalogByPrice(@PathVariable("price") Integer price) {
+        try{
+            return catalogRestService.getRestCatalogByPrice(price);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Catalog Price" + price + " not found"
+            );
+        }
+    }
 }

@@ -12,4 +12,5 @@ import com.apapedia.catalog.model.Catalog;
 public interface CatalogDb extends JpaRepository<Catalog, UUID> {
     List<Catalog> findBySellerAndIsDeletedFalse(UUID seller);
     List<Catalog> findByIsDeletedFalseOrderByProductNameAsc();
+    List<Catalog> findByPriceAndIsDeletedFalse(Integer price);
 }
