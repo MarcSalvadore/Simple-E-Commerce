@@ -1,5 +1,6 @@
 package com.apapedia.order.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +33,8 @@ public class Cart {
 
     @NotNull
     @Column(name = "total_price", nullable = false)
-    private Integer totalPrice;
+    private Integer totalPrice = 0;
 
     @OneToMany(mappedBy = "cartId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<CartItem> listCartItem;
+    private List<CartItem> listCartItem = new ArrayList<>();
 }

@@ -2,15 +2,19 @@ package com.apapedia.user.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.CustomerMapper;
 import com.apapedia.user.dto.request.CreateCustomerRequestDTO;
+import com.apapedia.user.dto.response.CartResponseDTO;
+import com.apapedia.user.dto.response.CustomerResponseDTO;
 import com.apapedia.user.model.Customer;
 import com.apapedia.user.restservice.CustomerRestService;
 
@@ -34,6 +38,12 @@ public class CustomerRestController {
         } else {
             var customer = customerMapper.createCustomerRequestDTOToCustomer(customerDTO);
             customerRestService.createRestCustomer(customer);
+            CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
+            customerResponseDTO.setId(customer.getCartId());
+            customerResponseDTO.setUserId(customer.getId());
+            String uri = "http://localhost:8083/api/cart/create";
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<CartResponseDTO> res = restTemplate.postForEntity(uri, customerResponseDTO, CartResponseDTO.class);
             return customer;
         }
     }

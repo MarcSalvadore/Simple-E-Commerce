@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.apapedia.order.dto.CartMapper;
+import com.apapedia.order.dto.request.CreateCartRequestDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.model.Order;
@@ -23,13 +25,17 @@ public class OrderRestController {
     @Autowired
     OrderRestService orderRestService;
 
+    @Autowired
+    CartMapper cartMapper;
+
     @PostMapping(value = "/cart/create")
-    public Cart restAddCart(@Valid @RequestBody Cart cart, BindingResult bindingResult) {
+    public Cart restAddCart(@Valid @RequestBody CreateCartRequestDTO cartDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
+            var cart = cartMapper.createCartRequestDTOToCart(cartDTO);
             orderRestService.createRestCart(cart);
             return cart;
         }
