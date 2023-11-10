@@ -1,5 +1,7 @@
 package com.apapedia.user.restservice;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +18,9 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Override
     public void createRestUser(User user) { userDb.save(user); }
+
+    @Override
+    public User getRestUserById(UUID id) {
+        return userDb.findById(id).get();
+    }
 }
