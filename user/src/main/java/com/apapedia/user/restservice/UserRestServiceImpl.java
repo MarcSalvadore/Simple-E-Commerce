@@ -48,5 +48,5 @@ public class UserRestServiceImpl implements UserRestService {
         }
 
         return user;
-    }
+    } 
 }
