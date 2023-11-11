@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -50,5 +51,10 @@ public class UserController {
         ResponseEntity<CreateUserRequestDTO> res = restTemplate.postForEntity(uri, userRequestDTO, CreateUserRequestDTO.class);
 
         return new RedirectView("/");
+    }
+
+    @GetMapping("profile")
+    public String profilePage(Model model) {
+        return "user/profile";
     }
 }
