@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.SellerMapper;
-import com.apapedia.user.dto.request.CreateSellerRequestDTO;
+import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.restservice.SellerRestService;
 
@@ -26,7 +26,7 @@ public class SellerRestController {
     SellerRestService sellerRestService;
 
     @PostMapping(value = "/seller/create")
-    public Seller restAddSeller(@Valid @RequestBody CreateSellerRequestDTO sellerDTO, BindingResult bindingResult) {
+    public Seller restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
