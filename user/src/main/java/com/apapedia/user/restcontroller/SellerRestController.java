@@ -30,9 +30,6 @@ public class SellerRestController {
     @Autowired
     SellerRestService sellerRestService;
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
-
     @PostMapping(value = "/seller/create")
     public Seller restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
@@ -42,12 +39,6 @@ public class SellerRestController {
         } else {  
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
             sellerRestService.createRestSeller(seller);
-            SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
-            sellerResponseDTO.setName(sellerDTO.getName());
-            sellerResponseDTO.setUsername(sellerDTO.getUsername());
-            sellerResponseDTO.setPassword(sellerDTO.getPassword());
-            sellerResponseDTO.setEmail(sellerDTO.getEmail());
-            sellerResponseDTO.setAddress(sellerDTO.getAddress());
             return seller;
         }
     }
