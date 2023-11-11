@@ -1,5 +1,6 @@
 package com.apapedia.catalog.restservice;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -80,26 +81,25 @@ public class CatalogRestServiceImpl implements CatalogRestService {
         return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
     }
 
-    @Override
-    public List<Catalog> getAllCatalogSortedByPrice(Integer price, String sortOrder) {
-        if ("asc".equalsIgnoreCase(sortOrder)) {
-            return catalogDb.findByPriceAndIsDeletedFalseOrderByPriceAsc(price);
-        } else if ("desc".equalsIgnoreCase(sortOrder)) {
-            return catalogDb.findByPriceAndIsDeletedFalseOrderByPriceDesc(price);
-        } else {
-            throw new IllegalArgumentException("Invalid sortOrder value");
-        }
-
-    }
 
     @Override
-    public List<Catalog> getAllCatalogSortedByName(String name, String sortOrder) {
-        if ("asc".equalsIgnoreCase(sortOrder)) {
-            return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductNameAsc(name);
-        } else if ("desc".equalsIgnoreCase(sortOrder)) {
-            return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductNameDesc(name);
-        } else {
-            throw new IllegalArgumentException("Invalid sortOrder value");
+    public List<Catalog> getCatalogListSorted(String sortBy, String sortOrder) {
+        List<Catalog> catalogList = new ArrayList<>();
+
+        if ("price".equalsIgnoreCase(sortBy)) {
+            if ("asc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByPriceAsc();
+            } else if ("desc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByPriceDesc();
+            }
+        } else if ("name".equalsIgnoreCase(sortBy)) {
+            if ("asc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByProductNameAsc();
+            } else if ("desc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByProductNameDesc();
+            }
         }
+
+        return catalogList;
     }
 }

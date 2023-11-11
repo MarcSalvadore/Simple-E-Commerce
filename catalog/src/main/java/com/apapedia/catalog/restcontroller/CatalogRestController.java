@@ -124,13 +124,7 @@ public class CatalogRestController {
         @PathVariable String sortBy,
         @PathVariable String sortOrder
     ){
-        List<Catalog> listCatalog = new ArrayList<>();
-
-        if (sortBy.matches("\\d+")) {
-            listCatalog = catalogRestService.getAllCatalogSortedByPrice(Integer.parseInt(sortBy), sortOrder);
-        } else {
-            listCatalog = catalogRestService.getAllCatalogSortedByName(sortBy, sortOrder);
-        }
+        List<Catalog> listCatalog = catalogRestService.getCatalogListSorted(sortBy, sortOrder);
 
         return listCatalog;
     }
