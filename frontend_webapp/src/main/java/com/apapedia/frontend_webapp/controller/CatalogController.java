@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.result.view.RedirectView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.apapedia.frontend_webapp.dto.request.CreateProductRequestDTO;
+import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
 
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 public class CatalogController {
     @GetMapping("add-product")
     public String formAddProduct(Model model) {
-        var productDTO = new CreateProductRequestDTO();
+        var productDTO = new CreateCatalogRequestDTO();
         String uri = "http://localhost:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCategoryResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCategoryResponseDTO[].class);
@@ -36,7 +36,7 @@ public class CatalogController {
     
     // masih error
     @PostMapping("add-product")
-    public RedirectView addProduct(@Valid @ModelAttribute CreateProductRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public RedirectView addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
             
@@ -48,12 +48,12 @@ public class CatalogController {
             
             redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
             redirectAttributes.addFlashAttribute("error", errorMessage);
-            return new RedirectView("/");
+            return new RedirectView("catalog/form-add-product");
         }
 
         String uri = "http://localhost:8082/api/catalog/add";
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<CreateProductRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO, CreateProductRequestDTO.class);
+        ResponseEntity<CreateCatalogRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO, CreateCatalogRequestDTO.class);
 
         return new RedirectView("/");
     }

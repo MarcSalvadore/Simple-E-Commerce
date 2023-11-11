@@ -18,7 +18,7 @@
                 <div class="justify-content-center">
                     <h2>Add Product</h2>
                     <br>
-                    <form th:action="@{/add-product}" th:object="${productDTO}" method="POST" enctype="multipart/form-data">
+                    <form th:action="@{/add-product}" th:object="${productDTO}" method="POST">
                       Name: <br>
                       <input class="form-control" type="text" th:field="*{productName}" />
                       <br><br>
@@ -36,12 +36,13 @@
                       <br><br>
   
                       Image: <br>
-                      <input type="file" th:field="*{image}" name="imageFile" class="form-control" />
+                      <input type="file" name="imageFile" class="form-control" />
                       <br><br>
   
                       Category: <br>
-                      <select class="form-control" name="category" th:field="*{category}">
+                      <select class="form-control" name="category" th:field="*{category.id}">
                         <option th:each="category: ${listCategory}" th:value="${category.id}" th:text="${category.name}"></option>
+                        <!-- <input type="hidden" th:field="${category.name}" /> -->
                       </select>
                       <br><br>
                       
