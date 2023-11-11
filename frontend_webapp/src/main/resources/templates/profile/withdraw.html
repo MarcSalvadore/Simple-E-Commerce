@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Withdraw</title>
+</head>
+
+<body>
+    <div class="container my-5">
+        <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <div class="row">
+            <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2 text-center">Withdraw APAPAY</h1>
+                        <form th:action="@{/withdraw}" method="post">
+                            <div class="form-group text-center mt-4">
+                                <input class="form-control form-control-lg" type="number" name="amount" placeholder="Enter amount">
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Withdraw</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
