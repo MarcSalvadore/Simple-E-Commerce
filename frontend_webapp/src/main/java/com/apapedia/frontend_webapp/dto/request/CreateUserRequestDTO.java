@@ -1,4 +1,4 @@
-package com.apapedia.frontend_webapp.dto;
+package com.apapedia.frontend_webapp.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public class SellerDTO {
+public class CreateUserRequestDTO {
     @NotBlank(message = "Nama tidak boleh kosong")
     private String name;
 
