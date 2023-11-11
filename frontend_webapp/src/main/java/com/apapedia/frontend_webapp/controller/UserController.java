@@ -26,7 +26,7 @@ public class UserController {
     public String formRegister(Model model){
         return "user/register";
     }
-
+    
     private SellerDTO getData(String name, String username, String email, String password, String address){
         RestTemplate restTemplate = new RestTemplate();
 
