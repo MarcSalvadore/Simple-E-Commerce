@@ -17,32 +17,20 @@
                 <div class="card">
                     <div class="card-body">
                         <h1 class="h2 text-center">Sign Up</h1>
-                        <form th:action="@{/register}" th:object="${userDTO}" method="post">
-                            <div class="form-group mt-2">
-                                <label>Name</label>
-                                <input th:field="*{name}" class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name">
-                            </div>
+                        <form>
                             <div class="form-group mt-2">
                                 <label>Username</label>
-                                <input th:field="*{username}" class="form-control form-control-lg" type="text" name="username" placeholder="Enter your username">
-                            </div>
-                            <div class="form-group mt-2">
-                                <label>Email</label>
-                                <input th:field="*{email}" class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email">
+                                <input class="form-control form-control-lg" type="text" name="name" placeholder="Enter your username">
                             </div>
                             <div class="form-group mt-2">
                                 <label>Password</label>
-                                <input th:field="*{password}" class="form-control form-control-lg" type="password" name="password" placeholder="Enter password">
-                            </div>
-                            <div class="form-group mt-2">
-                                <label>Address</label>
-                                <input th:field="*{address}" class="form-control form-control-lg" type="text" name="address" placeholder="Enter your address">
+                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password">
                             </div>
                             <div class="form-group text-center">
                                 <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Submit</button>
                             </div>
                             <div class="form-group text-center">
-                                <a class="mt-4" th:href="@{/login}">Already have an account? Login</a>
+                                <a class="mt-4" th:href="@{/register}">Don't have an account? Sign Up</a>
                             </div>
                         </form>
                     </div>
