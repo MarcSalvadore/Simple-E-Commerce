@@ -1,10 +1,10 @@
 package com.apapedia.frontend_webapp.dto.request;
 
-import java.math.BigDecimal;
+import org.hibernate.validator.constraints.UUID;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,17 +13,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateProductRequestDTO {
+    private UUID seller;
+    
     @NotBlank(message = "Nama produk tidak boleh kosong")
-    private String name;
+    private String productName;
 
-    @DecimalMin(value = "1.0", inclusive = true, message = "Harga harus minimal 1.0 atau lebih")
-    private BigDecimal price;
+    @PositiveOrZero(message = "Harga harus minimal 1.0 atau lebih")
+    private Integer price;
 
     @NotBlank(message = "Deskripsi produk tidak boleh kosong")
-    private String description;
+    private String productDescription;
 
-    @NotNull(message = "Stok produk tidak boleh kosong")
-    private int stock;
+    @PositiveOrZero(message = "Harga harus minimal 1.0 atau lebih")
+    private Integer stock;
 
     @NotBlank(message = "Masukkan gambar produk")
     private String image;
