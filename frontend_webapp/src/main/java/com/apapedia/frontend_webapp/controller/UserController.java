@@ -52,9 +52,4 @@ public class UserController {
 
         return new RedirectView("/");
     }
-
-    @GetMapping("profile")
-    public String profilePage(Model model) {
-        return "user/profile";
-    }
 }
