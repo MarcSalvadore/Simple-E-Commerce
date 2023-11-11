@@ -73,4 +73,10 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     public List<Catalog> getRestCatalogByPrice(Integer price) {
         return catalogDb.findByPriceAndIsDeletedFalse(price);
     }
+
+    // Catalog #7
+    @Override
+    public List<Catalog> getRestCatalogByName(String name) {
+        return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
+    }
 }

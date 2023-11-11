@@ -20,4 +20,7 @@ public interface CatalogRestService {
 
     // Catalog #8
     List<Catalog> getRestCatalogByPrice(Integer price);
+
+    // Catalog #7
+    List<Catalog> getRestCatalogByName(String name);
 }

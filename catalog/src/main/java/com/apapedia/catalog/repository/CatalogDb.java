@@ -13,4 +13,5 @@ public interface CatalogDb extends JpaRepository<Catalog, UUID> {
     List<Catalog> findBySellerAndIsDeletedFalse(UUID seller);
     List<Catalog> findByIsDeletedFalseOrderByProductNameAsc();
     List<Catalog> findByPriceAndIsDeletedFalse(Integer price);
+    List<Catalog> findByProductNameContainingIgnoreCaseAndIsDeletedFalse(String name);
 }
