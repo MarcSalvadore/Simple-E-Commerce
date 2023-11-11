@@ -1,5 +1,6 @@
 package com.apapedia.catalog.restservice;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,5 +73,33 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     @Override
     public List<Catalog> getRestCatalogByPrice(Integer price) {
         return catalogDb.findByPriceAndIsDeletedFalse(price);
+    }
+
+    // Catalog #7
+    @Override
+    public List<Catalog> getRestCatalogByName(String name) {
+        return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
+    }
+
+
+    @Override
+    public List<Catalog> getCatalogListSorted(String sortBy, String sortOrder) {
+        List<Catalog> catalogList = new ArrayList<>();
+
+        if ("price".equalsIgnoreCase(sortBy)) {
+            if ("asc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByPriceAsc();
+            } else if ("desc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByPriceDesc();
+            }
+        } else if ("name".equalsIgnoreCase(sortBy)) {
+            if ("asc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByProductNameAsc();
+            } else if ("desc".equalsIgnoreCase(sortOrder)) {
+                catalogList = catalogDb.findByIsDeletedFalseOrderByProductNameDesc();
+            }
+        }
+
+        return catalogList;
     }
 }
