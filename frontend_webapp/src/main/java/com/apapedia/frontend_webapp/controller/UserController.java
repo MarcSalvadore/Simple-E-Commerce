@@ -40,7 +40,7 @@ public class UserController {
             }
 
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-            return new RedirectView("/");
+            return new RedirectView("/register");
         }
 
         // disini kasih if else kalo username/password/email udah ada tp ntar aja dah
