@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/apps/home/home.dart';
+import 'package:frontend_mobile/apps/user/pages/register.dart';
 
 class Login extends StatefulWidget{
   const Login({Key? key, required String title}) : super(key: key);
@@ -98,7 +99,22 @@ class _LoginState extends State<Login>{
                                 ),
                               ),
                             )
-                          )
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, Register.id);
+                            },
+                            child: const Text(
+                              "Don't have an account? Sign up",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blue, // You can customize the color
+                              ),
+                            )
+                          ),
                         ],
                       )
                     ],

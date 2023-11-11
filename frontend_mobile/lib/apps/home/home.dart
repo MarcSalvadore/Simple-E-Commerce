@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile/components/appbar.dart';
 import 'package:frontend_mobile/components/drawer.dart';
+import 'package:frontend_mobile/constant.dart';
 
 class Home extends StatelessWidget{
   const Home({super.key, required String title});
@@ -8,10 +10,7 @@ class Home extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Apapedia"),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: CustomAppBar(title: "APAPEDIA"),
       drawer: buildDrawer(context),
     );
   }

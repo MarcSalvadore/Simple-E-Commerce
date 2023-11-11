@@ -4,6 +4,7 @@ import 'package:frontend_mobile/apps/home/home.dart';
 class Register extends StatefulWidget{
   const Register({Key? key, required String title}) : super(key: key);
   static const ROUTE_NAME = '/register';
+  static String id = 'register';
 
   @override
   State<Register> createState() => _RegisterState();
