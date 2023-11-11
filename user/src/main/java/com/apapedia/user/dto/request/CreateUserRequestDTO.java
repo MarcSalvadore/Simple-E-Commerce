@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
-public class CreateCustomerRequestDTO {
+public class CreateUserRequestDTO {
     @NotBlank(message = "Nama tidak boleh kosong")
     private String name;
 

@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.SellerMapper;
-import com.apapedia.user.dto.request.CreateSellerRequestDTO;
+import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.response.SellerResponseDTO;
 import com.apapedia.user.model.Seller;
 import com.apapedia.user.restservice.SellerRestService;
@@ -34,7 +34,7 @@ public class SellerRestController {
     private WebClient.Builder webClientBuilder;
 
     @PostMapping(value = "/seller/create")
-    public ResponseEntity<SellerResponseDTO> restAddSeller (@Valid @RequestBody CreateSellerRequestDTO sellerDTO, BindingResult bindingResult) {
+    public Seller restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
@@ -48,7 +48,7 @@ public class SellerRestController {
             sellerResponseDTO.setPassword(sellerDTO.getPassword());
             sellerResponseDTO.setEmail(sellerDTO.getEmail());
             sellerResponseDTO.setAddress(sellerDTO.getAddress());
-            return 
+            return seller;
         }
     }
 }

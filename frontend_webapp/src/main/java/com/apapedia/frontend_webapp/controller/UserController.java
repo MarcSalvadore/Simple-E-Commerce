@@ -49,13 +49,4 @@ public class UserController {
         SellerDTO responseBody = responseEntity.getBody();
         return responseBody;
     }
-
-    @PostMapping(value = "/register")
-    private SellerDTO registerSeller(@Valid @RequestBody SellerDTO sellerDTO, BindingResult bindingResult){
-        SellerDTO seller = getData(sellerDTO.getName(), sellerDTO.getUsername(), sellerDTO.getEmail(), sellerDTO.getPassword(), sellerDTO.getAddress());
-        buku.setJudul(translatedTitle.getData().getTranslatedText());
-        bukuRestService.updateRestBuku(buku);
-
-        return buku;
-    }
 }
