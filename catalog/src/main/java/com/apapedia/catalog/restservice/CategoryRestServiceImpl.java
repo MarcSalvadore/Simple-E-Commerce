@@ -1,5 +1,7 @@
 package com.apapedia.catalog.restservice;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +15,8 @@ public class CategoryRestServiceImpl implements CategoryRestService {
 
     @Override
     public void createRestCategory(Category category) { categoryDb.save(category); }
+
+    // Catalog #10
+    @Override
+    public List<Category> retrieveAllCategory() { return categoryDb.findAll(); }
 }
