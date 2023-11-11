@@ -9,5 +9,4 @@ import com.apapedia.user.model.User;
 
 @Repository
 public interface UserDb extends JpaRepository<User, UUID> {
-    
 }
