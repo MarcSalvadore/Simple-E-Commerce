@@ -10,4 +10,9 @@ public class ProfileController {
     public String profilePage(Model model) {
         return "profile/profile";
     }
+
+    @GetMapping("withdraw")
+    public String formWithdraw(Model model) {
+        return "profile/withdraw";
+    }
 }
