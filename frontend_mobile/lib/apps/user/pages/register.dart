@@ -33,8 +33,8 @@ class _RegisterState extends State<Register>{
                       // SizedBox(
                       //   height: size.width * 0.1,
                       // ),
-                      Stack(
-                        children: const [
+                      const Stack(
+                        children: [
                           Center(
                             child: Text('Sign Up',
                             textAlign: TextAlign.center,
@@ -56,7 +56,7 @@ class _RegisterState extends State<Register>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Enter your name",
                                 labelText: "Name",
                               ),
@@ -68,7 +68,7 @@ class _RegisterState extends State<Register>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Enter your username",
                                 labelText: "Username",
                               ),
@@ -80,7 +80,7 @@ class _RegisterState extends State<Register>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Enter your email",
                                 labelText: "Email",
                               ),
@@ -92,7 +92,7 @@ class _RegisterState extends State<Register>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Enter your password",
                                 labelText: "Password",
                               ),
@@ -104,7 +104,7 @@ class _RegisterState extends State<Register>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Enter your address",
                                 labelText: "Address",
                               ),

@@ -23,9 +23,9 @@ class Apapedia extends StatelessWidget {
       ),
       initialRoute: Home.id,
       routes: {
-        Home.id: (context) => Home(title: 'Home'),
-        Login.id: (context) => Login(title: 'Login'),
-        Register.id: (context) => Register(title: 'Register'),
+        Home.id: (context) => const Home(title: 'Home'),
+        Login.id: (context) => const Login(title: 'Login'),
+        Register.id: (context) => const Register(title: 'Register'),
       },
     );
   }

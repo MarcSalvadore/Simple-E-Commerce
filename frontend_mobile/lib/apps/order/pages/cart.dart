@@ -15,7 +15,7 @@ class _CartState extends State<Cart>{
     @override
     Widget build(BuildContext context){
       return Scaffold( //bebas
-        appBar: CustomAppBar(title: "Cart"),
+        appBar: const CustomAppBar(title: "Cart"),
         drawer: buildDrawer(context), 
 
       );
