@@ -79,4 +79,27 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     public List<Catalog> getRestCatalogByName(String name) {
         return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
     }
+
+    @Override
+    public List<Catalog> getAllCatalogSortedByPrice(Integer price, String sortOrder) {
+        if ("asc".equalsIgnoreCase(sortOrder)) {
+            return catalogDb.findByPriceAndIsDeletedFalseOrderByPriceAsc(price);
+        } else if ("desc".equalsIgnoreCase(sortOrder)) {
+            return catalogDb.findByPriceAndIsDeletedFalseOrderByPriceDesc(price);
+        } else {
+            throw new IllegalArgumentException("Invalid sortOrder value");
+        }
+
+    }
+
+    @Override
+    public List<Catalog> getAllCatalogSortedByName(String name, String sortOrder) {
+        if ("asc".equalsIgnoreCase(sortOrder)) {
+            return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductNameAsc(name);
+        } else if ("desc".equalsIgnoreCase(sortOrder)) {
+            return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductNameDesc(name);
+        } else {
+            throw new IllegalArgumentException("Invalid sortOrder value");
+        }
+    }
 }

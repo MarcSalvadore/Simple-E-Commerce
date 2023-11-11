@@ -23,4 +23,8 @@ public interface CatalogRestService {
 
     // Catalog #7
     List<Catalog> getRestCatalogByName(String name);
+
+    // Catalog #9
+    List<Catalog> getAllCatalogSortedByPrice(Integer price, String sortOrder);
+    List<Catalog> getAllCatalogSortedByName(String name, String sortOrder);
 }

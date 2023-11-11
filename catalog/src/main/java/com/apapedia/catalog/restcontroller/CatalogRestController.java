@@ -117,4 +117,21 @@ public class CatalogRestController {
         }
         return listCatalog;
     }
+
+    // Catalog 9
+    @GetMapping("/catalog/sort/{sortBy}/{sortOrder}")
+    private List<Catalog> getSortCatalog(
+        @PathVariable String sortBy,
+        @PathVariable String sortOrder
+    ){
+        List<Catalog> listCatalog = new ArrayList<>();
+
+        if (sortBy.matches("\\d+")) {
+            listCatalog = catalogRestService.getAllCatalogSortedByPrice(Integer.parseInt(sortBy), sortOrder);
+        } else {
+            listCatalog = catalogRestService.getAllCatalogSortedByName(sortBy, sortOrder);
+        }
+
+        return listCatalog;
+    }
 }
