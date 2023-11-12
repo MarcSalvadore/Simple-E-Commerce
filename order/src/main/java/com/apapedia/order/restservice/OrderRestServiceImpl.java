@@ -1,5 +1,7 @@
 package com.apapedia.order.restservice;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +42,9 @@ public class OrderRestServiceImpl implements OrderRestService {
 
     @Override
     public void createRestOrderItem(OrderItem orderItem) { orderItemDb.save(orderItem); };
+
+    @Override
+    public Cart getCartById(UUID idCart) {
+        return cartDb.findById(idCart).orElseThrow();
+    }
 }
