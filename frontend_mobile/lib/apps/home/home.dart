@@ -9,7 +9,7 @@ class Home extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: const CustomAppBar(title: "APAPEDIA"),
+      appBar: CustomAppBar(title: "APAPEDIA"),
       drawer: buildDrawer(context),
     );
   }
