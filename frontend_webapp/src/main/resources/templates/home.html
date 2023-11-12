@@ -6,6 +6,7 @@
     <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
     <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -28,50 +29,47 @@
                             <p class="card-text">Category: Category</p>
                             <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p>
                             <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p>
-                            <a type="button" class="btn btn-warning" th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
+                            <a type="button" class="btn btn-warning"
+                                th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <br><br>
+
+        <!-- Dummy Data for Bar Chart -->
+        <canvas id="barChart"></canvas>
+        <script>
+            var ctx = document.getElementById('barChart').getContext('2d');
+            var barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Iphone 15', 'Sepatu skena', 'Laptop', 'Jam', 'Mouse'],
+                    datasets: [{
+                        label: 'Top 5 Products Sold',
+                        data: [10, 8, 15, 12, 20],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'category',
+                            labels: ['Iphone 15', 'Sepatu skena', 'Laptop', 'Jam', 'Mouse']
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
     </div>
 </body>
 
-<!-- <body>
-    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-    <div class="container text-center">
-        <h1>Catalog List</h1>
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Seller</th>
-                    <th>Price</th>
-                    <th>Product Name</th>
-                    <th>Product Description</th>
-                    <th>Category</th>
-                    <th>Stock</th>
-                    <th>Image</th>
-                    <th>Is Deleted</th>
-                </tr>
-            </thead>
-            <tbody>
-              
-                <tr th:each="catalog : ${listCatalog}">
-                    <td th:text="${catalog.id}"></td>
-                    <td th:text="${catalog.seller}"></td>
-                    <td th:text="${catalog.price}"></td>
-                    <td th:text="${catalog.productName}"></td>
-                    <td th:text="${catalog.productDescription}"></td>
-                    <td>category</td>
-                    <td th:text="${catalog.stock}"></td>
-                    <td th:text="${catalog.image}"></td>
-                    <td th:text="${catalog.isDeleted}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</body> -->
 
 </html>
