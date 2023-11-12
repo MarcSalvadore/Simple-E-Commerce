@@ -13,7 +13,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
       ),
       body: Center(
         child: Container(
@@ -22,32 +22,32 @@ class _ProfileState extends State<Profile> {
             elevation: 4, // Add elevation to the card for a shadow effect
             child: Column(
               children: [
-                ListTile(
+                const ListTile(
                   title: Text("Profile", style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                ListTile(
+                const ListTile(
                   title: Text("Name"),
                   subtitle: Text(": ujang"),
                 ),
-                ListTile(
+                const ListTile(
                   title: Text("Email"),
                   subtitle: Text(": ujang.ganteng123@gmail.com"),
                 ),
-                ListTile(
+                const ListTile(
                   title: Text("Address"),
                   subtitle: Text(": Jl. bareng yuk"),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     // Implementasi code untuk Edit Profile page
                   },
-                  child: Text("Edit Profile"),
+                  child: const Text("Edit Profile"),
                 ),
-                ListTile(
+                const ListTile(
                   title: Text("Apapay", style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                ListTile(
+                const ListTile(
                   title: Text("Balance"),
                   subtitle: Text(": Rp 9.000.000"),
                 ),
@@ -56,17 +56,17 @@ class _ProfileState extends State<Profile> {
                     // Untuk berpindah ke Withdraw page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Withdraw(title: 'Withdraw')),
+                      MaterialPageRoute(builder: (context) => const Withdraw(title: 'Withdraw')),
                     );
                   },
-                  child: Text("Withdraw"),
+                  child: const Text("Withdraw"),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     // Implementasi code untuk sign-out user
                   },
-                  child: Text("Sign Out"),
+                  child: const Text("Sign Out"),
                 ),
               ],
             ),
