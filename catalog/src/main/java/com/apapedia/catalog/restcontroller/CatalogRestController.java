@@ -94,13 +94,16 @@ public class CatalogRestController {
     }
 
     // Catalog #8
-    @GetMapping(value = "/catalog/price/{price}")
-    public List<Catalog> getCatalogByPrice(@PathVariable("price") Integer price) {
+    @GetMapping(value = "/catalog/price")
+    public List<Catalog> getCatalogByPrice(
+        @RequestParam(name = "priceMax", required = false) Integer priceMax,
+        @RequestParam(name = "priceMin", required = false) Integer priceMin
+    ) {
         try{
-            return catalogRestService.getRestCatalogByPrice(price);
+            return catalogRestService.getRestCatalogByPrice(priceMax, priceMin);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Catalog Price" + price + " not found"
+                HttpStatus.NOT_FOUND, "Catalog not found"
             );
         }
     }

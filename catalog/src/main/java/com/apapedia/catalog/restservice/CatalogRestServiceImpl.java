@@ -71,8 +71,8 @@ public class CatalogRestServiceImpl implements CatalogRestService {
 
     // Catalog #8
     @Override
-    public List<Catalog> getRestCatalogByPrice(Integer price) {
-        return catalogDb.findByPriceAndIsDeletedFalse(price);
+    public List<Catalog> getRestCatalogByPrice(Integer priceMax, Integer priceMin) {
+        return catalogDb.findByPriceBetweenAndIsDeletedFalse(priceMax, priceMin);
     }
 
     // Catalog #7
