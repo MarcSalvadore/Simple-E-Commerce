@@ -10,8 +10,68 @@
 
 <body>
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
-    <div class="container text-center">
-        <h1>nanti disini ada list catalog, ambil data catalog dulu dari catalog service</h1>
+    <div class="container">
+        <div class="text-center pt-5">
+            <h2>List Catalog</h2>
+            <a type="button" class="btn btn-primary m-2" href="/add-product">Add Product</a>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Iterate over the listCatalog -->
+            <div th:each="catalog : ${listCatalog}">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${catalog.productName}"></h5>
+                            <p class="card-text" th:text="'Seller: ' + ${catalog.seller}"></p>
+                            <p class="card-text" th:text="'Price: ' + ${catalog.price}"></p>
+                            <p class="card-text" th:text="${catalog.productDescription}"></p>
+                            <p class="card-text">Category: Category</p>
+                            <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p>
+                            <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p>
+                            <a type="button" class="btn btn-warning" th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
+
+<!-- <body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container text-center">
+        <h1>Catalog List</h1>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Seller</th>
+                    <th>Price</th>
+                    <th>Product Name</th>
+                    <th>Product Description</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Image</th>
+                    <th>Is Deleted</th>
+                </tr>
+            </thead>
+            <tbody>
+              
+                <tr th:each="catalog : ${listCatalog}">
+                    <td th:text="${catalog.id}"></td>
+                    <td th:text="${catalog.seller}"></td>
+                    <td th:text="${catalog.price}"></td>
+                    <td th:text="${catalog.productName}"></td>
+                    <td th:text="${catalog.productDescription}"></td>
+                    <td>category</td>
+                    <td th:text="${catalog.stock}"></td>
+                    <td th:text="${catalog.image}"></td>
+                    <td th:text="${catalog.isDeleted}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body> -->
+
 </html>
