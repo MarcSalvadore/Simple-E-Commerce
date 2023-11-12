@@ -1,8 +1,8 @@
-package com.apapedia.catalog.dto.request;
+package com.apapedia.frontend_webapp.dto.request;
 
 import java.util.UUID;
 
-import com.apapedia.catalog.model.Category;
+import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 public class CreateCatalogRequestDTO {
-    // @NotNull
     private UUID seller;
 
     @NotBlank(message = "Nama Produk tidak boleh kosong")
@@ -34,9 +32,10 @@ public class CreateCatalogRequestDTO {
     private String image;
     
     @NotNull
-    private Category category;
+    private ReadCategoryResponseDTO category;
 
     @NotNull(message = "Stok Produk tidak boleh ksoong")
     @PositiveOrZero(message = "Stok harus positif")
     private Integer stock;
+    
 }
