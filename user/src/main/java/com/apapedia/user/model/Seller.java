@@ -18,5 +18,5 @@ import lombok.Setter;
 public class Seller extends User {
     @NotNull
     @Column(name = "category", nullable = false)
-    private String category = "biasa";
+    private String category;
 }
