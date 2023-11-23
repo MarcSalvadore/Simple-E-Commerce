@@ -3,6 +3,8 @@ package com.apapedia.catalog.model;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "category")
+@JsonIgnoreProperties(value={"listCatalog"}, allowSetters = true)
 public class Category {
     @Id
     private UUID id = UUID.randomUUID();

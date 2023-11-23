@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apapedia.catalog.model.Category;
 import com.apapedia.catalog.restservice.CategoryRestService;
 
+import jakarta.transaction.Transactional;
+
 @RestController
 @RequestMapping("/api")
 public class CategoryRestController {
@@ -17,6 +19,7 @@ public class CategoryRestController {
     CategoryRestService categoryRestService;
 
     // Catalog #10
+    @Transactional
     @GetMapping(value = "/category/viewall")
     public List<Category> getAllCategory() { return categoryRestService.retrieveAllCategory(); }
 }

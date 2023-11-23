@@ -17,6 +17,7 @@ public class BaseController {
         ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
         ReadCatalogResponseDTO[] listCatalog = res.getBody();
 
+        model.addAttribute("imageLink", "http://localhost:8082/api/image/");
         model.addAttribute("listCatalog", listCatalog);
 
         return "home";
