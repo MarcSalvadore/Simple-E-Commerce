@@ -1,5 +1,6 @@
 package com.apapedia.catalog.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -92,14 +94,41 @@ public class CatalogRestController {
     }
 
     // Catalog #8
-    @GetMapping(value = "/catalog/price/{price}")
-    public List<Catalog> getCatalogByPrice(@PathVariable("price") Integer price) {
+    @GetMapping(value = "/catalog/price")
+    public List<Catalog> getCatalogByPrice(
+        @RequestParam(name = "priceMax", required = false) Integer priceMax,
+        @RequestParam(name = "priceMin", required = false) Integer priceMin
+    ) {
         try{
-            return catalogRestService.getRestCatalogByPrice(price);
+            return catalogRestService.getRestCatalogByPrice(priceMax, priceMin);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Catalog Price" + price + " not found"
+                HttpStatus.NOT_FOUND, "Catalog not found"
             );
         }
+    }
+
+    // Catalog 7
+    @GetMapping("/catalog/search")
+    private List<Catalog> getCatalogByName(@RequestParam(name="query", required=false) String search){
+        List<Catalog> listCatalog = new ArrayList<>();
+
+        if (search != null && !search.isEmpty()) {
+            listCatalog = catalogRestService.getRestCatalogByName(search);
+        } else {
+            listCatalog = catalogRestService.getAllCatalog();
+        }
+        return listCatalog;
+    }
+
+    // Catalog 9
+    @GetMapping("/catalog/sort/{sortBy}/{sortOrder}")
+    private List<Catalog> getSortCatalog(
+        @PathVariable String sortBy,
+        @PathVariable String sortOrder
+    ){
+        List<Catalog> listCatalog = catalogRestService.getCatalogListSorted(sortBy, sortOrder);
+
+        return listCatalog;
     }
 }

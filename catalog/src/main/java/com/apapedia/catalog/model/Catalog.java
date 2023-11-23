@@ -53,7 +53,7 @@ public class Catalog {
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
-    @NotNull
+    // @NotNull
     @Column(name = "image", nullable = false)
     private String image;
 

@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -40,7 +39,7 @@ public class UserController {
                 errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
             }
 
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            redirectAttributes.addFlashAttribute("error", errorMessage);
             return new RedirectView("/register");
         }
 
@@ -51,5 +50,13 @@ public class UserController {
         ResponseEntity<CreateUserRequestDTO> res = restTemplate.postForEntity(uri, userRequestDTO, CreateUserRequestDTO.class);
 
         return new RedirectView("/");
+    }
+
+    @GetMapping("login")
+    public String formLogin(Model model){
+        // var user = new CreateUserRequestDTO();
+
+        // model.addAttribute("userDTO", user);
+        return "user/login";
     }
 }
