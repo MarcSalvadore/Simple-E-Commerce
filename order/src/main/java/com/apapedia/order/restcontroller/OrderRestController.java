@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-// import com.apapedia.order.dto.CartItemMapper;
+import com.apapedia.order.dto.CartItemMapper;
 import com.apapedia.order.dto.CartMapper;
 import com.apapedia.order.dto.request.CreateCartItemRequestDTO;
 import com.apapedia.order.dto.request.CreateCartRequestDTO;
@@ -30,8 +30,8 @@ public class OrderRestController {
     @Autowired
     CartMapper cartMapper;
 
-    // @Autowired
-    // CartItemMapper cartItemMapper;
+    @Autowired
+    CartItemMapper cartItemMapper;
 
     @PostMapping(value = "/cart/create")
     public Cart restAddCart(@Valid @RequestBody CreateCartRequestDTO cartDTO, BindingResult bindingResult) {
@@ -89,12 +89,8 @@ public class OrderRestController {
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
-            // CartItem cartItem = cartItemMapper.createCartItemRequestDTOToCartItem(cartItemRequest);
-            Cart cart = orderRestService.getCartById(cartItemRequest.getCartId());
-
-            CartItem cartItem = new CartItem();
-            cartItem.setProductId(cartItemRequest.getProductId());
-            cartItem.setQuantity(cartItemRequest.getQuantity());
+            CartItem cartItem = cartItemMapper.createCartItemRequestDTOToCartItem(cartItemRequest);
+            Cart cart = orderRestService.getCartById(cartItemRequest.getCartUUID());
             
             cartItem.setCartId(cart);
 

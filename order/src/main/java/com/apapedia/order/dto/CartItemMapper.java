@@ -1,11 +1,11 @@
-// package com.apapedia.order.dto;
+package com.apapedia.order.dto;
 
-// import org.mapstruct.Mapper;
+import org.mapstruct.Mapper;
 
-// import com.apapedia.order.dto.request.CreateCartItemRequestDTO;
-// import com.apapedia.order.model.CartItem;
+import com.apapedia.order.dto.request.CreateCartItemRequestDTO;
+import com.apapedia.order.model.CartItem;
 
-// @Mapper(componentModel = "spring")
-// public interface CartItemMapper {
-//     CartItem createCartItemRequestDTOToCartItem(CreateCartItemRequestDTO createCartItemRequestDTO);
-// } 
+@Mapper(componentModel = "spring")
+public interface CartItemMapper {
+    CartItem createCartItemRequestDTOToCartItem(CreateCartItemRequestDTO createCartItemRequestDTO);
+} 

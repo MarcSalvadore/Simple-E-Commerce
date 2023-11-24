@@ -45,6 +45,6 @@ public class OrderRestServiceImpl implements OrderRestService {
 
     @Override
     public Cart getCartById(UUID idCart) {
-        return cartDb.findById(idCart).orElseThrow();
+        return cartDb.findById(idCart).get();
     }
 }

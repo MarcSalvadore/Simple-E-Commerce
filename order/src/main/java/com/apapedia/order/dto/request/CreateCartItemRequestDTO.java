@@ -2,6 +2,8 @@ package com.apapedia.order.dto.request;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class CreateCartItemRequestDTO {
 
-    private UUID cartId;
+    @JsonProperty("cartId")
+    private UUID cartUUID;
 
     private UUID productId;
 
