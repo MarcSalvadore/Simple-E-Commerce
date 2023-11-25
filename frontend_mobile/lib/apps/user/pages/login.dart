@@ -35,8 +35,8 @@ class _LoginState extends State<Login>{
                       // SizedBox(
                       //   height: size.width * 0.1,
                       // ),
-                      const Stack(
-                        children: [
+                      Stack(
+                        children: const [
                           Center(
                             child: Text('Login',
                             textAlign: TextAlign.center,
@@ -58,7 +58,7 @@ class _LoginState extends State<Login>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "Enter your username",
                                 labelText: "Username",
                               ),
@@ -70,8 +70,7 @@ class _LoginState extends State<Login>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
-                              obscureText: true,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "Enter your password",
                                 labelText: "Password",
                               ),
@@ -101,7 +100,7 @@ class _LoginState extends State<Login>{
                               ),
                             )
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 15,
                           ),
                           TextButton(

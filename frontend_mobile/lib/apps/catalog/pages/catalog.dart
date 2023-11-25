@@ -15,7 +15,7 @@ class _CatalogState extends State<Catalog>{
     @override
     Widget build(BuildContext context){
       return Scaffold( //bebas
-        appBar: const CustomAppBar(title: "Catalog"),
+        appBar: CustomAppBar(title: "Catalog"),
         drawer: buildDrawer(context),
 
       );
