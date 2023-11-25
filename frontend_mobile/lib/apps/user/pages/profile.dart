@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'withdraw.dart'; // Import the Withdraw screen
+import 'update-profile.dart'; // Import the Update Profile screen
 
 class Profile extends StatefulWidget {
   const Profile({Key? key, required String title}) : super(key: key);
@@ -40,7 +41,10 @@ class _ProfileState extends State<Profile> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Implementasi code untuk Edit Profile page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UpdateProfilePage(title: 'UpdateProfilePage')),
+                    );
                   },
                   child: Text("Edit Profile"),
                 ),

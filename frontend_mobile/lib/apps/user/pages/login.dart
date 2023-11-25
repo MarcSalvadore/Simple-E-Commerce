@@ -70,6 +70,7 @@ class _LoginState extends State<Login>{
                               horizontal: 25.0, vertical: 10.0
                             ),
                             child: TextFormField(
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 hintText: "Enter your password",
                                 labelText: "Password",
