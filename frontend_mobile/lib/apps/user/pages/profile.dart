@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'withdraw.dart'; // Import the Withdraw screen
 import 'update-profile.dart'; // Import the Update Profile screen
+import 'package:frontend_mobile/components/appbar.dart';
+import 'package:frontend_mobile/components/drawer.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key, required String title}) : super(key: key);
@@ -13,9 +15,8 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Profile"),
-      ),
+      appBar: const CustomAppBar(title: "APAPEDIA"),
+      drawer: buildDrawer(context),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20),

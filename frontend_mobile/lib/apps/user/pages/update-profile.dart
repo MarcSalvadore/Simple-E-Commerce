@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../home/home.dart';
+import 'package:frontend_mobile/components/appbar.dart';
+import 'package:frontend_mobile/components/drawer.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({Key? key, required String title}) : super(key: key);
@@ -15,17 +17,18 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Update Profile'),
-      ),
+      appBar: const CustomAppBar(title: "APAPEDIA"),
+      drawer: buildDrawer(context),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
                 children: [
+                  ListTile(
+                    title: Text("Update Profile", style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
                   SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 25.0, vertical: 10.0
@@ -92,9 +95,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       initialValue: "Jl. bareng yuk",
                       // onchanged, onsaved, autovalidatemode belum
                     ),
-                  ),
-                  const SizedBox(
-                    height: 25,
                   ),
                   TextButton(
                       onPressed: () {
