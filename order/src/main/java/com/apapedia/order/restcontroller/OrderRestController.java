@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,6 +67,23 @@ public class OrderRestController {
             orderRestService.createRestCartItem(cartItem);
             return cartItem;
         }
+    }
+
+    @PutMapping(value = "/cartitem/editQuantity")
+    public CartItem restEditCartItemQuantity(@Valid @RequestBody CartItem cartItem, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+            );
+        } else {
+            orderRestService.editCartItemQuantity(cartItem);
+            return cartItem;
+        }
+    }
+
+    @DeleteMapping(value = "/cartitem/delete/{cartItemId}")
+    public void restDeleteCartItem(@PathVariable("cartItemId") String cartItemId) {
+        orderRestService.deleteCartItem(UUID.fromString(cartItemId));
     }
 
     @PostMapping(value = "/order/create")
