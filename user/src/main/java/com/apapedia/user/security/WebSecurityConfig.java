@@ -27,7 +27,7 @@ public class WebSecurityConfig {
 
     @Autowired
     JwtTokenFilter jwtTokenFilter;
-    
+
     @Bean
     @Order(1)
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
@@ -35,7 +35,7 @@ public class WebSecurityConfig {
             .securityMatcher("/api/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/api/user/add").hasAuthority("Admin")
+                .requestMatchers("/api/*").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain webfilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(Customizer.withDefaults())
             .authorizeHttpRequests(requests -> requests
