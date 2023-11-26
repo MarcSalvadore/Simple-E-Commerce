@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/components/appbar.dart';
 import 'package:frontend_mobile/components/drawer.dart';
+import 'detailProduk.dart'; // Import halaman detailProduk.dart
 
 class Catalog extends StatefulWidget {
   const Catalog({Key? key, required String title}) : super(key: key);
@@ -134,6 +135,8 @@ class _CatalogState extends State<Catalog> {
   }
 }
 
+// ... (kode lainnya)
+
 // Halaman Detail Produk
 class ProductDetail extends StatelessWidget {
   final String productName;
@@ -149,35 +152,10 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Product Detail'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              productImage,
-              height: 150,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: 16),
-            Text(
-              productName,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              productPrice,
-              style: TextStyle(fontSize: 20, color: Colors.green),
-            ),
-          ],
-        ),
-      ),
-    );
+    return DetailProduk(); // Gunakan halaman DetailProduk
   }
 }
+
 
 // Halaman Histori Pesanan
 class OrderHistory extends StatelessWidget {
