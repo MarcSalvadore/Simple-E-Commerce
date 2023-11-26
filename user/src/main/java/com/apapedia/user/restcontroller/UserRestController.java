@@ -1,10 +1,13 @@
 package com.apapedia.user.restcontroller;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,6 +53,13 @@ public class UserRestController {
             UserModel user = userRestService.updateRestUser(userFromDto);
             return user;
         }
+    }
+
+    @DeleteMapping(value = "user/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
+        UserModel user = userRestService.getUserById(id);
+        userRestService.deleteUser(user);
+        return new ResponseEntity<>("User has been deleted", HttpStatus.OK);
     }
     
 

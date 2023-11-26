@@ -15,4 +15,6 @@ public interface UserRestService {
     UserModel updateRestUser(UserModel user);
 
     String encrypt(String password);
+
+    void deleteUser(UserModel user);
 }

@@ -30,7 +30,7 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public UserModel getUserById(UUID id) {
         for(UserModel user : retrieveAllUser()) {
-            if (user.getId().equals(id)) {
+            if (user.getId().equals(id) && user.getDeleted() == false) {
                 return user;
             }
         }
@@ -57,5 +57,11 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public String encrypt(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public void deleteUser(UserModel user) {
+        user.setDeleted(true);
+        createRestUser(user);
     } 
 }

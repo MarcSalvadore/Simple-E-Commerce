@@ -65,4 +65,8 @@ public class UserModel{
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "is_deleted")
+    private Boolean deleted = false;
+
 }

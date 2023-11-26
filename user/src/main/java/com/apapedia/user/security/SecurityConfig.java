@@ -23,6 +23,8 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/seller/create")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/customer/create")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/user/delete/{id}")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/user/{id}")).permitAll()
                 .anyRequest().authenticated()
             )
             // .formLogin((form) -> form 
