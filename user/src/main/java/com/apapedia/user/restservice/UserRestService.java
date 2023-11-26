@@ -13,4 +13,6 @@ public interface UserRestService {
     UserModel getUserById(UUID id);
 
     UserModel updateRestUser(UserModel user);
+
+    String encrypt(String password);
 }

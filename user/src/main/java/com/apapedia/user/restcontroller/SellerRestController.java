@@ -35,7 +35,6 @@ public class SellerRestController {
         } else { 
             // log.info(authentication.getName() + " added new seller."); 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
-            seller.setRole(Role.SELLER);
             sellerRestService.createRestSeller(seller);
             return seller;
         }

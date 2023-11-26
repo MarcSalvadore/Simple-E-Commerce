@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.user.model.UserModel;
@@ -16,6 +17,9 @@ import jakarta.transaction.Transactional;
 public class UserRestServiceImpl implements UserRestService {
     @Autowired
     UserDb userDb;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void createRestUser(UserModel user) { userDb.save(user); }
@@ -48,5 +52,10 @@ public class UserRestServiceImpl implements UserRestService {
         }
 
         return user;
+    }
+
+    @Override
+    public String encrypt(String password) {
+        return passwordEncoder.encode(password);
     } 
 }
