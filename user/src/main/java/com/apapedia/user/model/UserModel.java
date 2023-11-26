@@ -33,7 +33,7 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class UserModel {
+public class UserModel{
     @Id
     private UUID id = UUID.randomUUID();
     
