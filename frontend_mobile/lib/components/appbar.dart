@@ -4,10 +4,10 @@ import 'package:frontend_mobile/constant.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  CustomAppBar({required this.title});
+  const CustomAppBar({super.key, required this.title});
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
