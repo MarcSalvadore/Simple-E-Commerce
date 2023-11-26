@@ -1,5 +1,8 @@
 package com.apapedia.order.restservice;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.model.Order;
@@ -13,4 +16,12 @@ public interface OrderRestService {
     void createRestOrder(Order order);
 
     void createRestOrderItem(OrderItem orderItem);
+
+    void editCartItemQuantity(CartItem cartItem);
+
+    List<CartItem> retrieveRestAllCartItem();
+
+    CartItem getRestCartItemById(UUID cartItemId);
+
+    void deleteCartItem(UUID cartItem);
 }
