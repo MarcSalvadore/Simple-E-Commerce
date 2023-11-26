@@ -16,6 +16,7 @@ import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.response.CartResponseDTO;
 import com.apapedia.user.dto.response.CustomerResponseDTO;
 import com.apapedia.user.model.Customer;
+import com.apapedia.user.model.Role;
 import com.apapedia.user.restservice.CustomerRestService;
 
 import jakarta.validation.Valid;
@@ -43,6 +44,7 @@ public class CustomerRestController {
             String uri = "http://localhost:8083/api/cart/create";
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<CartResponseDTO> res = restTemplate.postForEntity(uri, customerResponseDTO, CartResponseDTO.class);
+            customer.setRole(Role.CUSTOMER);
             customerRestService.createRestCustomer(customer);
             return customer;
         }

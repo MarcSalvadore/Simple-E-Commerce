@@ -16,9 +16,7 @@ import com.apapedia.user.model.Seller;
 import com.apapedia.user.restservice.SellerRestService;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/api")
 public class SellerRestController {
