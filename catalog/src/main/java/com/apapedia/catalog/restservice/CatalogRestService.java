@@ -19,7 +19,7 @@ public interface CatalogRestService {
     void deleteRestCatalog(Catalog catalog);
 
     // Catalog #8
-    List<Catalog> getRestCatalogByPrice(Integer price);
+    List<Catalog> getRestCatalogByPrice(Integer priceMax, Integer priceMin);
 
     // Catalog #7
     List<Catalog> getRestCatalogByName(String name);
