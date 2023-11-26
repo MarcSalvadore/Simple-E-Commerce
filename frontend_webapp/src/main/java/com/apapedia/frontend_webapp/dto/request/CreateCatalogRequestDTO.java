@@ -2,7 +2,10 @@ package com.apapedia.frontend_webapp.dto.request;
 
 import java.util.UUID;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +32,12 @@ public class CreateCatalogRequestDTO {
     private String productDescription;
 
     // @NotBlank(message = "Harap unggah Gambar Produk")
-    private String image;
+
+    @JsonIgnore
+    @NotNull
+    private MultipartFile imageFile;
+
+    private byte[] image;
     
     @NotNull
     private ReadCategoryResponseDTO category;

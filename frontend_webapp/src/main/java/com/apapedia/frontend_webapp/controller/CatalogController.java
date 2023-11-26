@@ -1,5 +1,6 @@
 package com.apapedia.frontend_webapp.controller;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class CatalogController {
     
     // masih error
     @PostMapping("add-product")
-    public RedirectView addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public RedirectView addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException{
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
             
@@ -51,10 +52,14 @@ public class CatalogController {
             return new RedirectView("catalog/form-add-product");
         }
 
+        productRequestDTO.setSeller(UUID.randomUUID());
+        productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
+
         String uri = "http://localhost:8082/api/catalog/add";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<CreateCatalogRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO, CreateCatalogRequestDTO.class);
 
+        redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
         return new RedirectView("/");
     }
 }

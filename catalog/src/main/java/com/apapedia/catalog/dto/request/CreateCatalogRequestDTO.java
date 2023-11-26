@@ -30,8 +30,8 @@ public class CreateCatalogRequestDTO {
     @NotBlank(message = "Deskripsi Produk tidak boleh kosong")
     private String productDescription;
 
-    // @NotBlank(message = "Harap unggah Gambar Produk")
-    private String image;
+    @NotNull(message = "Harap unggah Gambar Produk")
+    private byte[] image;
     
     @NotNull
     private Category category;

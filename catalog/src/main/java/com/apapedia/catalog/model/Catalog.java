@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "catalog")
-@JsonIgnoreProperties(value={"category"}, allowSetters = true)
+@JsonIgnoreProperties(value={"image"}, allowSetters = true)
 public class Catalog {
     @Id
     private UUID id = UUID.randomUUID();
@@ -55,7 +56,8 @@ public class Catalog {
 
     // @NotNull
     @Column(name = "image", nullable = false)
-    private String image;
+    @Lob
+    private byte[] image;
 
     // Atribut untuk soft delete catalog
     @NotNull
