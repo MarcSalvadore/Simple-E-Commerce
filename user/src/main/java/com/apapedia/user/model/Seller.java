@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "seller")
-public class Seller extends User {
+public class Seller extends UserModel {
     @NotNull
     @Column(name = "category", nullable = false)
     private String category;

@@ -59,4 +59,5 @@ public class UserController {
         // model.addAttribute("userDTO", user);
         return "user/login";
     }
+    @PostMapping("login")
 }
