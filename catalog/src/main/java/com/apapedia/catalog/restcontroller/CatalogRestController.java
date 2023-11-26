@@ -6,7 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +51,11 @@ public class CatalogRestController {
             catalogRestService.createRestCatalog(catalog);
             return catalog;
         }
+    }
+
+    @GetMapping(value = "/image/{idCatalog}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public Resource getImageFile(@PathVariable("idCatalog") UUID idCatalog) {
+        return new ByteArrayResource(catalogRestService.getRestCatalogById(idCatalog).getImage());
     }
 
     @GetMapping(value = "/catalog/viewall/{idSeller}")
@@ -94,13 +102,16 @@ public class CatalogRestController {
     }
 
     // Catalog #8
-    @GetMapping(value = "/catalog/price/{price}")
-    public List<Catalog> getCatalogByPrice(@PathVariable("price") Integer price) {
+    @GetMapping(value = "/catalog/price")
+    public List<Catalog> getCatalogByPrice(
+        @RequestParam(name = "priceMin", required = false) Integer priceMin,
+        @RequestParam(name =  "priceMax", required = false) Integer priceMax
+    ) {
         try{
-            return catalogRestService.getRestCatalogByPrice(price);
+            return catalogRestService.getRestCatalogByPrice(priceMin, priceMax);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Catalog Price" + price + " not found"
+                HttpStatus.NOT_FOUND, "Catalog not found"
             );
         }
     }

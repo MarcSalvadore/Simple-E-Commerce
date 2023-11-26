@@ -1,6 +1,10 @@
 package com.apapedia.order.restservice;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.order.model.Cart;
@@ -40,4 +44,24 @@ public class OrderRestServiceImpl implements OrderRestService {
 
     @Override
     public void createRestOrderItem(OrderItem orderItem) { orderItemDb.save(orderItem); };
+
+    @Override
+    public Cart getCartById(UUID idCart) {
+        return cartDb.findById(idCart).orElseThrow();
+    }
+
+    @Override
+    public List<Order> getRestOrderByCustomerId(UUID customerId) {
+        return orderDb.findByCustomer(customerId);
+    }
+
+    @Override
+    public List<Order> getRestOrderBySellerId(UUID sellerId) {
+        return orderDb.findBySeller(sellerId);
+    }
+
+    @Override
+    public void updateOrderStatus(UUID orderId, int newStatus) {
+        orderDb.updateOrderStatus(orderId, newStatus);
+     }
 }
