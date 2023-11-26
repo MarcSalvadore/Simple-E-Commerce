@@ -16,6 +16,7 @@ import org.springframework.web.reactive.result.view.RedirectView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
+import com.apapedia.frontend_webapp.dto.request.UpdateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
 
 import jakarta.validation.Valid;
@@ -62,4 +63,22 @@ public class CatalogController {
         redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
         return new RedirectView("/");
     }
+
+    // masi blm bener
+    @GetMapping("update-product")
+    public String formUpdateCatalog(Model model){
+        var productDTO = new UpdateCatalogRequestDTO();
+        String uri = "http://localhost:8082/api/category/viewall";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ReadCategoryResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCategoryResponseDTO[].class);
+        ReadCategoryResponseDTO[] listCategory = res.getBody();
+
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("listCategory", listCategory);
+        
+        return "catalog/form-update-product";
+    }
+
+    
+
 }
