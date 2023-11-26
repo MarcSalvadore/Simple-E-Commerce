@@ -3,6 +3,8 @@ package com.apapedia.order.restservice;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.ResponseEntity;
+
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.model.Order;
@@ -24,4 +26,9 @@ public interface OrderRestService {
     CartItem getRestCartItemById(UUID cartItemId);
 
     void deleteCartItem(UUID cartItem);
+    Cart getCartById(UUID idCart);
+
+    List<Order> getRestOrderByCustomerId(UUID customerId);
+    List<Order> getRestOrderBySellerId(UUID sellerId);
+    void updateOrderStatus(UUID orderId, int newStatus);
 }
