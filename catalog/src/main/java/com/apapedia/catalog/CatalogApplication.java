@@ -21,25 +21,57 @@ public class CatalogApplication {
 	@Transactional
 	CommandLineRunner run(CategoryRestService categoryRestService) {
 		return args -> {
-			var categoryElektronik = new Category();
-			categoryElektronik.setName("Gadget & Elektronik");
-			categoryRestService.createRestCategory(categoryElektronik);
+			var category1 = new Category();
+			category1.setName("Aksesoris Fashion");
+			categoryRestService.createRestCategory(category1);
 
-			var categoryFashion = new Category();
-			categoryFashion.setName("Fashion & Kecantikan");
-			categoryRestService.createRestCategory(categoryFashion);
+			var category2 = new Category();
+			category2.setName("Buku & Alat Tulis");
+			categoryRestService.createRestCategory(category2);
 
-			var categoryHarian = new Category();
-			categoryHarian.setName("Kebutuhan Harian");
-			categoryRestService.createRestCategory(categoryHarian);
+			var category3 = new Category();
+			category3.setName("Elektronik");
+			categoryRestService.createRestCategory(category3);
 
-			var categoryHobi = new Category();
-			categoryHobi.setName("Mainan & Hobi");
-			categoryRestService.createRestCategory(categoryHobi);
+			var category4 = new Category();
+			category4.setName("Fashion Bayi & Anak");
+			categoryRestService.createRestCategory(category4);
 
-			var categoryDekorasi = new Category();
-			categoryDekorasi.setName("Perlengkapan Rumah & Dekorasi");
-			categoryRestService.createRestCategory(categoryDekorasi);
+			var category5 = new Category();
+			category5.setName("Fashion Muslim");
+			categoryRestService.createRestCategory(category5);
+
+			var category6 = new Category();
+			category6.setName("Fotografi");
+			categoryRestService.createRestCategory(category6);
+
+			var category7 = new Category();
+			category7.setName("Hobi & Koleksi");
+			categoryRestService.createRestCategory(category7);
+
+			var category8 = new Category();
+			category8.setName("Jam Tangan");
+			categoryRestService.createRestCategory(category8);
+			
+			var category9 = new Category();
+			category9.setName("Perawatan & Kecantikan");
+			categoryRestService.createRestCategory(category9);
+
+			var category10 = new Category();
+			category10.setName("Makanan & Minuman");
+			categoryRestService.createRestCategory(category10);
+
+			var category11 = new Category();
+			category11.setName("Otomotif");
+			categoryRestService.createRestCategory(category11);
+
+			var category12 = new Category();
+			category12.setName("Perlengkapan Rumah");
+			categoryRestService.createRestCategory(category12);
+
+			var category13 = new Category();
+			category13.setName("Souvenir & Party Supplies");
+			categoryRestService.createRestCategory(category13);
 		};
 	}
 }
