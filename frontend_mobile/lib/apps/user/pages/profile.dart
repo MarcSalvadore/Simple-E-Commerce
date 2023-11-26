@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'withdraw.dart'; // Import the Withdraw screen
+import 'topup.dart'; // Import the Withdraw screen
 import 'update-profile.dart'; // Import the Update Profile screen
 import 'package:frontend_mobile/components/appbar.dart';
 import 'package:frontend_mobile/components/drawer.dart';
@@ -61,10 +61,10 @@ class _ProfileState extends State<Profile> {
                     // Untuk berpindah ke Withdraw page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Withdraw(title: 'Withdraw')),
+                      MaterialPageRoute(builder: (context) => TopUp(title: 'TopUp')),
                     );
                   },
-                  child: Text("Withdraw"),
+                  child: Text("Top Up"),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
