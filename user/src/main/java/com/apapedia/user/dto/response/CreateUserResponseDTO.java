@@ -1,18 +1,17 @@
-package com.apapedia.user.dto.request;
+package com.apapedia.user.dto.response;
+import java.util.UUID;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-
-public class CreateUserRequestDTO {
+public class CreateUserResponseDTO {
+    private UUID id;
     private String name;
     private String username;
-    private String password;
     private String email;
     private String address;
 }

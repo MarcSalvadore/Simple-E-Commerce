@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 
 import jakarta.transaction.Transactional;
@@ -18,14 +18,14 @@ public class UserRestServiceImpl implements UserRestService {
     UserDb userDb;
 
     @Override
-    public void createRestUser(User user) { userDb.save(user); }
+    public void createRestUser(UserModel user) { userDb.save(user); }
 
     @Override
-    public List<User> retrieveAllUser() { return userDb.findAll(); }
+    public List<UserModel> retrieveAllUser() { return userDb.findAll(); }
 
     @Override
-    public User getUserById(UUID id) {
-        for(User user : retrieveAllUser()) {
+    public UserModel getUserById(UUID id) {
+        for(UserModel user : retrieveAllUser()) {
             if (user.getId().equals(id)) {
                 return user;
             }
@@ -34,8 +34,8 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public User updateRestUser(User userFromDto) {
-        User user = getUserById(userFromDto.getId());
+    public UserModel updateRestUser(UserModel userFromDto) {
+        UserModel user = getUserById(userFromDto.getId());
 
         if(user != null) {
             user.setName(userFromDto.getName());

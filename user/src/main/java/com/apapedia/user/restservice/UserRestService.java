@@ -3,14 +3,14 @@ package com.apapedia.user.restservice;
 import java.util.List;
 import java.util.UUID;
 
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
 
 public interface UserRestService {
-    void createRestUser(User user);
+    void createRestUser(UserModel user);
 
-    List<User> retrieveAllUser();
+    List<UserModel> retrieveAllUser();
 
-    User getUserById(UUID id);
+    UserModel getUserById(UUID id);
 
-    User updateRestUser(User user);
+    UserModel updateRestUser(UserModel user);
 }

@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
-import com.apapedia.user.model.User;
+import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.UserRestService;
 
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class UserRestController {
     UserMapper userMapper;
     
     @GetMapping(value = "/user/{id}")
-    private User getUser(@PathVariable("id") UUID id){
+    private UserModel getUser(@PathVariable("id") UUID id){
         try {
             return userRestService.getUserById(id);
         } catch (Exception e) {
@@ -41,13 +41,13 @@ public class UserRestController {
     }
     
     @PutMapping(value = "user/update")
-    private User updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
+    private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
         } else {
-            User userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
-            User user = userRestService.updateRestUser(userFromDto);
+            UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
+            UserModel user = userRestService.updateRestUser(userFromDto);
             return user;
         }
     }

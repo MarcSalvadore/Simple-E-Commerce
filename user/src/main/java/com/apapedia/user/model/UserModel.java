@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class User {
+public class UserModel {
     @Id
     private UUID id = UUID.randomUUID();
     
@@ -59,4 +61,8 @@ public class User {
     @NotNull
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt = new Date();
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EnumRole role;
 }
