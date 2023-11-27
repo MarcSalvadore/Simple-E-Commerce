@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 
 import jakarta.validation.Valid;
 
@@ -54,9 +55,29 @@ public class UserController {
 
     @GetMapping("login")
     public String formLogin(Model model){
-        // var user = new CreateUserRequestDTO();
-
-        // model.addAttribute("userDTO", user);
+        var user  = new LoginJwtRequestDTO();
+        model.addAttribute("userDTO", user);
         return "user/login";
+    }
+
+    @PostMapping("login")
+    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
+
+            //Mengambil setiap error message yang ada
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String defaultMessage = error.getDefaultMessage();
+                errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
+            }
+
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return new RedirectView("/login");
+        }
+        String uri = "http://localhost:8081/api/login";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<LoginJwtRequestDTO> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, LoginJwtRequestDTO.class);
+
+        return new RedirectView("/");
     }
 }
