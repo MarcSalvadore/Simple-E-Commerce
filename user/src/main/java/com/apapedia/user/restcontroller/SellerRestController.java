@@ -31,12 +31,10 @@ public class SellerRestController {
     @Autowired
     SellerRestService sellerRestService;
 
-    @PostMapping(value = "/seller/create")
+    @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
-            );
+                return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else { 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
             sellerRestService.createRestSeller(seller);

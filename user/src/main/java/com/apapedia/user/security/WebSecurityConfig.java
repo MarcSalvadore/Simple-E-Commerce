@@ -50,27 +50,27 @@ public class WebSecurityConfig {
             return http.build();
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain webfilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(Customizer.withDefaults())
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin((form) -> form 
-                .loginPage("http://localhost:8084/login")
-                .permitAll()
-                .defaultSuccessUrl("http://localhost:8084/login/")
-            )
-            // .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            //     .logoutSuccessUrl("/login"))
+    // @Bean
+    // @Order(2)
+    // public SecurityFilterChain webfilterChain(HttpSecurity http) throws Exception {
+    //     http
+    //         .csrf(Customizer.withDefaults())
+    //         .authorizeHttpRequests(requests -> requests
+    //             .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
+    //             .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
+    //             .anyRequest().authenticated()
+    //         )
+    //         .formLogin((form) -> form 
+    //             .loginPage("http://localhost:8084/login")
+    //             .permitAll()
+    //             .defaultSuccessUrl("http://localhost:8084/login/")
+    //         )
+    //         // .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+    //         //     .logoutSuccessUrl("/login"))
 
-        ;
-        return http.build();
-    }
+    //     ;
+    //     return http.build();
+    // }
     @Bean
     public BCryptPasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
