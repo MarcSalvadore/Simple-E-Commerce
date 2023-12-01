@@ -10,8 +10,11 @@ import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 @Controller
 public class BaseController {
     @GetMapping("/")
-    public String home(Model model) {
- 
+    public String home( Model model) {
+        // if (authentication != null && authentication.isAuthenticated()) {
+        //     String username = authentication.getName();
+        //     model.addAttribute("username", username);
+        // }
         String uri = "http://localhost:8082/api/catalog/viewall";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);

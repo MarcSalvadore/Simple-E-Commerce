@@ -29,7 +29,7 @@
       <!-- menu profile di pojok kanan atas kalo udah login -->
       <li class="nav navbar-nav navbar-right dropdown">
         <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Hello, ujang!
+          Hello, <span th:text="${#authentication.getName()}">Username</span>!
         </a>
         <ul class="dropdown-menu dropdown-menu-light">
             <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>

@@ -40,7 +40,6 @@ public class WebSecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login").permitAll()
-                // .requestMatchers("/api/login").permitAll()
                 .requestMatchers("/api/seller/**").hasAuthority("SELLER")
                 .requestMatchers("/api/customer/**").hasAuthority("CUSTOMER")
                 .anyRequest().authenticated()
@@ -65,8 +64,8 @@ public class WebSecurityConfig {
     //             .permitAll()
     //             .defaultSuccessUrl("http://localhost:8084/login/")
     //         )
-    //         // .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-    //         //     .logoutSuccessUrl("/login"))
+    //         .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+    //             .logoutSuccessUrl("http://localhost:8084/login"))
 
     //     ;
     //     return http.build();

@@ -1,19 +1,15 @@
-package com.apapedia.user.dto.request;
+package com.apapedia.user.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-
-public class CreateUserRequestDTO {
+public class CurrentUserResponseDTO {
     private String name;
     private String username;
     private String password;
-    private String email;
     private String address;
-    private String category;
 }

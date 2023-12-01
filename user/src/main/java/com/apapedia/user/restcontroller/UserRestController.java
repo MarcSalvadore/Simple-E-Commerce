@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
+import com.apapedia.user.dto.response.CurrentUserResponseDTO;
 import com.apapedia.user.dto.response.LoginJwtResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.UserRestService;
@@ -54,6 +56,19 @@ public class UserRestController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    // private static UserModel getCurrentUser() {
+    //     return ((UserModel) SecurityContextHolder.getContext()
+    //             .getAuthentication()
+    //             .getPrincipal());
+    // }
+
+    // @GetMapping("/current")
+    // @PreAuthorize("hasAuthority('user:read')")
+    // public ResponseEntity<CurrentUserResponseDTO> getCurrentUserProfile() {
+    //     CurrentUserResponseDTO response = userRestService.getCurrentUser(getCurrentUser().getUsername());
+    //     return new ResponseEntity<>(response, HttpStatus.OK);
+    // }
     
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
@@ -77,51 +92,31 @@ public class UserRestController {
             return user;
         }
     }
-    // private void authenticate(String username, String password) throws Exception {
-    //     try {
-    //         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-    //     } catch (DisabledException e) {
-    //         throw new Exception("USER_DISABLED", e);
-    //     } catch (BadCredentialsException e) {
-    //         throw new Exception("INVALID_CREDENTIALS", e);
-    //     }
-    // }
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
         try {
-            // authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+            authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
             final String token = jwtUtils.generateJwtToken(userDetails.getUsername());
-            return ResponseEntity.ok(new LoginJwtResponseDTO(token));
+            LoginJwtResponseDTO res = new LoginJwtResponseDTO();
+            res.setToken(token);
+            return ResponseEntity.ok(res);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-        // authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
-        // final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
-        // final String token = jwtUtils.generateJwtToken(userDetails.getUsername());
-        // return ResponseEntity.ok(new LoginJwtResponseDTO(token));
-        
-        // Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword()));
-        // if (authentication.isAuthenticated()) {
-        //     return new ResponseEntity<>(new LoginJwtResponseDTO(jwtUtils.generateJwtToken(loginJwtRequestDTO.getUsername())), HttpStatus.OK);
-        // }
-        // else {
-        //     throw new ResponseStatusException(
-        //         HttpStatus.NOT_FOUND, "User not found"
-        //     );
-        // }
     }
-    // @PreAuthorize("hasAuthority('SELLER')")
-    // @GetMapping("/ping")
-    // public ResponseEntity<String> test() {
-    //     try {
-    //         return ResponseEntity.ok("Ping berhasil!");
-    //     } catch (Exception e){
-    //         throw new RuntimeException(e);
-    //     }
-    // } 
+
 }
 

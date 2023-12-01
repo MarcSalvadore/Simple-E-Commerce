@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
+import com.apapedia.user.dto.response.CurrentUserResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 

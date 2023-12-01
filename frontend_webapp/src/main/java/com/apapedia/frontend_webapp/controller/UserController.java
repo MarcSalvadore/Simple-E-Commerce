@@ -35,45 +35,36 @@ public class UserController {
         model.addAttribute("userDTO", user);
         return "user/register";
     }
+
     @PostMapping("register")
-    public String registerSeller(@ModelAttribute CreateUserRequestDTO userDTO, Model model, HttpServletRequest request){
-        HttpSession session = request.getSession(false);
-        String jwtToken = (String) session.getAttribute("token");
-        CreateUserResponseDTO userResultDTO = userService.sendSeller(userDTO, jwtToken);
-        // if (userResultDTO.getId() == null) {
-        //     return 
-        // }
-        model.addAttribute("user", userResultDTO);
-        return "success-add-user";
+    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String defaultMessage = error.getDefaultMessage();
+                errorMessage.append(defaultMessage).append("<br>");
+            }
+
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return new RedirectView("/register");
+        }
+
+        try {
+            String uri = "http://localhost:8081/api/seller/create";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(uri, userRequestDTO, String.class);
+
+            // Registration successful, add a success message
+            redirectAttributes.addFlashAttribute("success", "Registration successful!");
+        } catch (Exception e) {
+            // Registration failed, add an error message
+            System.out.println(e.toString());
+            redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
+        }
+
+        return new RedirectView("/login");
     }
-    // @PostMapping("register")
-    // private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-    //     if (bindingResult.hasErrors()) {
-    //         StringBuilder errorMessage = new StringBuilder();
-
-    //         for (FieldError error : bindingResult.getFieldErrors()) {
-    //             String defaultMessage = error.getDefaultMessage();
-    //             errorMessage.append(defaultMessage).append("<br>");
-    //         }
-
-    //         redirectAttributes.addFlashAttribute("error", errorMessage);
-    //         return new RedirectView("/register");
-    //     }
-
-    //     try {
-    //         String uri = "http://localhost:8081/api/seller/create";
-    //         RestTemplate restTemplate = new RestTemplate();
-    //         restTemplate.postForEntity(uri, userRequestDTO, CreateUserRequestDTO.class);
-
-    //         // Registration successful, add a success message
-    //         redirectAttributes.addFlashAttribute("success", "Registration successful!");
-    //     } catch (Exception e) {
-    //         // Registration failed, add an error message
-    //         redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
-    //     }
-
-    //     return new RedirectView("/");
-    // }
 
     @GetMapping("login")
     public String formLogin(Model model){
@@ -82,24 +73,23 @@ public class UserController {
         return "user/login";
     }
 
-    // @PostMapping("login")
-    // public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-    //     if (bindingResult.hasErrors()) {
-    //         StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
+    @PostMapping("login")
+    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
 
-    //         //Mengambil setiap error message yang ada
-    //         for (FieldError error : bindingResult.getFieldErrors()) {
-    //             String defaultMessage = error.getDefaultMessage();
-    //             errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
-    //         }
+            //Mengambil setiap error message yang ada
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String defaultMessage = error.getDefaultMessage();
+                errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
+            }
 
-    //         redirectAttributes.addFlashAttribute("error", errorMessage);
-    //         return new RedirectView("/login");
-    //     }
-    //     String uri = "http://localhost:8081/api/login";
-    //     RestTemplate restTemplate = new RestTemplate();
-    //     ResponseEntity<LoginJwtRequestDTO> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, LoginJwtRequestDTO.class);
-
-    //     return new RedirectView("/");
-    // }
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return new RedirectView("/login");
+        }
+        String uri = "http://localhost:8081/api/login";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<LoginJwtRequestDTO> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, LoginJwtRequestDTO.class);
+        return new RedirectView("/");
+    }
 }
