@@ -1,14 +1,21 @@
 package com.apapedia.frontend_webapp.controller;
 
+import java.net.http.HttpRequest;
+import java.util.UUID;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -19,7 +26,9 @@ import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.service.UserService;
 import com.apapedia.frontend_webapp.service.UserServiceImpl;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -74,7 +83,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,HttpServletResponse response){
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
 
@@ -87,9 +96,31 @@ public class UserController {
             redirectAttributes.addFlashAttribute("error", errorMessage);
             return new RedirectView("/login");
         }
+        String token = userService.getToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+        Cookie cookie = new Cookie("token", token);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+
         String uri = "http://localhost:8081/api/login";
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<LoginJwtRequestDTO> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, LoginJwtRequestDTO.class);
+        ResponseEntity<String> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, String.class);
+
         return new RedirectView("/");
     }
+
+    @PostMapping("/logout")
+    public RedirectView logout(@CookieValue(name = "token", required = false) String token, HttpServletRequest request, HttpServletResponse response){
+        request.getSession().invalidate();
+
+        // Clear the authentication token (if using tokens)
+        // Example using cookies:
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return new RedirectView("/");
+    }
+
+    
+    
 }

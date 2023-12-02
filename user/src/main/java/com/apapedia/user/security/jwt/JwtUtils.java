@@ -3,12 +3,14 @@ package com.apapedia.user.security.jwt;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -27,9 +29,11 @@ public class JwtUtils {
     @Value("${user.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(UUID id, String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", id.toString())  // Add UUID as a custom claim
+                .claim("role", role)    
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -61,6 +65,9 @@ public class JwtUtils {
         }
         return false;
     }
-
+    public String extractUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        return claims.getSubject();
+    }
 
 }

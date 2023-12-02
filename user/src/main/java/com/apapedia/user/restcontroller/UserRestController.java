@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
@@ -35,6 +37,10 @@ import com.apapedia.user.restservice.UserRestService;
 import com.apapedia.user.security.UserDetailsServiceImpl;
 import com.apapedia.user.security.jwt.JwtUtils;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,19 +63,25 @@ public class UserRestController {
     @Autowired
     JwtUtils jwtUtils;
 
-    // private static UserModel getCurrentUser() {
-    //     return ((UserModel) SecurityContextHolder.getContext()
-    //             .getAuthentication()
-    //             .getPrincipal());
+    // @GetMapping(value = "/user/{id}")
+    // private ResponseEntity<CurrentUserResponseDTO> getUser(@PathVariable("id") UUID id){
+    //     try {
+    //         UserModel user = userRestService.getUserById(id);
+    //         CurrentUserResponseDTO userDTO = new CurrentUserResponseDTO();
+    //         userDTO.setId(user.getId());
+    //         userDTO.setName(user.getName());
+    //         userDTO.setUsername(user.getUsername());
+    //         userDTO.setEmail(user.getEmail());
+    //         user.setPassword(user.getPassword());
+    //         user.setAddress(user.getAddress());
+            
+    //         return ResponseEntity.ok(userDTO);
+    //     } catch (Exception e) {
+    //         throw new ResponseStatusException(
+    //             HttpStatus.NOT_FOUND, "User not found"
+    //         );
+    //     }
     // }
-
-    // @GetMapping("/current")
-    // @PreAuthorize("hasAuthority('user:read')")
-    // public ResponseEntity<CurrentUserResponseDTO> getCurrentUserProfile() {
-    //     CurrentUserResponseDTO response = userRestService.getCurrentUser(getCurrentUser().getUsername());
-    //     return new ResponseEntity<>(response, HttpStatus.OK);
-    // }
-    
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
         try {
@@ -80,7 +92,7 @@ public class UserRestController {
             );
         }
     }
-    
+
     @PutMapping(value = "user/update")
     private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()){
@@ -106,10 +118,15 @@ public class UserRestController {
     public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
         try {
             authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
-            final String token = jwtUtils.generateJwtToken(userDetails.getUsername());
+            UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
+
+            final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
+
             LoginJwtResponseDTO res = new LoginJwtResponseDTO();
             res.setToken(token);
+
             return ResponseEntity.ok(res);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
@@ -117,6 +134,23 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Invalidate the session or clear authentication token
+        // Example using HttpSession:
+        request.getSession().invalidate();
+
+        // Clear the authentication token (if using tokens)
+        // Example using cookies:
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logout successful");
+    }
+
 
 }
 
