@@ -28,9 +28,6 @@
               <span class="glyphicon glyphicon-log-in"></span> Login
           </a>
       </li>
-        <!-- <li class="nav-item"><a type="button" class="btn btn-success text-light ms-3" th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li> -->
-      </ul>
-      <!-- menu profile di pojok kanan atas kalo udah login -->
       <li class="nav-item dropdown" th:if="${isTokenPresent}">
         <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:white;">
             Hello, <span th:text="${username}"></span>
@@ -38,7 +35,7 @@
         <ul class="dropdown-menu dropdown-menu-light">
             <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
             <form id="logoutForm" action="/logout" method="post">
-              <a class="dropdown-item" type="submit">Sign Out</button></a>
+              <button class="dropdown-item" type="submit">Sign Out</button>
           </form>
         </ul>
       </li>
