@@ -9,13 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
-import com.apapedia.user.dto.response.CreateUserResponseDTO;
-import com.apapedia.user.model.Seller;
-import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.SellerRestService;
 
 import jakarta.validation.Valid;

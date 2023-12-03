@@ -9,10 +9,7 @@ import com.apapedia.user.model.Seller;
 
 @Mapper(componentModel = "spring")
 public interface SellerMapper {
-    // @Mapping(target = "role", ignore = true)
     Seller createSellerRequestDTOToSeller(CreateUserRequestDTO createSellerRequestDTO);
-
-    // @Mapping(target = "role", ignore = true)
     CreateUserResponseDTO createUserResponseDTOToUserModel(Seller seller);
 
 }
