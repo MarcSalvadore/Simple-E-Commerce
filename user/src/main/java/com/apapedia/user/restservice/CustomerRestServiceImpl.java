@@ -16,6 +16,9 @@ public class CustomerRestServiceImpl implements CustomerRestService {
     @Autowired
     CustomerDb customerDb;
 
+    @Autowired
+    UserRestService userRestService;
+
     @Override
     public void createRestCustomer(Customer customer) { 
         customer.setRole(EnumRole.CUSTOMER);
