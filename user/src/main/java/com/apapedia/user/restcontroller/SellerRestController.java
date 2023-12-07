@@ -17,7 +17,6 @@ import com.apapedia.user.restservice.SellerRestService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/api")
 public class SellerRestController {
@@ -34,7 +33,6 @@ public class SellerRestController {
         } else { 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
             sellerRestService.createRestSeller(seller);
-            log.info("Created new seller");
             return ResponseEntity.ok("Registrasi berhasil!");
         }
     }

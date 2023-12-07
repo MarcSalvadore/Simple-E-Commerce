@@ -57,27 +57,27 @@ public class UserController {
         return "user/login";
     }
 
-    @PostMapping("login")
-    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,HttpServletResponse response){
-        try {
-            String token = userService.getToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
-            Cookie cookie = new Cookie("token", token);
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
+    // @PostMapping("login")
+    // public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,HttpServletResponse response){
+    //     try {
+    //         String token = userService.getToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+    //         Cookie cookie = new Cookie("token", token);
+    //                 cookie.setPath("/");
+    //                 response.addCookie(cookie);
 
-            String uri = "http://localhost:8081/api/login";
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, String.class);
+    //         String uri = "http://localhost:8081/api/login";
+    //         RestTemplate restTemplate = new RestTemplate();
+    //         ResponseEntity<String> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, String.class);
 
-            return new RedirectView("/");
+    //         return new RedirectView("/");
 
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            redirectAttributes.addFlashAttribute("error", "Login failed. Please try again.");
-            return new RedirectView("/login");
-        }
+    //     } catch (Exception e) {
+    //         System.out.println(e.toString());
+    //         redirectAttributes.addFlashAttribute("error", "Login failed. Please try again.");
+    //         return new RedirectView("/login");
+    //     }
         
-    }
+    // }
 
     @PostMapping("/logout")
     public RedirectView logout(@CookieValue(name = "token", required = false) String token, HttpServletRequest request, HttpServletResponse response){

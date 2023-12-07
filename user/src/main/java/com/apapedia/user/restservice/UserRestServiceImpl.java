@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
+import com.apapedia.user.security.jwt.JwtUtils;
 
 import jakarta.transaction.Transactional;
 
@@ -17,6 +20,9 @@ import jakarta.transaction.Transactional;
 public class UserRestServiceImpl implements UserRestService {
     @Autowired
     UserDb userDb;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @Override
     public void createRestUser(UserModel user) { userDb.save(user); }
@@ -54,6 +60,19 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public UserModel getUserByUsername(String username) {
         return userDb.findByUsername(username);
+    }
+
+    @Override
+    public String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO) {
+        String username = loginJwtRequestDTO.getUsername();
+        String name = loginJwtRequestDTO.getName();
+        
+        UserModel user = userDb.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found. Please register user.");
+        }
+        return jwtUtils.generateJwtToken(user.getId(), username, user.getRole().toString());
     }
     
 }

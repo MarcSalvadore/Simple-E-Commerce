@@ -14,19 +14,40 @@ import com.apapedia.frontend_webapp.service.UserService;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BaseController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/")
-    public String home(@CookieValue(name = "token", required = false) String token, Model model, HttpServletRequest request) {
-        boolean isTokenPresent = containsCookie(request, "token");
-        model.addAttribute("isTokenPresent", isTokenPresent);
+    // @GetMapping("/")
+    // public String home(@CookieValue(name = "token", required = false) String token, Model model, HttpServletRequest request) {
+    //     boolean isTokenPresent = containsCookie(request, "token");
+    //     model.addAttribute("isTokenPresent", isTokenPresent);
 
-        if (isTokenPresent) {
-            String username = userService.getUsernameFromToken(token);
+    //     if (isTokenPresent) {
+    //         String username = userService.getUsernameFromToken(token);
+    //         model.addAttribute("username", username);
+    //     }
+    //     String uri = "http://localhost:8082/api/catalog/viewall";
+    //     RestTemplate restTemplate = new RestTemplate();
+    //     ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
+    //     ReadCatalogResponseDTO[] listCatalog = res.getBody();
+
+    //     model.addAttribute("imageLink", "http://localhost:8082/api/image/");
+    //     model.addAttribute("listCatalog", listCatalog);
+
+    //     return "home";
+    // }
+    @GetMapping("/")
+    public String home(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+        System.out.println("INI TOKEN");
+        System.out.println(session.getAttribute("token"));
+        if (jwtToken != null) {
+            String username = userService.getUsernameFromToken(jwtToken);
             model.addAttribute("username", username);
         }
         String uri = "http://localhost:8082/api/catalog/viewall";

@@ -2,44 +2,56 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 </head>
 
 <body>
-  <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand fw-bold text-light ms-3" href="/">APAPEDIA</a>
-      </div>
-      <!-- menu di tengah kalo udah login -->
-      <ul class="nav navbar-nav">
-        <!-- menu ini di tengah kalo buka halaman catalog page pas udh login -->
-        <li class="nav-item"><a class="nav-link text-light ms-3" href="#">Order History</a></li>
-      </ul>
-      <!-- search produk di tengah kalo belum login -->
-      <form class="form-inline my-2 my-lg-0 d-flex">
-        <input class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
-        <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
-      </form>
-      <!-- tombol login logout di pojok kanan atas kalo belum login -->
-      <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item" th:unless="${isTokenPresent}">
-          <a type="button" class="btn btn-outline-success text-light ms-3" th:href="@{/login}">
-              <span class="glyphicon glyphicon-log-in"></span> Login
-          </a>
-      </li>
-      <li class="nav-item dropdown" th:if="${isTokenPresent}">
-        <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:white;">
-            Hello, <span th:text="${username}"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-light">
-            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
-            <form id="logoutForm" action="/logout" method="post">
-              <button class="dropdown-item" type="submit">Sign Out</button>
-          </form>
-        </ul>
-      </li>
-    </div>
-  </nav> 
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand fw-bold text-light ms-3" href="/">APAPEDIA</a>
+            </div>
+
+            <!-- Check if the username is present in the session -->
+            <ul class="nav navbar-nav" th:if="${username != null}">
+                <!-- Menu in the center when on the catalog page after logging in -->
+                <li class="nav-item"><a class="nav-link text-light ms-3" href="#">Order History</a></li>
+            </ul>
+
+            <!-- Check if the username is not present in the session -->
+            <form class="form-inline my-2 my-lg-0 d-flex" th:if="${username == null}">
+                <input class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
+                <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
+            </form>
+
+            <!-- Check if the username is not present in the session -->
+            <ul class="nav navbar-nav navbar-right" th:if="${username == null}">
+                <!-- Login button in the top right corner if not logged in -->
+                <li class="nav-item">
+                    <a type="button" class="btn btn-outline-success text-light ms-3" th:href="@{/login-sso}">
+                        <span class="glyphicon glyphicon-log-in"></span> Login
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Check if the username is present in the session -->
+            <ul class="nav navbar-nav navbar-right" th:if="${username != null}">
+                <!-- Display username and logout option in the top right corner if logged in -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        style="color:white;">
+                        Hello, <span th:text="${username}"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-light">
+                        <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                        <form id="logoutForm" action="/logout" method="post">
+                            <button class="dropdown-item" type="submit">Sign Out</button>
+                        </form>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </body>
+
 </html>

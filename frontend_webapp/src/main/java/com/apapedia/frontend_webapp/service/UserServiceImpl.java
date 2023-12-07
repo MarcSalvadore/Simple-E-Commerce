@@ -30,12 +30,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getToken(String username, String password) {
-        var body = new LoginJwtRequestDTO(username, password);
+    public String getToken(String username, String name) {
+        var body = new LoginJwtRequestDTO(username, name);
 
         var response = this.webClient
             .post()
-            .uri("/api/login")
+            .uri("/api/auth/login-seller")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(body)
             .retrieve()

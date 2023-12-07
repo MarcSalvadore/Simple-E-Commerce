@@ -55,6 +55,7 @@ public class UserRestController {
     @Autowired
     JwtUtils jwtUtils;
 
+
     //User details
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
@@ -81,26 +82,26 @@ public class UserRestController {
     }
 
     //Login
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
-        try {
-            authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+    // @PostMapping("/login")
+    // public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
+    //     try {
+    //         authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
 
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
-            UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
+    //         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
+    //         UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
 
-            final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
+    //         final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
 
-            LoginJwtResponseDTO res = new LoginJwtResponseDTO();
-            res.setToken(token);
+    //         LoginJwtResponseDTO res = new LoginJwtResponseDTO();
+    //         res.setToken(token);
 
-            return ResponseEntity.ok(res);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
-    }
+    //         return ResponseEntity.ok(res);
+    //     } catch (UsernameNotFoundException e) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
+    //     } catch (BadCredentialsException e) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    //     }
+    // }
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -123,6 +124,19 @@ public class UserRestController {
 
         return ResponseEntity.ok("Logout successful");
     }
+
+    @PostMapping("/auth/login-seller")
+    public ResponseEntity<?> loginSeller(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) {
+        try {
+            String jwtToken = userRestService.loginSeller(loginJwtRequestDTO);
+            return new ResponseEntity<>(new LoginJwtResponseDTO(jwtToken), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "User not found"
+            );
+        }
+    }
+    
 
 
 }

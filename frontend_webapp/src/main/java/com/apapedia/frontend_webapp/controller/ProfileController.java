@@ -13,6 +13,7 @@ import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProfileController {
@@ -24,14 +25,16 @@ public class ProfileController {
     UserService userService;
 
     @GetMapping("profile")
-    public String profilePage(@CookieValue(name = "token", required = false) String token, HttpServletRequest request, Model model) {
+    public String profilePage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
 
-        if (!jwtUtils.validateToken(token)) {
-            return "redirect:/login";
+        if (!jwtUtils.validateToken(jwtToken)) {
+            return "redirect:/login-sso";
         }
 
-        UUID userId = userService.getUserIdFromToken(token);
-        CreateUserResponseDTO seller = userService.getUserDetails(userId, token);
+        UUID userId = userService.getUserIdFromToken(jwtToken);
+        CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
         model.addAttribute("userDTO", seller);
         
         return "profile/profile";

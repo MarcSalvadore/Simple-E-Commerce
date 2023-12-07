@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginJwtRequestDTO {
     private String username;
-    private String password;
+    private String name;
 }
