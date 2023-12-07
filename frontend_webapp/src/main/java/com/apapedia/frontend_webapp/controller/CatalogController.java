@@ -28,8 +28,24 @@ import jakarta.validation.Valid;
 
 @Controller
 public class CatalogController {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
     @GetMapping("add-product")
-    public String formAddProduct(Model model) {
+    public String formAddProduct(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        
+        if (session != null) {
+            String jwtToken = (String) session.getAttribute("token");
+
+            if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
+                model.addAttribute("username", username);
+            }
+        }
         var productDTO = new CreateCatalogRequestDTO();
         String uri = "http://localhost:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();

@@ -35,9 +35,6 @@ public class SellerRestController {
                 return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else { 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
-            if (userRestService.getUserByUsername(seller.getUsername()).getIsDeleted() == true) {
-                
-            }
             sellerRestService.createRestSeller(seller);
             return ResponseEntity.ok("Registrasi berhasil!");
         }

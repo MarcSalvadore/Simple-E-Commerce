@@ -26,6 +26,7 @@ public class SellerRestServiceImpl implements SellerRestService {
         seller.setRole(EnumRole.SELLER);
         String hashedPass = encrypt(seller.getPassword());
         seller.setPassword(hashedPass);
+        sellerDb.save(seller);
 
         Seller existingDeletedSellerByUsername = userDb.findByUsernameAndIsDeleted(seller.getUsername(), true);
         Seller existingDeletedSellerByEmail = userDb.findByEmailAndIsDeleted(seller.getEmail(), true);
