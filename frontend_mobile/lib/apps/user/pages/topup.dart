@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile/components/appbar.dart';
+import 'package:frontend_mobile/components/drawer.dart';
 
-class Withdraw extends StatefulWidget {
-  const Withdraw({Key? key, required String title}) : super(key: key);
+class TopUp extends StatefulWidget {
+  const TopUp({Key? key, required String title}) : super(key: key);
 
   @override
-  State<Withdraw> createState() => _WithdrawState();
+  State<TopUp> createState() => _TopUpState();
 }
 
-class _WithdrawState extends State<Withdraw> {
+class _TopUpState extends State<TopUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Withdraw"),
-      ),
+       appBar: const CustomAppBar(title: "APAPEDIA"),
+      drawer: buildDrawer(context),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Text("Withdraw APAPAY"),
+              const Text("Top Up APAPAY"),
               const SizedBox(height: 20),
               const TextField(
                 decoration: InputDecoration(
@@ -31,7 +32,7 @@ class _WithdrawState extends State<Withdraw> {
                 onPressed: () {
                   // Handle withdrawal logic here
                 },
-                child: const Text("Withdraw"),
+                child: const Text("Top Up"),
               ),
             ],
           ),
