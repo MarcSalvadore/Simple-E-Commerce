@@ -19,6 +19,13 @@ public interface OrderRestService {
 
     void createRestOrderItem(OrderItem orderItem);
 
+    void editCartItemQuantity(CartItem cartItem);
+
+    List<CartItem> retrieveRestAllCartItem();
+
+    CartItem getRestCartItemById(UUID cartItemId);
+
+    void deleteCartItem(UUID cartItem);
     Cart getCartById(UUID idCart);
 
     List<Order> getRestOrderByCustomerId(UUID customerId);
