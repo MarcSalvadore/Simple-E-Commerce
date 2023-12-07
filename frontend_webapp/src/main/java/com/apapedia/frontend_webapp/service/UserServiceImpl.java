@@ -69,4 +69,15 @@ public class UserServiceImpl implements UserService {
         Claims claims = jwtService.decodeToken(token);
         return claims.get("sub", String.class);
     }
+
+    @Override
+    public void deleteUser(UUID id, String token) {
+        this.webClient
+        .delete()
+        .uri("/api/user/{id}/delete", id)
+        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+        .retrieve()
+        .bodyToMono(Void.class)
+        .block();
+    }
 }

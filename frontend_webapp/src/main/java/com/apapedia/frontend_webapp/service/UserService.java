@@ -9,4 +9,5 @@ public interface UserService {
     CreateUserResponseDTO getUserDetails(UUID id, String token);
     UUID getUserIdFromToken(String token);
     String getUsernameFromToken(String token);
+    void deleteUser(UUID id, String token);
 }

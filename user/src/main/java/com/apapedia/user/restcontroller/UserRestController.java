@@ -10,8 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -135,6 +133,13 @@ public class UserRestController {
                 HttpStatus.NOT_FOUND, "User not found"
             );
         }
+    }
+
+    @DeleteMapping("user/{id}/delete")
+    public ResponseEntity<String> deleteCatalog(@PathVariable("id") UUID id) {
+        var seller = userRestService.getUserById(id);
+        userRestService.deleteSeller(seller);
+        return ResponseEntity.ok("User has been deleted");
     }
     
 

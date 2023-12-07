@@ -1,16 +1,13 @@
 package com.apapedia.frontend_webapp.controller;
 
-import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +20,6 @@ import com.apapedia.frontend_webapp.security.xml.ServiceResponse;
 import com.apapedia.frontend_webapp.service.UserService;
 import com.apapedia.frontend_webapp.setting.Setting;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -73,12 +69,15 @@ public class PageController {
 
     @GetMapping("/login-sso")
     public ModelAndView loginSSO(){
-        // System.out.println("CEK");
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
     }
 
     @GetMapping("/logout-sso")
-    public ModelAndView logoutSSO(Principal principal, HttpServletRequest request, HttpServletResponse response){
+    public ModelAndView logoutSSO(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
         request.getSession().invalidate();
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }

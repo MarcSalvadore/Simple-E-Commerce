@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.restservice.SellerRestService;
+import com.apapedia.user.restservice.UserRestService;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api")
@@ -26,12 +26,18 @@ public class SellerRestController {
     @Autowired
     SellerRestService sellerRestService;
 
+    @Autowired
+    UserRestService userRestService;
+
     @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
                 return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else { 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
+            if (userRestService.getUserByUsername(seller.getUsername()).getIsDeleted() == true) {
+                
+            }
             sellerRestService.createRestSeller(seller);
             return ResponseEntity.ok("Registrasi berhasil!");
         }

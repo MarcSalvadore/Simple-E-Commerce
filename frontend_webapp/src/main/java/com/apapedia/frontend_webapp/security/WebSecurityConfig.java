@@ -24,11 +24,6 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                 .anyRequest().authenticated()
             )
-            // .formLogin((form) -> form
-            //     .loginPage("/login-sso")
-            //     .permitAll()
-            //     .defaultSuccessUrl("/")
-            // )
             .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login-sso"))

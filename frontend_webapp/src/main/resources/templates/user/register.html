@@ -20,37 +20,37 @@
                         <form th:action="@{/register}" th:object="${userDTO}" method="post">
                             <div class="form-group mt-2">
                                 <label>Name</label>
-                                <input th:field="*{name}" class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name">
+                                <input required="true"  th:field="*{name}" class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name">
                             </div>
                             <div class="form-group mt-2">
                                 <label>Username</label>
-                                <input th:field="*{username}" class="form-control form-control-lg" type="text" name="username" placeholder="Enter your username">
+                                <input required="true" th:field="*{username}" class="form-control form-control-lg" type="text" name="username" placeholder="Enter your username">
                             </div>
                             <div class="form-group mt-2">
                                 <label>Email</label>
-                                <input th:field="*{email}" class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email">
+                                <input required="true" th:field="*{email}" class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email">
                             </div>
                             <div class="form-group mt-2">
                                 <label>Password</label>
-                                <input th:field="*{password}" class="form-control form-control-lg" type="password" name="password" placeholder="Enter password">
+                                <input required="true" th:field="*{password}" class="form-control form-control-lg" type="password" name="password" placeholder="Enter password">
                             </div>
                             <div class="form-group mt-2">
                                 <label>Category</label>
-                                <select th:field="*{category}" class="form-control form-control-lg" name="category">
+                                <select required="true" th:field="*{category}" class="form-control form-control-lg" name="category">
                                   <option value="Biasa">Biasa</option>
                                   <option value="Official Store">Official Store</option>
                                 </select>
                             </div>
                             <div class="form-group mt-2">
                                 <label>Address</label>
-                                <input th:field="*{address}" class="form-control form-control-lg" type="text" name="address" placeholder="Enter your address">
+                                <input required="true" th:field="*{address}" class="form-control form-control-lg" type="text" name="address" placeholder="Enter your address">
                             </div>
                             <div class="form-group text-center">
                                 <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Submit</button>
                             </div>
-                            <div class="form-group text-center">
-                                <a class="mt-4" th:href="@{/login}">Already have an account? Login</a>
-                            </div>
+                            <!-- <div class="form-group text-center">
+                                <a type="button" class="mt-4" th:href="@{/login-sso}">Already have an account? Login</a>
+                            </div> -->
                         </form>
                     </div>
                 </div>

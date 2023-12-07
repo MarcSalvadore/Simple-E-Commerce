@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
@@ -24,7 +23,7 @@ public class ProfileController {
     @Autowired
     UserService userService;
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public String profilePage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
@@ -40,12 +39,12 @@ public class ProfileController {
         return "profile/profile";
     }
 
-    @GetMapping("withdraw")
+    @GetMapping("/withdraw")
     public String formWithdraw(Model model) {
         return "profile/withdraw";
     }
 
-    @GetMapping("profile/edit")
+    @GetMapping("/profile/edit")
     public String editProfile(Model model) {
         return "profile/edit-profile";
     }

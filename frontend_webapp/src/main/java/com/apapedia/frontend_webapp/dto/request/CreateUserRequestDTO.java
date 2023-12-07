@@ -1,5 +1,7 @@
 package com.apapedia.frontend_webapp.dto.request;
 
+import com.github.javafaker.Bool;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,5 @@ public class CreateUserRequestDTO {
     private String email;
     private String address;
     private String category;   
+    private Boolean isDeleted = false;
 }

@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
@@ -33,7 +32,7 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public UserModel getUserById(UUID id) {
         for(UserModel user : retrieveAllUser()) {
-            if (user.getId().equals(id)) {
+            if (user.getId().equals(id) && user.getIsDeleted() != true) {
                 return user;
             }
         }
@@ -65,14 +64,17 @@ public class UserRestServiceImpl implements UserRestService {
     @Override
     public String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO) {
         String username = loginJwtRequestDTO.getUsername();
-        String name = loginJwtRequestDTO.getName();
-        
         UserModel user = userDb.findByUsername(username);
-
-        if (user == null) {
+        if (user == null || user.getIsDeleted() == true) {
             throw new UsernameNotFoundException("User not found. Please register user.");
         }
         return jwtUtils.generateJwtToken(user.getId(), username, user.getRole().toString());
+    }
+
+    @Override
+    public void deleteSeller(UserModel userModel) {
+       userModel.setIsDeleted(true);
+       userDb.save(userModel);
     }
     
 }
