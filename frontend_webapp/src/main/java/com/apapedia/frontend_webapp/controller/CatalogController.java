@@ -3,6 +3,7 @@ package com.apapedia.frontend_webapp.controller;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +19,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.UpdateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
+import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
 public class CatalogController {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
     @GetMapping("add-product")
-    public String formAddProduct(Model model) {
+    public String formAddProduct(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        
+        if (session != null) {
+            String jwtToken = (String) session.getAttribute("token");
+
+            if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
+                model.addAttribute("username", username);
+            }
+        }
         var productDTO = new CreateCatalogRequestDTO();
         String uri = "http://localhost:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();
