@@ -14,7 +14,7 @@
     <div class="container">
         <div class="text-center pt-5">
             <h2>List Catalog</h2>
-            <a type="button" class="btn btn-primary m-2" href="/add-product">Add Product</a>
+            <a type="button" class="btn btn-primary m-2" th:if="${username != null}" href="/add-product">Add Product</a>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Iterate over the listCatalog -->
@@ -29,10 +29,7 @@
                             <p class="card-text" th:text="${catalog.productDescription}"></p>
                             <p class="card-text">Category: Category</p>
                             <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p>
-<<<<<<< HEAD
                             <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p>
-=======
->>>>>>> 35d1e110eea020498e0aedccf1d87987fa5a9520
                             <a type="button" class="btn btn-warning"
                                 th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
                         </div>
