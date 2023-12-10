@@ -5,12 +5,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.UUID;
 
+import org.glassfish.jaxb.core.annotation.OverrideAnnotationOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.apapedia.frontend_webapp.dto.TokenDTO;
 import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
+import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 
@@ -79,5 +82,24 @@ public class UserServiceImpl implements UserService {
         .retrieve()
         .bodyToMono(Void.class)
         .block();
+    }
+
+    @Override
+    public String withdraw(WithdrawRequestDTO withdrawRequestDTO, String token) {
+        var response = this.webClient
+            .post()
+            .uri("/api/withdraw")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(withdrawRequestDTO)
+            .retrieve()
+            .bodyToMono(String.class)
+            .block();
+        
+        if (response != null) {
+            return "Withdraw telah berhasil!";
+        }
+
+        return "Withdraw gagal";
     }
 }

@@ -12,6 +12,9 @@ import com.apapedia.user.repository.UserDb;
 
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @Transactional
 public class SellerRestServiceImpl implements SellerRestService {
@@ -54,4 +57,34 @@ public class SellerRestServiceImpl implements SellerRestService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
+
+    @Override
+    public boolean withdraw(UUID idSeller, Long amount) {
+        Seller seller = getSellerbyId(idSeller);
+
+        if (seller != null) {
+            Long balance = seller.getBalance();
+            
+            seller.setBalance(balance - amount);
+            sellerDb.save(seller);
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Seller getSellerbyId(UUID id) {
+        for (Seller seller : retrieveAllSeller()) {
+            if (seller.getId().equals(id) && seller.getIsDeleted() == false) {
+                return seller;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Seller> retrieveAllSeller() { return sellerDb.findAll(); }
 }
