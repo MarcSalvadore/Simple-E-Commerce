@@ -61,7 +61,6 @@ public class UserRestController {
     @Autowired
     JwtUtils jwtUtils;
 
-
     //User details
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
@@ -87,28 +86,7 @@ public class UserRestController {
         }
     }
 
-    //Login
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
-        try {
-            authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
-
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
-            UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
-
-            final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
-
-            LoginJwtResponseDTO res = new LoginJwtResponseDTO();
-            res.setToken(token);
-
-            return ResponseEntity.ok(res);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
-    }
-
+    //Login customer
     @PostMapping("/auth/login-customer")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult) {
         try {
@@ -131,27 +109,7 @@ public class UserRestController {
         }
     }
 
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().invalidate();
-        Cookie cookie = new Cookie("token", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok("Logout successful");
-    }
-
+    //Login seller
     @PostMapping("/auth/login-seller")
     public ResponseEntity<?> loginSeller(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) {
         try {
@@ -164,6 +122,7 @@ public class UserRestController {
         }
     }
 
+    //Delete user
     @DeleteMapping("user/{id}/delete")
     public ResponseEntity<String> deleteCatalog(@PathVariable("id") UUID id) {
         var seller = userRestService.getUserById(id);
@@ -171,7 +130,5 @@ public class UserRestController {
         return ResponseEntity.ok("User has been deleted");
     }
     
-
-
 }
 
