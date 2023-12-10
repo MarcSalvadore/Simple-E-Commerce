@@ -29,11 +29,11 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/withdraw")).authenticated()
                 .anyRequest().authenticated()
             )
-            .formLogin((form) -> form
-                .loginPage("/login-sso")
-                .permitAll()
-                .defaultSuccessUrl("/")
-            )
+            // .formLogin((form) -> form
+            //     .loginPage("/login-sso")
+            //     .permitAll()
+            //     .defaultSuccessUrl("/")
+            // )
             .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login-sso"))

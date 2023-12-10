@@ -67,15 +67,15 @@ public class UserRestController {
     }
 
     //Edit profile
-    @PutMapping(value = "user/update")
-    private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()){
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
-        } else {
+    @PostMapping(value = "user/{id}/update")
+    private UserModel updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
+        try {
             UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
             UserModel user = userRestService.updateRestUser(userFromDto);
             return user;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         }
     }
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
+import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
 
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -96,7 +98,32 @@ public class ProfileController {
     }
 
     @GetMapping("/profile/edit")
-    public String editProfile(Model model) {
+    public String editProfilePage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+
+        if (!jwtUtils.validateToken(jwtToken)) {
+            return "redirect:/login-sso";
+        }
+        UUID userId = userService.getUserIdFromToken(jwtToken);
+        CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
+        model.addAttribute("seller", seller);
+
         return "profile/edit-profile";
+    }
+
+    @PostMapping("/profile/edit")
+    public String editProfile(HttpServletRequest request, Model model, @ModelAttribute CreateUserResponseDTO requestBody) {
+        System.out.println("MASUK PUT");
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+
+        if (!jwtUtils.validateToken(jwtToken)) {
+            return "redirect:/login-sso";
+        }
+        UUID userId = userService.getUserIdFromToken(jwtToken);
+        UpdateUserResponseDTO seller = userService.editUser(userId, jwtToken, requestBody);
+        System.out.println("YES");
+        return "profile/profile";
     }
 }
