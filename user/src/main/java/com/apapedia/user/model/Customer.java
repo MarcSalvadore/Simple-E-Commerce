@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "customer")
-public class Customer extends User {
+public class Customer extends UserModel {
     @NotNull
     @Column(name = "cart_id", nullable = false)
     private UUID cartId = UUID.randomUUID();

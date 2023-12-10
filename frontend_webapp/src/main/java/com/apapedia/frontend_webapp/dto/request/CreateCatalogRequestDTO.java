@@ -2,7 +2,10 @@ package com.apapedia.frontend_webapp.dto.request;
 
 import java.util.UUID;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateCatalogRequestDTO {
+    // @NotNull
     private UUID seller;
 
     @NotBlank(message = "Nama Produk tidak boleh kosong")
@@ -28,8 +32,12 @@ public class CreateCatalogRequestDTO {
     @NotBlank(message = "Deskripsi Produk tidak boleh kosong")
     private String productDescription;
 
-    // @NotBlank(message = "Harap unggah Gambar Produk")
-    private String image;
+    @JsonIgnore
+    @NotNull
+    private MultipartFile imageFile;
+
+    // @NotNull(message = "Harap unggah Gambar Produk")
+    private byte[] image;
     
     @NotNull
     private ReadCategoryResponseDTO category;

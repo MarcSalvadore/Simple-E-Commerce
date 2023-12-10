@@ -22,6 +22,7 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     public void createRestCatalog(Catalog catalog) { catalogDb.save(catalog); }
 
     @Override
+    @Transactional
     public List<Catalog> getRestAllCatalogBySellerId(UUID idSeller) {
         return catalogDb.findBySellerAndIsDeletedFalse(idSeller);
     }
@@ -37,6 +38,7 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     }
 
     @Override
+    @Transactional
     public List<Catalog> getAllCatalog() {
         return catalogDb.findByIsDeletedFalseOrderByProductNameAsc();
     }
@@ -71,18 +73,21 @@ public class CatalogRestServiceImpl implements CatalogRestService {
 
     // Catalog #8
     @Override
-    public List<Catalog> getRestCatalogByPrice(Integer price) {
-        return catalogDb.findByPriceAndIsDeletedFalse(price);
+    @Transactional
+    public List<Catalog> getRestCatalogByPrice(Integer priceMin, Integer priceMax) {
+        return catalogDb.findByPriceBetweenAndIsDeletedFalse(priceMin, priceMax);
     }
 
     // Catalog #7
     @Override
+    @Transactional
     public List<Catalog> getRestCatalogByName(String name) {
         return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
     }
 
 
     @Override
+    @Transactional
     public List<Catalog> getCatalogListSorted(String sortBy, String sortOrder) {
         List<Catalog> catalogList = new ArrayList<>();
 

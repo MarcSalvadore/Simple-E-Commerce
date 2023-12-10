@@ -1,10 +1,10 @@
 package com.apapedia.frontend_webapp.controller;
 
-import org.springframework.http.ResponseEntity;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +13,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
+import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+
 
 @Controller
 public class UserController {
-    
-    @GetMapping("register")
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
+    // Register seller
+    @GetMapping("/register")
     public String formRegister(Model model){
         var user = new CreateUserRequestDTO();
 
@@ -27,36 +39,34 @@ public class UserController {
         return "user/register";
     }
 
-    @PostMapping("register")
-    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        //Validasi gagal, kembalikan pesan error
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
-
-            //Mengambil setiap error message yang ada
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                String defaultMessage = error.getDefaultMessage();
-                errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
-            }
-
-            redirectAttributes.addFlashAttribute("error", errorMessage);
+    @PostMapping("/register")
+    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, RedirectAttributes redirectAttributes){
+        try {
+            String uri = "http://localhost:8081/api/seller/create";
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.postForEntity(uri, userRequestDTO, String.class);
+            redirectAttributes.addFlashAttribute("success", "Registration successful!");
+            return new RedirectView("/login-sso");
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
             return new RedirectView("/register");
         }
-
-        // disini kasih if else kalo username/password/email udah ada tp ntar aja dah
-
-        String uri = "http://localhost:8081/api/seller/create";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<CreateUserRequestDTO> res = restTemplate.postForEntity(uri, userRequestDTO, CreateUserRequestDTO.class);
-
-        return new RedirectView("/");
     }
 
-    @GetMapping("login")
-    public String formLogin(Model model){
-        // var user = new CreateUserRequestDTO();
-
-        // model.addAttribute("userDTO", user);
-        return "user/login";
+    @PostMapping("/user/delete")
+    public RedirectView deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
+        String token = (String) session.getAttribute("token");
+        UUID userId = userService.getUserIdFromToken(token);
+        try {
+            userService.deleteUser(userId, token);
+            model.addAttribute("message", "User successfully deleted");
+            return new RedirectView("/logout-sso");
+        } catch (Exception e) {
+            model.addAttribute("error", "Error deleting user: " + e.getMessage());
+            return new RedirectView("/profile");
+        }
     }
+
+    
 }
