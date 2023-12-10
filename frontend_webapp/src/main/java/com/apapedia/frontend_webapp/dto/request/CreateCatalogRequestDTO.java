@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateCatalogRequestDTO {
+    // @NotNull
     private UUID seller;
 
     @NotBlank(message = "Nama Produk tidak boleh kosong")
@@ -31,12 +32,11 @@ public class CreateCatalogRequestDTO {
     @NotBlank(message = "Deskripsi Produk tidak boleh kosong")
     private String productDescription;
 
-    // @NotBlank(message = "Harap unggah Gambar Produk")
-
     @JsonIgnore
     @NotNull
     private MultipartFile imageFile;
 
+    // @NotNull(message = "Harap unggah Gambar Produk")
     private byte[] image;
     
     @NotNull
