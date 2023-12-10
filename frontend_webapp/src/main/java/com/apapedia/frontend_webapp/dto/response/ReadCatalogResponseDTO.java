@@ -24,5 +24,7 @@ public class ReadCatalogResponseDTO {
 
     private Integer stock;
 
-    private Boolean isDeleted = false;
+    private byte[] image;
+
+    private Boolean isDeleted;
 }
