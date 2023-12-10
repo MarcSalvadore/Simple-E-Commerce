@@ -1,5 +1,7 @@
 package com.apapedia.user.restcontroller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,6 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
+import com.apapedia.user.dto.response.LoginCustomerResponseDTO;
 import com.apapedia.user.dto.response.LoginJwtResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.UserRestService;
@@ -80,26 +88,48 @@ public class UserRestController {
     }
 
     //Login
-    // @PostMapping("/login")
-    // public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
-    //     try {
-    //         authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) throws Exception{
+        try {
+            authenticate(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword());
 
-    //         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
-    //         UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
+            UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
 
-    //         final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
+            final String token = jwtUtils.generateJwtToken(user.getId(),user.getUsername(),user.getRole().toString());
 
-    //         LoginJwtResponseDTO res = new LoginJwtResponseDTO();
-    //         res.setToken(token);
+            LoginJwtResponseDTO res = new LoginJwtResponseDTO();
+            res.setToken(token);
 
-    //         return ResponseEntity.ok(res);
-    //     } catch (UsernameNotFoundException e) {
-    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
-    //     } catch (BadCredentialsException e) {
-    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-    //     }
-    // }
+            return ResponseEntity.ok(res);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username not found");
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
+
+    @PostMapping("/auth/login-customer")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
+            UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
+
+
+            String jwt = jwtUtils.generateJwtToken(user.getId(),loginJwtRequestDTO.getUsername(), user.getRole().toString());
+            return ResponseEntity.ok(new LoginCustomerResponseDTO(jwt,user.getId().toString()));
+
+        } catch (AuthenticationException e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "false");
+            response.put("message", "Username atau password salah");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+    }
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -111,7 +141,6 @@ public class UserRestController {
         }
     }
 
-    //Login
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();

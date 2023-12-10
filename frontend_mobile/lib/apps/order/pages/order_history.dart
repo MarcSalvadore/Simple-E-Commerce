@@ -16,7 +16,7 @@ class _OrderState extends State<Order>{
     Widget build(BuildContext context){
       return Scaffold( //bebas
         appBar: CustomAppBar(title: "Order History"),
-        drawer: buildDrawer(context), 
+        drawer: buildDrawer(context),
 
       );
     }
