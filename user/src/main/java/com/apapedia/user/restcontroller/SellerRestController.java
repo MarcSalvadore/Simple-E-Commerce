@@ -6,12 +6,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
+import com.apapedia.user.dto.response.ReadWithdrawResponseDTO;
 import com.apapedia.user.restservice.SellerRestService;
 import com.apapedia.user.restservice.UserRestService;
 
@@ -38,5 +40,16 @@ public class SellerRestController {
             sellerRestService.createRestSeller(seller);
             return ResponseEntity.ok("Registrasi berhasil!");
         }
+    }
+
+    @PostMapping(value = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String restWithdraw(@RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
+        boolean res = sellerRestService.withdraw(withdrawResponseDTO.getIdSeller(), withdrawResponseDTO.getAmount());
+        
+        if (res) {
+            return "Withdraw berhasil!";
+        }
+
+        return null;
     }
 }

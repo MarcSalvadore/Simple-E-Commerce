@@ -30,6 +30,7 @@ public class BaseController {
 
         if (session != null) {
             String jwtToken = (String) session.getAttribute("token");
+            System.out.println(jwtToken);
 
             if (jwtUtils.validateToken(jwtToken)) {
                 String username = userService.getUsernameFromToken(jwtToken);

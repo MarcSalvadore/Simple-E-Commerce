@@ -60,7 +60,6 @@ public class CatalogController {
         return "catalog/form-add-product";
     }
     
-    // masih error
     @PostMapping("add-product")
     public String addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException{
         HttpSession session = request.getSession(false);
