@@ -29,10 +29,6 @@
                             <p class="card-text" th:text="${catalog.productDescription}"></p>
                             <p class="card-text">Category: Category</p>
                             <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p>
-<<<<<<< HEAD
-                            <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p>
-=======
->>>>>>> 35d1e110eea020498e0aedccf1d87987fa5a9520
                             <a type="button" class="btn btn-warning"
                                 th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
                         </div>
