@@ -9,25 +9,12 @@ services:
     volumes:
       - ./file-storage:/file-storage
       - ./log:/log
-    env_file:
-      - .env
     depends_on:
-      - catalog-db
+      - db
     networks:
       - frontend-network
       - backend-network
-  catalog-db:
-    image: postgres:14-alpine
-    ports:
-      - '15083:5432'
-    restart: 'no'
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=secret99
-    volumes:
-      - catalog-db:/var/lib/postgresql/data
-    networks:
-      - backend-network
+
   order-web:
     build:
       context: ./order
@@ -40,22 +27,11 @@ services:
     env_file:
       - .env
     depends_on:
-      - order-db
+      - db
     networks:
       - frontend-network
       - backend-network
-  order-db:
-    image: postgres:14-alpine
-    ports:
-      - '15084:5432'
-    restart: 'no'
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=secret99
-    volumes:
-      - order-db:/var/lib/postgresql/data
-    networks:
-      - backend-network
+  
   user-web:
     build:
       context: ./user
@@ -68,11 +44,29 @@ services:
     env_file:
       - .env
     depends_on:
-      - user-db
+      - db
     networks:
       - frontend-network
       - backend-network
-  user-db:
+  
+  frontend-web:
+    build:
+      context: ./frontend_web
+    restart: always
+    ports:
+      - "10085:8084"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    depends_on:
+      - catalog-web
+      - order-web
+      - user-web
+    networks:
+      - frontend-network
+      - backend-network
+
+  db:
     image: postgres:14-alpine
     ports:
       - '15082:5432'
@@ -81,25 +75,12 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret99
     volumes:
-      - user-db:/var/lib/postgresql/data
+      - catalog-db:/var/lib/postgresql/data
     networks:
-      - backend-network
-  frontend-web:
-    build:
-      context: ./frontend_webapp
-    restart: always
-    ports:
-      - "10085:8084"
-    networks:
-      - frontend-network
       - backend-network
       
 volumes:
-  catalog-db:
-    driver: local
-  order-db:
-    driver: local
-  user-db:
+  db:
     driver: local
 
 networks:
@@ -107,6 +88,7 @@ networks:
     driver: bridge
   backend-network:
     driver: bridge
+    
 # version: '3.8'
 # services:
 #   db:
