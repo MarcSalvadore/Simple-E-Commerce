@@ -3,7 +3,10 @@ package com.apapedia.frontend_webapp.controller;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,13 +21,34 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.UpdateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
+import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
 public class CatalogController {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
     @GetMapping("add-product")
-    public String formAddProduct(Model model) {
+    public String formAddProduct(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        
+        if (session != null) {
+            String jwtToken = (String) session.getAttribute("token");
+
+            if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
+                model.addAttribute("username", username);
+            }
+        }
+
         var productDTO = new CreateCatalogRequestDTO();
         String uri = "http://localhost:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();
@@ -36,9 +60,11 @@ public class CatalogController {
         return "catalog/form-add-product";
     }
     
-    // masih error
     @PostMapping("add-product")
-    public RedirectView addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException{
+    public String addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException{
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+        
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
             
@@ -50,18 +76,19 @@ public class CatalogController {
             
             redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
             redirectAttributes.addFlashAttribute("error", errorMessage);
-            return new RedirectView("catalog/form-add-product");
+            return "redirect:/add-product";
         }
 
-        productRequestDTO.setSeller(UUID.randomUUID());
+        productRequestDTO.setSeller(userService.getUserIdFromToken(jwtToken));
         productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
 
         String uri = "http://localhost:8082/api/catalog/add";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<CreateCatalogRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO, CreateCatalogRequestDTO.class);
 
+        redirectAttributes.addFlashAttribute("success", "Produk telah ditambahkan");
         redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
-        return new RedirectView("/");
+        return "redirect:/";
     }
 
     // masi blm bener
