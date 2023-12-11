@@ -14,20 +14,20 @@ import lombok.NoArgsConstructor;
 @Data
 @Configuration
 public class ReadOrderItemResponseDTO {
-    private UUID id ;
+    private String id ;
 
-    @JsonAlias("product_id")
-    private UUID productId;
+    // @JsonAlias("product_id")
+    private String productId;
 
-	@JsonAlias("order_id")
-	private ReadOrderResponseDTO orderId;
+	// @JsonAlias("order_id")
+	// private ReadOrderResponseDTO orderId;
 
     private Integer quantity;
 
-    @JsonAlias("product_name")
+    // @JsonAlias("product_name")
     private String productName;
 
-    @JsonAlias("product_price")
+    // @JsonAlias("product_price")
     private Integer productPrice;
     
 }

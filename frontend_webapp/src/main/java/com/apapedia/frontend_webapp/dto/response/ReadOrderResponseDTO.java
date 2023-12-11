@@ -3,28 +3,36 @@ package com.apapedia.frontend_webapp.dto.response;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
+
+import java.sql.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Configuration
 public class ReadOrderResponseDTO {
-    private UUID id;
+    
+    private String id;
+
+    // private Date createdAt;
+
+    // private Date updatedAt;
 
     private Integer status;
 
-    @JsonAlias("total_price")
     private Integer totalPrice;
+ 
+    // @JsonDeserialize(using = UUIDDeserializer.class)
+    // @UUID
+    // private String customer;
 
-    private UUID customer;
-
-    private UUID seller;
+    // @JsonDeserialize(using = UUIDDeserializer.class)
+    // @UUID
+    private String seller;
 
     private List<ReadOrderItemResponseDTO> listOrderItem;
     
