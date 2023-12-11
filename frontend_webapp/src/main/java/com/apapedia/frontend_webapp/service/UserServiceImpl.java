@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtService;
 
     public UserServiceImpl(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://apap-009.cs.ui.ac.id:10082")
+        this.webClient = webClientBuilder.baseUrl("http://apap-082.cs.ui.ac.id")
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }

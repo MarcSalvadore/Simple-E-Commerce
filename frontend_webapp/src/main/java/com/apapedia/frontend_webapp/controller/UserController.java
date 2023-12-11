@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/register")
     private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, RedirectAttributes redirectAttributes){
         try {
-            String uri = "http://apap-009.cs.ui.ac.id:10082/api/seller/create";
+            String uri = "http://apap-082.cs.ui.ac.id/api/seller/create";
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.postForEntity(uri, userRequestDTO, String.class);
             redirectAttributes.addFlashAttribute("success", "Registration successful!");

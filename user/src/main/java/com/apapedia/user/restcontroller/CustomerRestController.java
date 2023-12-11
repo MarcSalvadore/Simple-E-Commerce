@@ -40,7 +40,7 @@ public class CustomerRestController {
             CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
             customerResponseDTO.setId(customer.getCartId());
             customerResponseDTO.setUserId(customer.getId());
-            String uri = "http://apap-009.cs.ui.ac.id:10084/api/cart/create";
+            String uri = "http://apap-084.cs.ui.ac.id/api/cart/create";
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<CartResponseDTO> res = restTemplate.postForEntity(uri, customerResponseDTO, CartResponseDTO.class);
             customerRestService.createRestCustomer(customer);
