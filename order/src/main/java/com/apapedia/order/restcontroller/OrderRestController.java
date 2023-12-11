@@ -1,14 +1,15 @@
 package com.apapedia.order.restcontroller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import com.apapedia.order.dto.request.*;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 // import com.apapedia.order.dto.CartItemMapper;
 import com.apapedia.order.dto.CartMapper;
-import com.apapedia.order.dto.request.CreateCartItemRequestDTO;
-import com.apapedia.order.dto.request.CreateCartRequestDTO;
-import com.apapedia.order.dto.request.CreateOrderRequestDTO;
-import com.apapedia.order.dto.request.CreateOrdetItemRequestDTO;
-import com.apapedia.order.dto.request.UpdateOrderStatusRequestDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.model.Order;
@@ -203,4 +199,40 @@ public class OrderRestController {
             return "success";
         }
     }
+
+//    @PutMapping("/order/{customerId}/update-saldo")
+//    public ResponseEntity<String> updateSellerSaldo(@PathVariable UUID customerId, @RequestBody UpdateSaldoRequestDTO request) {
+//        // Check if the sellerId is valid (you may want to implement this validation)
+//        // For simplicity, I'm assuming you have a UserService to handle business logic.
+//
+//        // Update the seller's saldo (balance)
+//        boolean saldoUpdated = orderRestService.updateSellerEarning(customerId, request.getAdditionalSaldo());
+//
+//        if (saldoUpdated) {
+//            return new ResponseEntity<>("Seller saldo updated successfully", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Failed to update seller saldo", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+    @GetMapping(value = "/order/chart/{sellerId}")
+    public ResponseEntity<Map<String, Long>> chartTopFiveOrder(@PathVariable("sellerId") UUID sellerId, Model model) {
+        // Fetch the top 5 sold products for the seller within the month interval
+        Map<String, Long> listTopOrder = orderRestService.chartTop5SoldProduct(sellerId);
+
+        // Returning the response for the chart data
+        return new ResponseEntity<>(listTopOrder, HttpStatus.OK);
+    }
+
+    // Update seller balance
+    @PutMapping(value = "/order/{orderId}/complete")
+    public ResponseEntity<String> completeOrder(@PathVariable UUID orderId) {
+        try {
+            orderRestService.completeOrder(orderId);
+            return new ResponseEntity<>("Order telah diselesaikan dan seller akan menerima transaksi pembayaran.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

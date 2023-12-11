@@ -1,6 +1,8 @@
 package com.apapedia.order.restservice;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -31,4 +33,7 @@ public interface OrderRestService {
     List<Order> getRestOrderByCustomerId(UUID customerId);
     List<Order> getRestOrderBySellerId(UUID sellerId);
     void updateOrderStatus(UUID orderId, int newStatus);
+    Map<String, Long> chartTop5SoldProduct(UUID sellerId);
+    List<Order> getMonthlyOrderBySeller(UUID sellerId, LocalDate startDate, LocalDate endDate);
+    void completeOrder(UUID orderId);
 }
