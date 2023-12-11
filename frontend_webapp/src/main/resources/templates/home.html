@@ -33,7 +33,7 @@
                             <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p> -->
                             <!-- <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p> -->
                             <a type="button" class="btn btn-warning"
-                            th:if="${username != null}" th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
+                            th:if="${username != null}" th:href="@{/update-product/{idCatalog}(idCatalog=${catalog.id})}">Edit</a>
                         </div>
                     </div>
                 </div>
