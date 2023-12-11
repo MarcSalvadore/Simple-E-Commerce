@@ -51,7 +51,7 @@ services:
   
   frontend-web:
     build:
-      context: ./frontend_web
+      context: ./frontend_webapp
     restart: always
     ports:
       - "10085:8084"
@@ -88,7 +88,7 @@ networks:
     driver: bridge
   backend-network:
     driver: bridge
-    
+
 # version: '3.8'
 # services:
 #   db:
