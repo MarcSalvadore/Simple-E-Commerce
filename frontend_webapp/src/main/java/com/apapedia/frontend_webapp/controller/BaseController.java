@@ -37,12 +37,12 @@ public class BaseController {
                 model.addAttribute("username", username);
             }
         }
-        String uri = "http://localhost:8082/api/catalog/viewall";
+        String uri = "http://apap-009.cs.ui.ac.id:10083/api/catalog/viewall";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
         ReadCatalogResponseDTO[] listCatalog = res.getBody();
 
-        model.addAttribute("imageLink", "http://localhost:8082/api/image/");
+        model.addAttribute("imageLink", "http://apap-009.cs.ui.ac.id:10083/api/image/");
         model.addAttribute("listCatalog", listCatalog);
 
         return "home";
