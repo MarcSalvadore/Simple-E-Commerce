@@ -2,17 +2,20 @@ package com.apapedia.user.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
-import com.apapedia.user.model.Seller;
+import com.apapedia.user.dto.response.ReadWithdrawResponseDTO;
 import com.apapedia.user.restservice.SellerRestService;
+import com.apapedia.user.restservice.UserRestService;
 
 import jakarta.validation.Valid;
 
@@ -25,16 +28,28 @@ public class SellerRestController {
     @Autowired
     SellerRestService sellerRestService;
 
-    @PostMapping(value = "/seller/create")
-    public Seller restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
+    @Autowired
+    UserRestService userRestService;
+
+    @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
-            );
-        } else {  
+                return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+        } else { 
             var seller = sellerMapper.createSellerRequestDTOToSeller(sellerDTO);
             sellerRestService.createRestSeller(seller);
-            return seller;
+            return ResponseEntity.ok("Registrasi berhasil!");
         }
+    }
+
+    @PostMapping(value = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String restWithdraw(@RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
+        boolean res = sellerRestService.withdraw(withdrawResponseDTO.getIdSeller(), withdrawResponseDTO.getAmount());
+        
+        if (res) {
+            return "Withdraw berhasil!";
+        }
+
+        return null;
     }
 }
