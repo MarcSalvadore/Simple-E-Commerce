@@ -1,11 +1,17 @@
 package com.apapedia.order.restservice;
 
-import java.util.UUID;
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.List;
-import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.apapedia.order.dto.response.TopOrderResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +25,9 @@ import com.apapedia.order.repository.OrderDb;
 import com.apapedia.order.repository.OrderItemDb;
 
 import jakarta.transaction.Transactional;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @Transactional
@@ -91,4 +100,85 @@ public class OrderRestServiceImpl implements OrderRestService {
     public void updateOrderStatus(UUID orderId, int newStatus) {
         orderDb.updateOrderStatus(orderId, newStatus);
      }
+
+    @Override
+    public Map<String, Long> chartTop5SoldProduct(UUID sellerId){
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now().withDayOfMonth(startDate.lengthOfMonth());
+
+        // Filter orders for the given seller and within the month interval
+        List<Order> sellerOrders = getMonthlyOrderBySeller(sellerId, startDate, endDate);
+
+        // Flatten the list of order items
+        List<OrderItem> allOrderItems = sellerOrders.stream()
+                .flatMap(order -> order.getListOrderItem().stream())
+                .collect(Collectors.toList());
+
+        // Group and sum the quantities sold by product name
+        Map<String, Long> productSoldMap = allOrderItems.stream()
+                .collect(Collectors.groupingBy(OrderItem::getProductName,
+                        Collectors.summingLong(OrderItem::getQuantity)));
+
+        // Sort the result by quantity sold in descending order
+        Map<String, Long> sortedProductSoldMap = productSoldMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+        // Take the top 5 items
+        return sortedProductSoldMap.entrySet().stream()
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public List<Order> getMonthlyOrderBySeller(UUID sellerId, LocalDate startDate, LocalDate endDate) {
+        return orderDb.findBySeller(sellerId);
+    }
+
+    @Transactional
+    public void completeOrder(UUID orderId) {
+        // Fetch the order from the database
+        Order order = orderDb.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // Update the seller's balance (Assuming you have a Seller entity with a balance field)
+        // seller.updateBalance(order.getTotalPrice());
+
+        // Update the order status to indicate completion
+        order.setStatus(5); // Status 5, berarti order sudah selesai.
+
+        // Save the changes
+        orderDb.save(order);
+    }
+
+    public Map<String, String> getCustomerDetailsByOrderId(UUID orderId) {
+        // Fetch the order from the database
+        Order order = orderDb.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Map<String, String> customerDetails = new HashMap<>();
+        // Assuming you have a Customer entity linked to the Order entity
+        customerDetails.put("customerId", order.getCustomer().toString());
+        // Add other customer details as needed
+
+        return customerDetails;
+    }
+
+    public Map<String, String> getSellerDetailsByOrderId(UUID orderId) {
+        // Fetch the order from the database
+        Order order = orderDb.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        Map<String, String> sellerDetails = new HashMap<>();
+        // Assuming you have a Seller entity linked to the Order entity
+        sellerDetails.put("sellerId", order.getSeller().toString());
+        // Add other seller details as needed
+
+        return sellerDetails;
+    }
 }
