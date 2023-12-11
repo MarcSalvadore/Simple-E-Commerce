@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>history</title>
+</head>
+
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="text-center pt-5">
+            <h2>Order History</h2>
+        </div>    
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${listOrder}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.productName}"></td>
+                    <td th:text="${order.status}"></td>
+                    <td>
+                        
+                        <button class="btn btn-primary" th:onclick="'updateOrderStatus(\'' + ${order.id} + '\')">
+                            Update Status
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function updateOrderStatus(orderId) {
+            
+            var form = document.createElement("form");
+            var hiddenOrderId = document.createElement("input");
+            var hiddenStatus = document.createElement("input");
+
+            hiddenOrderId.type = "hidden";
+            hiddenOrderId.name = "orderId";
+            hiddenOrderId.value = orderId;
+
+            hiddenStatus.type = "hidden";
+            hiddenStatus.name = "status";
+            hiddenStatus.value = 0; 
+
+            form.method = "POST";
+            form.action = "updateOrderStatus"; 
+
+            
+            form.appendChild(hiddenOrderId);
+            form.appendChild(hiddenStatus);
+            form.appendChild(document.createElement("button")); 
+
+            document.querySelector("button.btn.btn-primary").replaceWith(form);
+        }
+    </script>
+</body>
+
+</html>

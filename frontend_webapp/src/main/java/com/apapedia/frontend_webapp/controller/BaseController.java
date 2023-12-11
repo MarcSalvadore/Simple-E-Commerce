@@ -12,13 +12,13 @@ public class BaseController {
     @GetMapping("/")
     public String home(Model model) {
  
-        String uri = "http://localhost:8082/api/catalog/viewall";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
-        ReadCatalogResponseDTO[] listCatalog = res.getBody();
+        // String uri = "http://localhost:8084/api/catalog/viewall";
+        // RestTemplate restTemplate = new RestTemplate();
+        // ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
+        // ReadCatalogResponseDTO[] listCatalog = res.getBody();
 
-        model.addAttribute("imageLink", "http://localhost:8082/api/image/");
-        model.addAttribute("listCatalog", listCatalog);
+        // model.addAttribute("imageLink", "http://localhost:8084/api/image/");
+        // model.addAttribute("listCatalog", listCatalog);
 
         return "home";
     }
