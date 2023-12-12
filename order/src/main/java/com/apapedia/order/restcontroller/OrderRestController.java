@@ -1,14 +1,21 @@
 package com.apapedia.order.restcontroller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import com.apapedia.*;
+import com.apapedia.order.dto.request.*;
+import com.apapedia.order.dto.response.SellerResponseDTO;
+import com.apapedia.order.repository.OrderDb;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,15 +25,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 // import com.apapedia.order.dto.CartItemMapper;
 import com.apapedia.order.dto.CartMapper;
-import com.apapedia.order.dto.request.CreateCartItemRequestDTO;
-import com.apapedia.order.dto.request.CreateCartRequestDTO;
-import com.apapedia.order.dto.request.CreateOrderRequestDTO;
-import com.apapedia.order.dto.request.CreateOrdetItemRequestDTO;
-import com.apapedia.order.dto.request.UpdateOrderStatusRequestDTO;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
 import com.apapedia.order.model.Order;
@@ -40,6 +43,9 @@ import jakarta.validation.Valid;
 public class OrderRestController {
     @Autowired
     OrderRestService orderRestService;
+
+    @Autowired
+    OrderDb orderDb;
 
     @Autowired
     CartMapper cartMapper;
@@ -201,6 +207,44 @@ public class OrderRestController {
         } else {
             orderRestService.updateOrderStatus(orderId, orderStatusReq.getStatus());
             return "success";
+        }
+    }
+
+    @GetMapping(value = "/order/chart/{sellerId}")
+    public ResponseEntity<Map<String, Long>> chartTopFiveOrder(@PathVariable("sellerId") UUID sellerId, Model model) {
+        // Fetch the top 5 sold products for the seller within the month interval
+        Map<String, Long> listTopOrder = orderRestService.chartTop5SoldProduct(sellerId);
+
+        // Returning the response for the chart data
+        return new ResponseEntity<>(listTopOrder, HttpStatus.OK);
+    }
+
+    // Update seller balance
+    @PostMapping(value = "/order/topup")
+    public ResponseEntity<String> restTopUpOrder(@RequestBody ReadTopUpRequestDTO topUpDTO) {
+        try {
+            // Assuming you have a method to retrieve completed orders with status 5
+            List<Order> completedOrders = orderRestService.getCompletedOrdersBySellerId(topUpDTO.getSellerId());
+
+            // Iterate through completed orders and top up the seller's balance
+            for (Order order : completedOrders) {
+                // Assuming you have a SellerResponseDTO to send to the Seller service
+                SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
+                sellerResponseDTO.setSellerId(order.getSeller());
+                sellerResponseDTO.setAmount(Long.valueOf(order.getTotalPrice()));
+
+                // Call the Seller service to update the seller's balance
+                String sellerUri = "http://localhost:8081/api/topup";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.postForEntity(sellerUri, sellerResponseDTO, String.class);
+            }
+
+            return ResponseEntity.ok("Top-up for completed orders successful.");
+        } catch (Exception e) {
+            // Handle exceptions, log errors, and return an appropriate response
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Failed to top-up seller's balance", e
+            );
         }
     }
 }

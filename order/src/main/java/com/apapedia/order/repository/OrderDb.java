@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 public interface OrderDb extends JpaRepository<Order, UUID> {
     List<Order> findByCustomer(UUID customer);
     List<Order> findBySeller(UUID seller);
+    List<Order> findBySellerAndStatus(UUID seller, Integer orderStatus);
     
     @Modifying
     @Transactional
