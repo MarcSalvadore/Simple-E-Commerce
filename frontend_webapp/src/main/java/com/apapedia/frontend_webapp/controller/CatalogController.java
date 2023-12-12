@@ -158,7 +158,7 @@ public class CatalogController {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession(false);
-        String jwtToken = (String) session.getAttribute("token");
+        String jwtToken = (String) session.getAttribute("token");;
         System.out.println(productRequestDTO);
         
 
