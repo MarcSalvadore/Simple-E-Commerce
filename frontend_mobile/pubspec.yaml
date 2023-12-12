@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.1.0
   loading_overlay: ^0.3.0
+  shared_preferences: ^2.2.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +61,13 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Light.ttf
+        - asset: fonts/Poppins-Medium.ttf
+        - asset: fonts/Poppins-Bold.ttf
+          weight: 500
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:

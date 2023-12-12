@@ -17,8 +17,8 @@ class Apapedia extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: const TextTheme(
-        bodyMedium: TextStyle(
-        ),
+          bodyMedium: TextStyle(
+          ),
         ),
       ),
       initialRoute: Home.id,
@@ -40,7 +40,7 @@ class PersistentTabItem {
 
   PersistentTabItem(
       {required this.tab,
-      this.navigatorkey,
-      required this.title,
-      required this.icon});
+        this.navigatorkey,
+        required this.title,
+        required this.icon});
 }
