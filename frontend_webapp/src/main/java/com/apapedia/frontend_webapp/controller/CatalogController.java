@@ -70,15 +70,12 @@ public class CatalogController {
         model.addAttribute("listCategory", listCategory);
         return "catalog/form-add-product";
     }
-
-    // masih error
+    
     @PostMapping("add-product")
-    public String addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO,
-            BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request)
-            throws IOException {
+    public String addProduct(@Valid @ModelAttribute CreateCatalogRequestDTO productRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException{
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
-
+        
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder(); // Menginisiasi error message
 
