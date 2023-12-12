@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
@@ -31,6 +34,7 @@ import jakarta.validation.Valid;
 
 @Controller
 public class CatalogController {
+    private final WebClient webClient;
     private static final Logger log = LoggerFactory.getLogger(CatalogController.class);
 
     @Autowired
@@ -38,6 +42,12 @@ public class CatalogController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    public CatalogController(WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.baseUrl("http://catalog-web:8082")
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .build();
+    }
 
     @GetMapping("add-product")
     public String formAddProduct(Model model, HttpServletRequest request) {
@@ -52,7 +62,7 @@ public class CatalogController {
             }
         }
         var productDTO = new CreateCatalogRequestDTO();
-        String uri = "http://localhost:8082/api/category/viewall";
+        String uri = "http://catalog-web:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCategoryResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCategoryResponseDTO[].class);
         ReadCategoryResponseDTO[] listCategory = res.getBody();
@@ -85,13 +95,17 @@ public class CatalogController {
         productRequestDTO.setSeller(userService.getUserIdFromToken(jwtToken));
         productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
 
-        String uri = "http://localhost:8082/api/catalog/add";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<CreateCatalogRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO,
-                CreateCatalogRequestDTO.class);
+        var response = this.webClient
+            .post()
+            .uri("/api/catalog/add")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(productRequestDTO)
+            .retrieve()
+            .bodyToMono(CreateCatalogRequestDTO.class)
+            .block();
 
         redirectAttributes.addFlashAttribute("success", "Produk telah ditambahkan");
-        redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
+        redirectAttributes.addFlashAttribute("productDTO", response);
         return "redirect:/";
     }
 
@@ -110,7 +124,7 @@ public class CatalogController {
         }
 
         // ambil data catalog lama untuk dimunculkan diform
-        String uri = "http://localhost:8082/api/catalog/detail/" + idCatalog; // Assuming there's an endpoint to get a
+        String uri = "http://catalog-web:8082/api/catalog/detail/" + idCatalog; // Assuming there's an endpoint to get a
                                                                              // specific catalog by ID
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCatalogResponseDTO> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO.class);
@@ -123,7 +137,7 @@ public class CatalogController {
         productDTO.setStock(catalog.getStock());
 
         // untuk dropdown category
-        String uriCategory = "http://localhost:8082/api/category/viewall";
+        String uriCategory = "http://catalog-web:8082/api/category/viewall";
         RestTemplate restTemplateCategory = new RestTemplate();
         ResponseEntity<ReadCategoryResponseDTO[]> resCategory = restTemplateCategory.getForEntity(uriCategory,
                 ReadCategoryResponseDTO[].class);
@@ -143,8 +157,7 @@ public class CatalogController {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession(false);
-        String jwtToken = (String) session.getAttribute("token");
-        System.out.println("AAAAAAA");
+        String jwtToken = (String) session.getAttribute("token");;
         System.out.println(productRequestDTO);
         
 
@@ -168,7 +181,7 @@ public class CatalogController {
 
         // System.out.println(productRequestDTO);
 
-        String uri = "http://localhost:8082/api/catalog/update";
+        String uri = "http://catalog-web:8082/api/catalog/update";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.put(uri, productRequestDTO);
 

@@ -1,5 +1,7 @@
 package com.apapedia.frontend_webapp.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,15 +34,31 @@ public class BaseController {
             if (jwtUtils.validateToken(jwtToken)) {
                 String username = userService.getUsernameFromToken(jwtToken);
                 model.addAttribute("username", username);
-            }
-        }
-        String uri = "http://localhost:8082/api/catalog/viewall";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
-        ReadCatalogResponseDTO[] listCatalog = res.getBody();
 
-        // model.addAttribute("imageLink", "http://localhost:8084/api/image/");
-        model.addAttribute("listCatalog", listCatalog);
+                // Jika user login, dapatkan seller ID dari token
+                UUID sellerId = userService.getUserIdFromToken(jwtToken);
+                // endpoint viewall catalog by seller id
+                String uri = "http://catalog-web:8082/api/catalog/viewall/" + sellerId;
+
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri,
+                        ReadCatalogResponseDTO[].class);
+                ReadCatalogResponseDTO[] listCatalog = res.getBody();
+
+                model.addAttribute("imageLink", "http://apap-083.cs.ui.ac.id/api/image/");
+                model.addAttribute("listCatalog", listCatalog);
+
+            } 
+        } else {
+                String uri = "http://catalog-web:8082/api/catalog/viewall";
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri,
+                        ReadCatalogResponseDTO[].class);
+                ReadCatalogResponseDTO[] listCatalog = res.getBody();
+
+                model.addAttribute("imageLink", "http://apap-083.cs.ui.ac.id/api/image/");
+                model.addAttribute("listCatalog", listCatalog);
+        }
 
         return "home";
     }

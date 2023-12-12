@@ -40,7 +40,7 @@ public class CatalogRestController {
     @Autowired
     CatalogRestService catalogRestService;
 
-    @PostMapping(value = "/catalog/add")
+    @PostMapping(value = "/catalog/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Catalog restAddCatalog(@Valid @RequestBody CreateCatalogRequestDTO catalogDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
