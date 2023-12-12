@@ -1,18 +1,11 @@
 package com.apapedia.order.restcontroller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
-import com.apapedia.*;
 import com.apapedia.order.dto.request.*;
 import com.apapedia.order.dto.response.SellerResponseDTO;
 import com.apapedia.order.repository.OrderDb;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -28,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-// import com.apapedia.order.dto.CartItemMapper;
 import com.apapedia.order.dto.CartMapper;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;
