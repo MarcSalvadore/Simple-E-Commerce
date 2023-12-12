@@ -6,18 +6,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.UUID;
 
-import org.glassfish.jaxb.core.annotation.OverrideAnnotationOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 import com.apapedia.frontend_webapp.dto.TokenDTO;
 import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
-import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 
 import io.jsonwebtoken.Claims;

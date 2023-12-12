@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.apapedia.user.model.EnumRole;
 import com.apapedia.user.model.Seller;
-import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.SellerDb;
 import com.apapedia.user.repository.UserDb;
 

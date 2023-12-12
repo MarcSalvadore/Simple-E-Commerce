@@ -1,7 +1,5 @@
 package com.apapedia.frontend_webapp.dto.request;
 
-import com.github.javafaker.Bool;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

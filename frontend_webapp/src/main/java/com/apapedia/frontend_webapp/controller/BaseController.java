@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
@@ -14,7 +12,6 @@ import com.apapedia.frontend_webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 @Controller
 public class BaseController {

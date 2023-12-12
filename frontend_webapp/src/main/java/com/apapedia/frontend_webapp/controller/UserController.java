@@ -30,7 +30,6 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
-    // Register seller
     @GetMapping("/register")
     public String formRegister(Model model){
         var user = new CreateUserRequestDTO();

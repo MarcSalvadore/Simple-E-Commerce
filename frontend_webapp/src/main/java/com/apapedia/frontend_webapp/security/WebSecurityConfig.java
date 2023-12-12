@@ -25,15 +25,12 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/add-product")).authenticated()
                 .requestMatchers(new AntPathRequestMatcher("/update-product")).authenticated()
                 .requestMatchers(new AntPathRequestMatcher("/profile")).authenticated()
-                .requestMatchers(new AntPathRequestMatcher("/profile-edit")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/profile/edit")).authenticated()
                 .requestMatchers(new AntPathRequestMatcher("/withdraw")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/user/delete")).authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/profile/edit/password")).authenticated()
                 .anyRequest().authenticated()
             )
-            // .formLogin((form) -> form
-            //     .loginPage("/login-sso")
-            //     .permitAll()
-            //     .defaultSuccessUrl("/")
-            // )
             .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login-sso"))
