@@ -28,8 +28,6 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	implementation 'com.github.javafaker:javafaker:1.0.2'
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-	// implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
