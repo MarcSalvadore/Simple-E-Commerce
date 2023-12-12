@@ -50,7 +50,7 @@ public class UserController {
         return "user/register";
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     private String registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
         try {
             var response = this.webClient
