@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.result.view.RedirectView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,11 +33,19 @@ import jakarta.validation.Valid;
 
 @Controller
 public class CatalogController {
+    private final WebClient webClient;
+
     @Autowired
     UserService userService;
 
     @Autowired
     JwtUtils jwtUtils;
+
+    public CatalogController(WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.baseUrl("http://user-web:8082")
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .build();
+    }
 
     @GetMapping("add-product")
     public String formAddProduct(Model model, HttpServletRequest request) {
@@ -82,12 +93,17 @@ public class CatalogController {
         productRequestDTO.setSeller(userService.getUserIdFromToken(jwtToken));
         productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
 
-        String uri = "http://catalog-web:8082/api/catalog/add";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<CreateCatalogRequestDTO> res = restTemplate.postForEntity(uri, productRequestDTO, CreateCatalogRequestDTO.class);
+        var response = this.webClient
+            .post()
+            .uri("/api/catalog/add")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(productRequestDTO)
+            .retrieve()
+            .bodyToMono(CreateCatalogRequestDTO.class)
+            .block();
 
         redirectAttributes.addFlashAttribute("success", "Produk telah ditambahkan");
-        redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
+        redirectAttributes.addFlashAttribute("productDTO", response);
         return "redirect:/";
     }
 
@@ -105,7 +121,4 @@ public class CatalogController {
         
         return "catalog/form-update-product";
     }
-
-    
-
 }
