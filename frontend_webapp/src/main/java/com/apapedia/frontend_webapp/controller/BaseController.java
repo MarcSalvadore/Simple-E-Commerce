@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.stereotype.Controller;
@@ -23,16 +24,19 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BaseController {
+    public final WebClient webClient;
+
     @Autowired
     UserService userService;
 
     @Autowired
     JwtUtils jwtUtils;
 
-    private WebClient webClient = WebClient.builder()
-                    .codecs(configurer -> configurer.defaultCodecs()
-                    .jaxb2Decoder(new Jaxb2XmlDecoder()))
+    public BaseController(WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_CATALOG_URL)
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
+    }
 
     @GetMapping("/")
     public String home(Model model, HttpServletRequest request) {
