@@ -56,7 +56,7 @@ public class UserController {
             var response = this.webClient
                 .post()
                 .uri("http://user-web:8081/api/seller/create")
-                // .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userRequestDTO)
                 .retrieve()
                 .bodyToMono(String.class)
