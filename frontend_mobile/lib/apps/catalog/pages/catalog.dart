@@ -4,7 +4,11 @@ import 'package:frontend_mobile/components/drawer.dart';
 import 'detailProduk.dart'; // Import halaman detailProduk.dart
 
 class Catalog extends StatefulWidget {
+
   const Catalog({Key? key, required String title}) : super(key: key);
+  static const ROUTE_NAME = '/catalog';
+  static String id = 'catalog';
+
 
   @override
   State<Catalog> createState() => _CatalogState();
