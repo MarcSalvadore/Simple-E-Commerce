@@ -19,17 +19,15 @@ public class CustomerRestServiceImpl implements CustomerRestService {
     @Autowired
     UserRestService userRestService;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     @Override
     public void createRestCustomer(Customer customer) { 
         customer.setRole(EnumRole.CUSTOMER);
-        String hashedPass = encrypt(customer.getPassword());
+        String hashedPass = encoder.encode(customer.getPassword());
         customer.setPassword(hashedPass);
         customerDb.save(customer); 
-    }
-
-    public String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
     }
 
 }

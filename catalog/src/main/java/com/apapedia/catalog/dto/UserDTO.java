@@ -1,5 +1,4 @@
-package com.apapedia.frontend_webapp.dto.response;
-
+package com.apapedia.catalog.dto;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserResponseDTO {
+public class UserDTO {
     private UUID id;
     private String name;
     private String username;

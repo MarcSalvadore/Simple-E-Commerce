@@ -61,7 +61,6 @@ public class CatalogController {
                 model.addAttribute("username", username);
             }
         }
-
         var productDTO = new CreateCatalogRequestDTO();
         String uri = "http://catalog-web:8082/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();

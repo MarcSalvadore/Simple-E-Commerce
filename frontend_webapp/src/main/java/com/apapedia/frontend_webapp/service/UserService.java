@@ -2,9 +2,8 @@ package com.apapedia.frontend_webapp.service;
 
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
-
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
+import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 
 public interface UserService {
@@ -14,4 +13,6 @@ public interface UserService {
     String getUsernameFromToken(String token);
     void deleteUser(UUID id, String token);
     String withdraw(WithdrawRequestDTO withdrawRequestDTO, String token);
+    CreateUserResponseDTO editUser(UUID id, String token, CreateUserResponseDTO createUserResponseDTO);
+    void changePassword(UUID id, String token, ChangePasswordResponseDTO changePasswordResponseDTO);
 }
