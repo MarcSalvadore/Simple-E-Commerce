@@ -140,45 +140,8 @@ public class OrderRestServiceImpl implements OrderRestService {
         return orderDb.findBySeller(sellerId);
     }
 
-    @Transactional
-    public void completeOrder(UUID orderId) {
-        // Fetch the order from the database
-        Order order = orderDb.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        // Update the seller's balance (Assuming you have a Seller entity with a balance field)
-        // seller.updateBalance(order.getTotalPrice());
-
-        // Update the order status to indicate completion
-        order.setStatus(5); // Status 5, berarti order sudah selesai.
-
-        // Save the changes
-        orderDb.save(order);
-    }
-
-    public Map<String, String> getCustomerDetailsByOrderId(UUID orderId) {
-        // Fetch the order from the database
-        Order order = orderDb.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        Map<String, String> customerDetails = new HashMap<>();
-        // Assuming you have a Customer entity linked to the Order entity
-        customerDetails.put("customerId", order.getCustomer().toString());
-        // Add other customer details as needed
-
-        return customerDetails;
-    }
-
-    public Map<String, String> getSellerDetailsByOrderId(UUID orderId) {
-        // Fetch the order from the database
-        Order order = orderDb.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        Map<String, String> sellerDetails = new HashMap<>();
-        // Assuming you have a Seller entity linked to the Order entity
-        sellerDetails.put("sellerId", order.getSeller().toString());
-        // Add other seller details as needed
-
-        return sellerDetails;
+    @Override
+    public List<Order> getCompletedOrdersBySellerId(UUID sellerId) {
+        return orderDb.findBySellerAndStatus(sellerId, 5);
     }
 }

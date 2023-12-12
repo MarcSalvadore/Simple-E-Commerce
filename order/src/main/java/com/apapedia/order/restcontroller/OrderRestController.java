@@ -4,9 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.apapedia.*;
 import com.apapedia.order.dto.request.*;
+import com.apapedia.order.dto.response.SellerResponseDTO;
+import com.apapedia.order.repository.OrderDb;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 // import com.apapedia.order.dto.CartItemMapper;
@@ -36,6 +43,9 @@ import jakarta.validation.Valid;
 public class OrderRestController {
     @Autowired
     OrderRestService orderRestService;
+
+    @Autowired
+    OrderDb orderDb;
 
     @Autowired
     CartMapper cartMapper;
@@ -200,21 +210,6 @@ public class OrderRestController {
         }
     }
 
-//    @PutMapping("/order/{customerId}/update-saldo")
-//    public ResponseEntity<String> updateSellerSaldo(@PathVariable UUID customerId, @RequestBody UpdateSaldoRequestDTO request) {
-//        // Check if the sellerId is valid (you may want to implement this validation)
-//        // For simplicity, I'm assuming you have a UserService to handle business logic.
-//
-//        // Update the seller's saldo (balance)
-//        boolean saldoUpdated = orderRestService.updateSellerEarning(customerId, request.getAdditionalSaldo());
-//
-//        if (saldoUpdated) {
-//            return new ResponseEntity<>("Seller saldo updated successfully", HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("Failed to update seller saldo", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     @GetMapping(value = "/order/chart/{sellerId}")
     public ResponseEntity<Map<String, Long>> chartTopFiveOrder(@PathVariable("sellerId") UUID sellerId, Model model) {
         // Fetch the top 5 sold products for the seller within the month interval
@@ -225,14 +220,31 @@ public class OrderRestController {
     }
 
     // Update seller balance
-    @PutMapping(value = "/order/{orderId}/complete")
-    public ResponseEntity<String> completeOrder(@PathVariable UUID orderId) {
+    @PostMapping(value = "/order/topup")
+    public ResponseEntity<String> restTopUpOrder(@RequestBody ReadTopUpRequestDTO topUpDTO) {
         try {
-            orderRestService.completeOrder(orderId);
-            return new ResponseEntity<>("Order telah diselesaikan dan seller akan menerima transaksi pembayaran.", HttpStatus.OK);
+            // Assuming you have a method to retrieve completed orders with status 5
+            List<Order> completedOrders = orderRestService.getCompletedOrdersBySellerId(topUpDTO.getSellerId());
+
+            // Iterate through completed orders and top up the seller's balance
+            for (Order order : completedOrders) {
+                // Assuming you have a SellerResponseDTO to send to the Seller service
+                SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
+                sellerResponseDTO.setSellerId(order.getSeller());
+                sellerResponseDTO.setAmount(Long.valueOf(order.getTotalPrice()));
+
+                // Call the Seller service to update the seller's balance
+                String sellerUri = "http://localhost:8081/api/topup";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.postForEntity(sellerUri, sellerResponseDTO, String.class);
+            }
+
+            return ResponseEntity.ok("Top-up for completed orders successful.");
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            // Handle exceptions, log errors, and return an appropriate response
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Failed to top-up seller's balance", e
+            );
         }
     }
-
 }
