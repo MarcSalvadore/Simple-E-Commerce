@@ -38,7 +38,7 @@ public class BaseController {
                 // Jika user login, dapatkan seller ID dari token
                 UUID sellerId = userService.getUserIdFromToken(jwtToken);
                 // endpoint viewall catalog by seller id
-                String uri = "http://apap-083.cs.ui.ac.id/api/catalog/viewall/" + sellerId;
+                String uri = "http://catalog-web:8082/api/catalog/viewall/" + sellerId;
 
                 RestTemplate restTemplate = new RestTemplate();
                 ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri,

@@ -30,7 +30,7 @@ public class OrderController {
     
     @GetMapping("/order/history/{sellerId}")
     public String orderHistoryPage(@PathVariable UUID sellerId, Model model) {
-        String uri = "http://localhost:8083/api/order/seller/" + sellerId;
+        String uri = "http://order-web:8083/api/order/seller/" + sellerId;
         RestTemplate restTemplate = new RestTemplate();
         ParameterizedTypeReference<List<ReadOrderResponseDTO>> responseType = new ParameterizedTypeReference<List<ReadOrderResponseDTO>>() {};
         ResponseEntity<List<ReadOrderResponseDTO>> res = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
@@ -44,7 +44,7 @@ public class OrderController {
     @PostMapping(value = "/order/status/{orderId}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String putMethodName(@PathVariable UUID orderId, @RequestParam("status") int status, @RequestParam("sellerId") String sellerId, Model model) {
         //TODO: process PUT request 
-        String uri = "http://localhost:8083/api/order/status/" + orderId;
+        String uri = "http://order-web:8083/api/order/status/" + orderId;
         UpdateOrderStatusRequestDTO request = new UpdateOrderStatusRequestDTO();
         request.setStatus(status);
         
@@ -59,7 +59,7 @@ public class OrderController {
         // Get the response body
         String responseBody = res.getBody();
 
-        String uriGet = "http://localhost:8083/api/order/seller/" + sellerId;
+        String uriGet = "http://order-web:8083/api/order/seller/" + sellerId;
         ParameterizedTypeReference<List<ReadOrderResponseDTO>> responseType = new ParameterizedTypeReference<List<ReadOrderResponseDTO>>() {};
         ResponseEntity<List<ReadOrderResponseDTO>> resp = restTemplate.exchange(uriGet, HttpMethod.GET, null, responseType);
         List<ReadOrderResponseDTO> listOrder = resp.getBody();
