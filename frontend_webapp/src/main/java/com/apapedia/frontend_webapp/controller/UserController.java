@@ -50,13 +50,13 @@ public class UserController {
         return "user/register";
     }
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register")
     private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
         try {
             var response = this.webClient
                 .post()
                 .uri("http://user-web:8081/api/seller/create")
-                .contentType(MediaType.APPLICATION_JSON)
+                // .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userRequestDTO)
                 .retrieve()
                 .bodyToMono(String.class)
