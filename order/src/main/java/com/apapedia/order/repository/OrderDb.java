@@ -24,6 +24,6 @@ public interface OrderDb extends JpaRepository<Order, UUID> {
     @Query("UPDATE Order o SET o.status = :newStatus WHERE o.id = :orderId")
     void updateOrderStatus(UUID orderId, int newStatus);
 
-    @Query("SELECT o.price FROM Order o WHERE o.seller = :sellerId AND o.status = 5")
+    @Query("SELECT o.totalPrice FROM Order o WHERE o.seller = :sellerId AND o.status = 5")
     List<Double> findPricesForDoneOrders(UUID sellerId);
 }
