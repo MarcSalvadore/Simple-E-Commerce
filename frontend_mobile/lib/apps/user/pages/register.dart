@@ -1,148 +1,286 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile/apps/home/home.dart';
+import 'package:frontend_mobile/apps/user/pages/login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Register extends StatefulWidget{
+class Register extends StatefulWidget {
   const Register({Key? key, required String title}) : super(key: key);
   static const ROUTE_NAME = '/register';
   static String id = 'register';
 
   @override
   State<Register> createState() => _RegisterState();
-
 }
 
-class _RegisterState extends State<Register>{
-    final _formKey = GlobalKey<FormState>();
+class _RegisterState extends State<Register> {
+  final _formKey = GlobalKey<FormState>();
 
-    @override
-    Widget build(BuildContext context){
-      Size size = MediaQuery.of(context).size;
-      return WillPopScope(
-        onWillPop: () async {
-        Navigator.popAndPushNamed(context, Home.id);
-        return true;
-        },
-        child: Form(
-          key: _formKey,
-          child: Stack(
+  TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  Future<bool> registerCustomer(String nama, String username, String password,
+      String email, int umur) async {
+    final response = await http.post(
+      Uri.parse("http://10.0.2.2:8081/customer/create"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        "name"      : nameController.text,
+        "username"      : usernameController.text,
+        "email"  : emailController.text,
+        "password"  : passwordController.text,
+        "address"     : addressController.text
+      }),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw false;
+    }
+  }
+  @override
+  void dispose() {
+    nameController.dispose();
+    usernameController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Scaffold(
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // SizedBox(
-                      //   height: size.width * 0.1,
-                      // ),
-                      Stack(
-                        children: const [
-                          Center(
-                            child: Text('Sign Up',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 55,
-                              fontWeight: FontWeight.bold
-                            ),
-                            ),
-                          )
-                        ],
+              const Text(
+                "APAPEDIA",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Icon(
+                Icons.shopping_cart,
+                size: 100,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                margin: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Create an Account!",
+                      style: TextStyle(
+                        fontSize: 24,
                       ),
-                      SizedBox(
-                        height: size.width * 0.1,
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 10.0
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your name",
-                                labelText: "Name",
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: TextFormField(
+                                controller: nameController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Name",
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter your name';
+                                  }
+                                  return null;
+                                },
                               ),
-                              // onchanged, onsaved, autovalidatemode belum
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 10.0
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your username",
-                                labelText: "Username",
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: TextFormField(
+                                controller: usernameController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Username",
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter your username';
+                                  }
+                                  return null;
+                                },
                               ),
-                              // onchanged, onsaved, autovalidatemode belum
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 10.0
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your email",
-                                labelText: "Email",
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: TextFormField(
+                                controller: emailController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Email",
+                                ),
+                                validator: (String? value) {
+                                  if (value == null ||
+                                      value.isEmpty ||
+                                      !value.contains('@')) {
+                                    return 'Enter a valid email address';
+                                  }
+                                  return null;
+                                },
                               ),
-                              // onchanged, onsaved, autovalidatemode belum
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 10.0
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your password",
-                                labelText: "Password",
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: TextFormField(
+                                controller: addressController,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Address",
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter your address';
+                                  }
+                                  return null;
+                                },
                               ),
-                              // onchanged, onsaved, autovalidatemode belum
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 25.0, vertical: 10.0
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Enter your address",
-                                labelText: "Address",
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: TextFormField(
+                                controller: passwordController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Password',
+                                ),
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter a password';
+                                  }
+                                  return null;
+                                },
                               ),
-                              // onchanged, onsaved, autovalidatemode belum
                             ),
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          Container(
-                            height: size.height * 0.08,
-                            width:  size.width * 0.8,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
+                            const SizedBox(
+                              height: 20,
                             ),
-                            child : TextButton(
-                              onPressed: () {
-
-                              },
-                              child: const Text(
-                                'Submit',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  height: 1.5,
-                                  fontWeight: FontWeight.bold
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                fixedSize:
+                                Size(MediaQuery.of(context).size.width * 0.8, 50),
+                                // backgroundColor: ColorPallete.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                            )
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  final response = await http.post(
+                                    Uri.parse(
+                                        "http://10.0.2.2:8081/api/customer/create"),
+                                    headers: <String, String>{
+                                      'Content-Type':
+                                      'application/json;charset=UTF-8'
+                                    },
+                                    body: jsonEncode({
+                                      'name': nameController.text,
+                                      'username': usernameController.text,
+                                      'email': emailController.text,
+                                      'address': addressController.text,
+                                      'password': passwordController.text,
+                                      'balance': 0,
+                                    }),
+                                  );
+                                  print("STATUS");
+                                  print(response.statusCode);
+                                  if (response.statusCode == 200) {
+                                    print("BERHASIL REGISTER");
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
+                                    // A.show(
+                                    //   context: context,
+                                    //   type: QuickAlertType.success,
+                                    //   title: 'Account has Been Created!',
+                                    //   text: 'Please login',
+                                    //   confirmBtnText: "Login",
+                                    //   onConfirmBtnTap: 	() => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage())),
+                                    //   barrierDismissible: false,
+                                    // );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Registration failed. Please try with another username and email.',
+                                        ),
+                                        duration: const Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'Register',
+                                style: TextStyle(fontSize: 20, color: Colors.black),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) => const Login(title: 'Login',)),
+                                ); // Use the route name for navigation
+                              },
+                              child: const Text(
+                                "Already have an account? Sign in here",
+                                // style: TextStyle(
+                                //   fontSize:
+                                // ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               )
             ],
           ),
         ),
-      );
-    }
+      ),
+    );
   }
+}
