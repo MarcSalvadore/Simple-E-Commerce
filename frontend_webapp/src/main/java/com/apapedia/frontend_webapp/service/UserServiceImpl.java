@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 
 import com.apapedia.frontend_webapp.dto.TokenDTO;
 import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
+import com.apapedia.frontend_webapp.dto.request.UpdateUserRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
+import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 
 import io.jsonwebtoken.Claims;
@@ -101,5 +103,20 @@ public class UserServiceImpl implements UserService {
         }
 
         return "Withdraw gagal";
+    }
+
+    @Override
+    public UpdateUserResponseDTO editProfile(UpdateUserRequestDTO updateUserResponseDTO, String token) {
+        UpdateUserResponseDTO response = this.webClient
+            .put()
+            .uri("/api/user/update")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(updateUserResponseDTO)
+            .retrieve()
+            .bodyToMono(UpdateUserResponseDTO.class)
+            .block();
+        
+        return response;
     }
 }

@@ -11,8 +11,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.apapedia.frontend_webapp.dto.request.UpdateUserRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
+import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
 
@@ -89,7 +91,53 @@ public class ProfileController {
     }
 
     @GetMapping("/profile/edit")
-    public String editProfile(Model model) {
+    public String formEditProfile(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+        UUID userID = userService.getUserIdFromToken(jwtToken);
+        CreateUserResponseDTO user = userService.getUserDetails(userID, jwtToken);
+        UpdateUserRequestDTO updateUserRequestDTO = new UpdateUserRequestDTO();
+
+        updateUserRequestDTO.setId(userID);
+        updateUserRequestDTO.setAddress(user.getAddress());
+        updateUserRequestDTO.setName(user.getName());
+        updateUserRequestDTO.setEmail(user.getEmail());
+        updateUserRequestDTO.setUsername(user.getUsername());
+        updateUserRequestDTO.setPassword(user.getPassword());
+        
+        model.addAttribute("userDTO", updateUserRequestDTO);
         return "profile/edit-profile";
+    }
+
+    @PostMapping("/profile/edit")
+    public String editProfile(@Valid @ModelAttribute UpdateUserRequestDTO updateUserRequestDTO, HttpServletRequest request, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+        
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
+            
+            //Mengambil setiap error message yang ada
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String defaultMessage = error.getDefaultMessage();
+                errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
+            }
+            
+            redirectAttributes.addFlashAttribute("userDTO", updateUserRequestDTO);
+            redirectAttributes.addFlashAttribute("error", errorMessage);
+            return "redirect:/profile/edit";
+        }
+
+        UpdateUserResponseDTO user = userService.editProfile(updateUserRequestDTO, jwtToken);
+
+        if (user != null) {
+            model.addAttribute("userDTO", user);
+            model.addAttribute("success", "Profil sudah ter-update!");
+            return "redirect:/profile";
+        } else {
+            model.addAttribute("error", "Edit profile gagal");
+            return "profile/edit-profile";
+        }
+
     }
 }

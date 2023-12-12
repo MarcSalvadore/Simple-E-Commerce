@@ -1,5 +1,6 @@
 package com.apapedia.user.restservice;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +50,7 @@ public class UserRestServiceImpl implements UserRestService {
             user.setEmail(userFromDto.getEmail());
             user.setPassword(userFromDto.getPassword());
             user.setAddress(userFromDto.getAddress());
+            user.setUpdatedAt(new Date());
 
             userDb.save(user);
         }

@@ -25,6 +25,7 @@ import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.LoginJwtResponseDTO;
+import com.apapedia.user.dto.response.UpdateUserResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.UserRestService;
 import com.apapedia.user.security.UserDetailsServiceImpl;
@@ -68,14 +69,15 @@ public class UserRestController {
 
     //Edit profile
     @PutMapping(value = "user/update")
-    private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
+    private UpdateUserResponseDTO updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
         } else {
             UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
             UserModel user = userRestService.updateRestUser(userFromDto);
-            return user;
+            UpdateUserResponseDTO userResponseDTO = userMapper.userToUpdateUserResponseDTO(user);
+            return userResponseDTO;
         }
     }
 

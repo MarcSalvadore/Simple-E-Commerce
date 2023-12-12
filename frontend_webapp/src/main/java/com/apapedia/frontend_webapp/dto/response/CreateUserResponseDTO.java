@@ -16,4 +16,5 @@ public class CreateUserResponseDTO {
     private String email;
     private String address;
     private Long balance;
+    private String password;
 }

@@ -1,15 +1,15 @@
-package com.apapedia.user.dto.request;
-
-import java.util.UUID;
+package com.apapedia.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateUserRequestDTO {
+public class UpdateUserResponseDTO {
     private UUID id;
     private String name;
     private String username;
