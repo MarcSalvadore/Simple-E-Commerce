@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
+
     @Autowired 
     UserService userService;
 
@@ -81,8 +82,4 @@ public class PageController {
         request.getSession().invalidate();
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }
-
-
-
-
 }
