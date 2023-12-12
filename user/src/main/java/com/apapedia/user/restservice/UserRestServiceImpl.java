@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.apapedia.user.dto.request.LoginSellerRequestDTO;
+import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
@@ -82,7 +82,7 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public String loginSeller(LoginSellerRequestDTO loginJwtRequestDTO) {
+    public String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO) {
         String username = loginJwtRequestDTO.getUsername();
         UserModel user = userDb.findByUsername(username);
         if (user == null || user.getIsDeleted() == true) {

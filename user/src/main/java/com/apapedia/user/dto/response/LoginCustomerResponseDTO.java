@@ -1,12 +1,11 @@
-package com.apapedia.user.dto.request;
+package com.apapedia.user.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginSellerRequestDTO {
-    private String username;
-    private String name;
+public class LoginCustomerResponseDTO {
+    String token;
+    String id;
 }
