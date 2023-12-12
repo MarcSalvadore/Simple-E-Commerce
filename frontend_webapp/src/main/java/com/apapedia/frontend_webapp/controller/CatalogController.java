@@ -42,7 +42,7 @@ public class CatalogController {
     JwtUtils jwtUtils;
 
     public CatalogController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://user-web:8082")
+        this.webClient = webClientBuilder.baseUrl("http://catalog-web:8082")
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
