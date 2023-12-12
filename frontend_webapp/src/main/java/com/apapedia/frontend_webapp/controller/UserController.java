@@ -63,7 +63,7 @@ public class UserController {
                 .block();
 
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return "redirect:/";
+            return "redirect:/login-sso";
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
