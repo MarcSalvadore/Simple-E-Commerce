@@ -5,13 +5,15 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.apapedia.user.dto.request.LoginJwtRequestDTO;
+import com.apapedia.user.dto.request.LoginSellerRequestDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -22,6 +24,9 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    BCryptPasswordEncoder encoder;
 
     @Override
     public void createRestUser(UserModel user) { userDb.save(user); }
@@ -40,27 +45,30 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public boolean updateRestUser(UserModel userFromDto) {
+    public UserModel updateRestUser(UserModel userFromDto) {
         UserModel user = getUserById(userFromDto.getId());
-        System.out.println("INI USER DARI DB");
-        System.out.println(user.getUsername());
-        System.out.println(user);
-        if(user != null) {
-            System.out.println("MASUK IF");
-            System.out.println(userFromDto.getName());
-            user.setName(userFromDto.getName());
-            user.setName(userFromDto.getUsername());
-            user.setEmail(userFromDto.getEmail());
-            user.setPassword(userFromDto.getPassword());
-            user.setAddress(userFromDto.getAddress());
 
-            userDb.save(user);
-
-            return true;
+        if (user != null) {
+            if (!isPasswordSame(userFromDto.getPassword(), user.getPassword())) {
+                user.setName(userFromDto.getName());
+                user.setUsername(userFromDto.getUsername());
+                user.setEmail(userFromDto.getEmail());
+                user.setAddress(userFromDto.getAddress());
+    
+                if (!encoder.matches(userFromDto.getPassword(), user.getPassword())) {
+                    user.setPassword(encoder.encode(userFromDto.getPassword()));
+                }
+    
+                userDb.save(user);
+                return user;
+            } else {
+                throw new IllegalArgumentException("New password must be different from the old password");
+                
+            }
         }
-
-        System.out.println(user);
-        return false;
+        return null; 
+        
+        
     }
 
     @Override
@@ -74,7 +82,7 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO) {
+    public String loginSeller(LoginSellerRequestDTO loginJwtRequestDTO) {
         String username = loginJwtRequestDTO.getUsername();
         UserModel user = userDb.findByUsername(username);
         if (user == null || user.getIsDeleted() == true) {
@@ -89,4 +97,23 @@ public class UserRestServiceImpl implements UserRestService {
        userDb.save(userModel);
     }
     
+    private boolean isPasswordSame(String newPassword, String existingPassword) {
+        return encoder.matches(newPassword, existingPassword);
+    }
+
+    @Override
+    public boolean isCurrentPasswordCorrect(UUID userId, String currentPassword) {
+        UserModel user = userDb.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                return encoder.matches(currentPassword, user.getPassword());
+    }
+
+    @Override
+    public void changeUserPassword(UUID userId, String newPassword) {
+        UserModel user = userDb.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        String hashedPassword = encoder.encode(newPassword);
+        user.setPassword(hashedPassword);
+        userDb.save(user);
+    }
 }

@@ -2,19 +2,16 @@ package com.apapedia.frontend_webapp.controller;
 
 import java.util.UUID;
 
-import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
+import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
-import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
+
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
 
@@ -23,17 +20,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
-import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
-import com.apapedia.frontend_webapp.service.UserService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProfileController {
@@ -51,7 +39,7 @@ public class ProfileController {
         System.out.println("INI TOKEN");
         System.out.println(jwtToken);
         if (!jwtUtils.validateToken(jwtToken)) {
-            return "redirect:/login-sso";
+            return "redirect:/logout-sso";
         }
 
         UUID userId = userService.getUserIdFromToken(jwtToken);
@@ -116,7 +104,8 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/edit")
-    public String editProfile(HttpServletRequest request, Model model, @ModelAttribute CreateUserResponseDTO requestBody) {
+    public String editProfile(HttpServletRequest request, Model model, @ModelAttribute CreateUserResponseDTO createUserResponseDTO) {
+        
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
 
@@ -124,10 +113,41 @@ public class ProfileController {
             return "redirect:/login-sso";
         }
         UUID userId = userService.getUserIdFromToken(jwtToken);
-        String success = userService.editUser(userId, jwtToken, requestBody);
-        
-        System.out.println("YES");
-        model.addAttribute("success", success);
+        CreateUserResponseDTO seller = userService.editUser(userId, jwtToken, createUserResponseDTO);
+        model.addAttribute("userDTO", seller);
         return "profile/profile";
     }
+
+    @GetMapping("/profile/setting")
+    public String settingPage(Model model) {
+        return "profile/setting";
+    }
+
+    @GetMapping("/profile/edit/password")
+    public String changePasswordPage(Model model) {
+        System.out.println("masuk change page");
+        model.addAttribute("changePasswordDTO", new ChangePasswordResponseDTO());
+        return "profile/change-password";
+    }
+
+    @PostMapping("/profile/edit/password")
+    public String changePassword(@Valid @ModelAttribute ChangePasswordResponseDTO changePasswordDTO, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes){
+        HttpSession session = request.getSession(false);
+        String jwtToken = (String) session.getAttribute("token");
+
+        if (!jwtUtils.validateToken(jwtToken)) {
+            return "redirect:/login-sso";
+        }
+
+        try {
+            UUID userId = userService.getUserIdFromToken(jwtToken);
+            userService.changePassword(userId, jwtToken, changePasswordDTO);
+            redirectAttributes.addFlashAttribute("success", "Password changed successfully");
+            return "redirect:/profile/setting";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Check your current password and make sure new password must be different from the current password ");
+            return "redirect:/profile/edit/password";
+        }
+    }
+    
 }

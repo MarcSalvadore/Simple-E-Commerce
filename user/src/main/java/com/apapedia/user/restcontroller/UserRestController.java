@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
+import com.apapedia.user.dto.request.ChangePasswordRequestDTO;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
-import com.apapedia.user.dto.request.LoginJwtRequestDTO;
+import com.apapedia.user.dto.request.LoginSellerRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.LoginJwtResponseDTO;
 import com.apapedia.user.model.UserModel;
@@ -54,8 +55,7 @@ public class UserRestController {
     @Autowired
     JwtUtils jwtUtils;
 
-
-    //User details
+    // Get user by id
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
         try {
@@ -67,28 +67,22 @@ public class UserRestController {
         }
     }
 
-    //Edit profile
+    // Edit user
     @PutMapping(value = "/user/{id}/update")
-    private String updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
-        System.out.println("INI REQUEST BODY");
-        System.out.println(userDTO);
-        System.out.println("MASUK MAPPING BACKEND");
+    private ResponseEntity<?> updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         try {
-            System.out.println("MASUK TRY BE");
-            UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
-            System.out.println("MASUK");
-            boolean res = userRestService.updateRestUser(userFromDto);
-            System.out.println("masuk edit");
-            if (res) {
-                return "Update berhasil";
-            }
-            else {
-                return null;
+            UserModel userFromDTO = userMapper.updateUserRequestDTOToUser(updateUserRequestDTO);
+            UserModel updatedUser = userRestService.updateRestUser(userFromDTO);
+            
+            if (updatedUser != null) {
+                return ResponseEntity.ok(updatedUser);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Update failed. Check if the provided data is valid or try again later.");
             }
         } catch (Exception e) {
-            return null;
-            // throw new ResponseStatusException(
-            //     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Update failed due to an unexpected error. Please try again later.");
         }
     }
 
@@ -137,7 +131,7 @@ public class UserRestController {
     }
 
     @PostMapping("/auth/login-seller")
-    public ResponseEntity<?> loginSeller(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) {
+    public ResponseEntity<?> loginSeller(@RequestBody LoginSellerRequestDTO loginJwtRequestDTO) {
         try {
             String jwtToken = userRestService.loginSeller(loginJwtRequestDTO);
             return new ResponseEntity<>(new LoginJwtResponseDTO(jwtToken), HttpStatus.OK);
@@ -164,6 +158,37 @@ public class UserRestController {
     //         return false;
     //     }
     // }
+
+    @PutMapping("/user/{id}/change-password")
+    public ResponseEntity<?> changePassword(
+            @PathVariable("id") UUID userId,
+            @RequestBody ChangePasswordRequestDTO changePasswordRequestDTO) {
+        try {
+            // Check if the current password is correct
+            boolean isCurrentPasswordCorrect = userRestService.isCurrentPasswordCorrect(userId, changePasswordRequestDTO.getCurrentPassword());
+
+            if (!isCurrentPasswordCorrect) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Current password is incorrect.");
+            }
+
+            // Check if the new password is different from the current password
+            if (changePasswordRequestDTO.getCurrentPassword().equals(changePasswordRequestDTO.getNewPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("New password must be different from the current password.");
+            }
+
+            // Update the password in the database
+            userRestService.changeUserPassword(userId, changePasswordRequestDTO.getNewPassword());
+
+            return ResponseEntity.ok("Password changed successfully.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Password change failed due to an unexpected error. Please try again later.");
+        }
+    }
+
 }
     
 

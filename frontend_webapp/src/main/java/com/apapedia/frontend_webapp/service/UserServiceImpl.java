@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import com.apapedia.frontend_webapp.dto.TokenDTO;
 import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
+import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.UpdateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
@@ -106,23 +107,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String editUser(UUID id, String token, CreateUserResponseDTO requestBody) {
-        System.out.println("INI REQ BODY");
-        System.out.println(requestBody);
+    public CreateUserResponseDTO editUser(UUID id, String token, CreateUserResponseDTO requestBody) {
         var response = this.webClient
             .put()
             .uri("/api/user/{id}/update", id)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
             .body(BodyInserters.fromValue(requestBody))
             .retrieve()
-            .bodyToMono(String.class)
+            .bodyToMono(CreateUserResponseDTO.class)
             .block();
-        System.out.println("INI RESP");
-        System.out.println(response);
-        if (response != null) {
-            return "Edit profile berhasil!";
-        } else {
-            return "Edit profile gagal";
-        }
+        return response;
+    }
+
+    @Override
+    public void changePassword(UUID id, String token, ChangePasswordResponseDTO changePasswordResponseDTO) {
+        this.webClient
+                .put()
+                .uri("/api/user/{id}/change-password", id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .body(BodyInserters.fromValue(changePasswordResponseDTO))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 }

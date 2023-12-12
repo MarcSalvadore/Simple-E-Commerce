@@ -24,10 +24,13 @@ public class SellerRestServiceImpl implements SellerRestService {
     @Autowired
     UserDb userDb;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     @Override
     public void createRestSeller(Seller seller) { 
         seller.setRole(EnumRole.SELLER);
-        String hashedPass = encrypt(seller.getPassword());
+        String hashedPass = encoder.encode(seller.getPassword());
         seller.setPassword(hashedPass);
         sellerDb.save(seller);
 
@@ -51,11 +54,6 @@ public class SellerRestServiceImpl implements SellerRestService {
         } else {
             sellerDb.save(seller);
         }
-    }
-
-    public String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
     }
 
     @Override
