@@ -18,6 +18,7 @@
                     <div class="card-body">
                         <h1 class="h2 text-center">Edit Profile</h1>
                         <form th:action="@{/profile/edit}" th:object="${userDTO}" enctype="multipart/form-data" method="POST">
+                            <input type="hidden" class="form-control" th:field="*{id}">
                             <div class="form-group mt-2">
                                 <label>Name</label>
                                 <input class="form-control form-control-lg" th:value="*{name}" th:field="*{name}" type="text" name="name" placeholder="Enter your name">
