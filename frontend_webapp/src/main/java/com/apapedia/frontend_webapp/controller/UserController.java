@@ -52,14 +52,10 @@ public class UserController {
 
     @PostMapping("/register")
     private String registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
-        String token = (String) session.getAttribute("token");
-        UUID userId = userService.getUserIdFromToken(token);
-
         try {
             var response = this.webClient
                 .post()
                 .uri("http://user-web:8081/api/seller/create")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userRequestDTO)
                 .retrieve()
