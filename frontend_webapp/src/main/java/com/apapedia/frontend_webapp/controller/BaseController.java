@@ -37,34 +37,15 @@ public class BaseController {
             if (jwtUtils.validateToken(jwtToken)) {
                 String username = userService.getUsernameFromToken(jwtToken);
                 model.addAttribute("username", username);
-
-                // Jika user login, dapatkan seller ID dari token
-                UUID sellerId = userService.getUserIdFromToken(jwtToken);
-                // endpoint viewall catalog by seller id
-                String uri = "http://localhost:8082/api/catalog/viewall/" + sellerId;
-
-                RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri,
-                        ReadCatalogResponseDTO[].class);
-                ReadCatalogResponseDTO[] listCatalog = res.getBody();
-
-                model.addAttribute("imageLink", "http://localhost:8082/api/image/");
-                model.addAttribute("listCatalog", listCatalog);
-                System.out.println("HOMEEE LOGINNNNN");
-
-            } 
-        }else {
-                String uri = "http://localhost:8082/api/catalog/viewall";
-                RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri,
-                        ReadCatalogResponseDTO[].class);
-                ReadCatalogResponseDTO[] listCatalog = res.getBody();
-
-                model.addAttribute("imageLink", "http://localhost:8082/api/image/");
-                model.addAttribute("listCatalog", listCatalog);
-
-                System.out.println("HOMEEE NON LOGINNN");
             }
+        }
+        String uri = "http://catalog-web:8082/api/catalog/viewall";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ReadCatalogResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO[].class);
+        ReadCatalogResponseDTO[] listCatalog = res.getBody();
+
+        model.addAttribute("imageLink", "http://catalog-web:8082/api/image/");
+        model.addAttribute("listCatalog", listCatalog);
 
         return "home";
     }

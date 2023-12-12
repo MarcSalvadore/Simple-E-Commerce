@@ -32,7 +32,7 @@ public class SellerRestController {
     @Autowired
     UserRestService userRestService;
 
-    @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/seller/create")
     public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
                 return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
@@ -43,7 +43,7 @@ public class SellerRestController {
         }
     }
 
-    @PostMapping(value = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/withdraw")
     public String restWithdraw(@RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
         boolean res = sellerRestService.withdraw(withdrawResponseDTO.getIdSeller(), withdrawResponseDTO.getAmount());
         
