@@ -1,5 +1,7 @@
 package com.apapedia.frontend_webapp.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,8 +14,6 @@ import com.apapedia.frontend_webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import java.util.UUID;
 
 @Controller
 public class BaseController {
@@ -58,7 +58,6 @@ public class BaseController {
 
                 model.addAttribute("imageLink", "http://apap-083.cs.ui.ac.id/api/image/");
                 model.addAttribute("listCatalog", listCatalog);
-
         }
 
         return "home";
