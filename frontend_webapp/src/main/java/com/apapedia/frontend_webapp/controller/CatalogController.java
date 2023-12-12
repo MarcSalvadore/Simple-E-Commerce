@@ -27,6 +27,7 @@ import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,7 +45,7 @@ public class CatalogController {
     JwtUtils jwtUtils;
 
     public CatalogController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://catalog-web:8082")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_CATALOG_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -63,7 +64,7 @@ public class CatalogController {
         }
 
         var productDTO = new CreateCatalogRequestDTO();
-        String uri = "http://catalog-web:8082/api/category/viewall";
+        String uri = Setting.SERVER_CATALOG_URL + "/api/category/viewall";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCategoryResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCategoryResponseDTO[].class);
         ReadCategoryResponseDTO[] listCategory = res.getBody();
@@ -125,7 +126,7 @@ public class CatalogController {
         }
 
         // ambil data catalog lama untuk dimunculkan diform
-        String uri = "http://catalog-web:8082/api/catalog/detail/" + idCatalog; // Assuming there's an endpoint to get a
+        String uri = Setting.SERVER_CATALOG_URL + "/api/catalog/detail/" + idCatalog; // Assuming there's an endpoint to get a
                                                                              // specific catalog by ID
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ReadCatalogResponseDTO> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO.class);
@@ -138,7 +139,7 @@ public class CatalogController {
         productDTO.setStock(catalog.getStock());
 
         // untuk dropdown category
-        String uriCategory = "http://catalog-web:8082/api/category/viewall";
+        String uriCategory = Setting.SERVER_CATALOG_URL + "/api/category/viewall";
         RestTemplate restTemplateCategory = new RestTemplate();
         ResponseEntity<ReadCategoryResponseDTO[]> resCategory = restTemplateCategory.getForEntity(uriCategory,
                 ReadCategoryResponseDTO[].class);
@@ -182,7 +183,7 @@ public class CatalogController {
 
         // System.out.println(productRequestDTO);
 
-        String uri = "http://catalog-web:8082/api/catalog/update";
+        String uri = Setting.SERVER_CATALOG_URL + "/api/catalog/update";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.put(uri, productRequestDTO);
 
