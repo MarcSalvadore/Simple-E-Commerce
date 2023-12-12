@@ -26,14 +26,14 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="${catalog.productName}"></h5>
                             <img th:src="${imageLink} + ${catalog.id}" alt="">
-                            <p class="card-text" th:text="'Seller: ' + ${catalog.seller}"></p>
+                            <!-- <p class="card-text" th:text="'Seller: ' + ${catalog.seller}"></p> -->
                             <p class="card-text" th:text="'Price: ' + ${catalog.price}"></p>
-                            <p class="card-text" th:text="${catalog.productDescription}"></p>
+                            <!-- <p class="card-text" th:text="${catalog.productDescription}"></p>
                             <p class="card-text">Category: Category</p>
-                            <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p>
+                            <p class="card-text" th:text="'Stock: ' + ${catalog.stock}"></p> -->
                             <!-- <p class="card-text" th:text="'Image: ' + ${catalog.image}"></p> -->
                             <a type="button" class="btn btn-warning"
-                                th:href="@{/edit-product/{id}(id=${catalog.id})}">Edit</a>
+                            th:if="${username != null}" th:href="@{/update-product/{idCatalog}(idCatalog=${catalog.id})}">Edit</a>
                         </div>
                     </div>
                 </div>
