@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    private String registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
+    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
         try {
             var response = this.webClient
                 .post()
@@ -63,11 +63,11 @@ public class UserController {
                 .block();
 
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return "redirect:/login-sso";
+            return new RedirectView("/login-sso");
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
-            return "redirect:/register";
+            return new RedirectView("/register");
         }
     }
 
