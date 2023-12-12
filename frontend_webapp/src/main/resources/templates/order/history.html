@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <div th:insert="~{fragments/common :: js}" th:remove="tag"></div>
+    <div th:insert="~{fragments/common :: css}" th:remove="tag"></div>
+    <title>history</title>
+</head>
+
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container">
+        <div class="text-center pt-5">
+            <h2>Order History</h2>
+        </div>    
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${listOrder}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.totalPrice}"></td>
+                    <td>
+
+                        <!-- Dropdown for updating status -->
+                        <div class="mt-2">
+                            <form th:action="@{/order/status/{id}(id=${order.id})}" method="post">
+                                <input type="hidden" name="orderId" th:value="${order.id}" />
+                                <input type="hidden" th:value="${order.seller}" name="sellerId"/>
+                                <div class="form-group">
+                                    <select class="form-control" name="status">
+                                        <option value="0" th:selected="${order.status == 0}">Menunggu Konfirmasi Penjual</option>
+                                        <option value="1" th:selected="${order.status == 1}">Dikonfirmasi Penjual</option>
+                                        <option value="2" th:selected="${order.status == 2}">Menunggu Kurir</option>
+                                        <option value="3" th:selected="${order.status == 3}">Dalam Perjalanan</option>
+                                        <option value="4" th:selected="${order.status == 4}">Barang Diterima</option>
+                                        <option value="5" th:selected="${order.status == 5}">Selesai</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Status</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        <form th:action="@{/updateOrderStatus}" method="post">
+            <input type="hidden" name="orderId" th:value="${order.id}" />
+            <input type="hidden" name="status" value="0" />
+            <button type="submit" class="btn btn-primary">Update Status</button>
+        </form>
+    </script>
+</body>
+
+</html>
