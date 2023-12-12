@@ -11,7 +11,7 @@ public interface UserRestService {
     void createRestUser(UserModel user);
     List<UserModel> retrieveAllUser();
     UserModel getUserById(UUID id);
-    UserModel updateRestUser(UserModel user);
+    boolean updateRestUser(UserModel user);
     UserModel getUserByUsername(String username);
     String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO);
     void deleteSeller(UserModel userModel);

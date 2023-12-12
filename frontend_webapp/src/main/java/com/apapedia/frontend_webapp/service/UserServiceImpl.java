@@ -106,15 +106,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserResponseDTO editUser(UUID id, String token, UpdateUserResponseDTO requestBody) {
-        UpdateUserResponseDTO response = this.webClient
-            .post()
+    public String editUser(UUID id, String token, CreateUserResponseDTO requestBody) {
+        System.out.println("INI REQ BODY");
+        System.out.println(requestBody);
+        var response = this.webClient
+            .put()
             .uri("/api/user/{id}/update", id)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
             .body(BodyInserters.fromValue(requestBody))
             .retrieve()
-            .bodyToMono(UpdateUserResponseDTO.class)
+            .bodyToMono(String.class)
             .block();
-        return response;
+        System.out.println("INI RESP");
+        System.out.println(response);
+        if (response != null) {
+            return "Edit profile berhasil!";
+        } else {
+            return "Edit profile gagal";
+        }
     }
 }

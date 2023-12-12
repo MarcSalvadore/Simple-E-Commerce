@@ -15,5 +15,5 @@ public interface UserService {
     String getUsernameFromToken(String token);
     void deleteUser(UUID id, String token);
     String withdraw(WithdrawRequestDTO withdrawRequestDTO, String token);
-    UpdateUserResponseDTO editUser(UUID id, String token, CreateUserResponseDTO requestBody);
+    String editUser(UUID id, String token, CreateUserResponseDTO requestBody);
 }

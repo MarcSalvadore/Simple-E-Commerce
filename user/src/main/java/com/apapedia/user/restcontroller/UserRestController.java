@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
+import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.LoginJwtResponseDTO;
@@ -67,15 +68,27 @@ public class UserRestController {
     }
 
     //Edit profile
-    @PostMapping(value = "user/{id}/update")
-    private UserModel updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
+    @PutMapping(value = "/user/{id}/update")
+    private String updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
+        System.out.println("INI REQUEST BODY");
+        System.out.println(userDTO);
+        System.out.println("MASUK MAPPING BACKEND");
         try {
+            System.out.println("MASUK TRY BE");
             UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
-            UserModel user = userRestService.updateRestUser(userFromDto);
-            return user;
+            System.out.println("MASUK");
+            boolean res = userRestService.updateRestUser(userFromDto);
+            System.out.println("masuk edit");
+            if (res) {
+                return "Update berhasil";
+            }
+            else {
+                return null;
+            }
         } catch (Exception e) {
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+            return null;
+            // throw new ResponseStatusException(
+            //     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         }
     }
 
@@ -141,8 +154,19 @@ public class UserRestController {
         userRestService.deleteSeller(seller);
         return ResponseEntity.ok("User has been deleted");
     }
+
+    // @GetMapping(value = "/user/{username}")
+    // private boolean getUserByUsername(@PathVariable("username") String username){
+    //     if (userRestService.getUserByUsername(username) != null) {
+    //             return true;
+    //     }
+    //     else{
+    //         return false;
+    //     }
+    // }
+}
     
 
 
-}
+
 

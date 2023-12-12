@@ -40,10 +40,14 @@ public class UserRestServiceImpl implements UserRestService {
     }
 
     @Override
-    public UserModel updateRestUser(UserModel userFromDto) {
+    public boolean updateRestUser(UserModel userFromDto) {
         UserModel user = getUserById(userFromDto.getId());
-
+        System.out.println("INI USER DARI DB");
+        System.out.println(user.getUsername());
+        System.out.println(user);
         if(user != null) {
+            System.out.println("MASUK IF");
+            System.out.println(userFromDto.getName());
             user.setName(userFromDto.getName());
             user.setName(userFromDto.getUsername());
             user.setEmail(userFromDto.getEmail());
@@ -51,14 +55,22 @@ public class UserRestServiceImpl implements UserRestService {
             user.setAddress(userFromDto.getAddress());
 
             userDb.save(user);
+
+            return true;
         }
 
-        return user;
+        System.out.println(user);
+        return false;
     }
 
     @Override
     public UserModel getUserByUsername(String username) {
-        return userDb.findByUsername(username);
+        for(UserModel user : retrieveAllUser()) {
+            if (user.getUsername().equals(username) && user.getIsDeleted() != true) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override

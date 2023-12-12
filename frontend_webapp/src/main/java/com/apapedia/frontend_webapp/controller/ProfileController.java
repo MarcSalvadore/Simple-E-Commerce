@@ -2,6 +2,7 @@ package com.apapedia.frontend_webapp.controller;
 
 import java.util.UUID;
 
+import org.hibernate.sql.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,8 @@ public class ProfileController {
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
 
+        System.out.println("INI TOKEN");
+        System.out.println(jwtToken);
         if (!jwtUtils.validateToken(jwtToken)) {
             return "redirect:/login-sso";
         }
@@ -114,7 +117,6 @@ public class ProfileController {
 
     @PostMapping("/profile/edit")
     public String editProfile(HttpServletRequest request, Model model, @ModelAttribute CreateUserResponseDTO requestBody) {
-        System.out.println("MASUK PUT");
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
 
@@ -122,8 +124,10 @@ public class ProfileController {
             return "redirect:/login-sso";
         }
         UUID userId = userService.getUserIdFromToken(jwtToken);
-        UpdateUserResponseDTO seller = userService.editUser(userId, jwtToken, requestBody);
+        String success = userService.editUser(userId, jwtToken, requestBody);
+        
         System.out.println("YES");
+        model.addAttribute("success", success);
         return "profile/profile";
     }
 }
