@@ -1,5 +1,6 @@
 package com.apapedia.user.restcontroller;
 
+import com.apapedia.user.dto.request.ReadTopUpRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ public class SellerRestController {
     @Autowired
     UserRestService userRestService;
 
-    @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/seller/create")
     public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
                 return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
@@ -42,12 +43,23 @@ public class SellerRestController {
         }
     }
 
-    @PostMapping(value = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/withdraw")
     public String restWithdraw(@RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
         boolean res = sellerRestService.withdraw(withdrawResponseDTO.getIdSeller(), withdrawResponseDTO.getAmount());
         
         if (res) {
             return "Withdraw berhasil!";
+        }
+
+        return null;
+    }
+
+    @PostMapping(value = "/topup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String restTopUp(@RequestBody ReadTopUpRequestDTO topUpRequestDTO) {
+        boolean res = sellerRestService.topUp(topUpRequestDTO.getIdSeller(), topUpRequestDTO.getAmount());
+
+        if (res) {
+            return "Top-up berhasil!";
         }
 
         return null;
