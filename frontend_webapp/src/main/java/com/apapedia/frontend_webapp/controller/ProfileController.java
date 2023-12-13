@@ -36,16 +36,14 @@ public class ProfileController {
         HttpSession session = request.getSession(false);
         String jwtToken = (String) session.getAttribute("token");
 
-        System.out.println("INI TOKEN");
-        System.out.println(jwtToken);
         if (!jwtUtils.validateToken(jwtToken)) {
             return "redirect:/logout-sso";
         }
 
         UUID userId = userService.getUserIdFromToken(jwtToken);
         CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
+
         model.addAttribute("userDTO", seller);
-        
         return "profile/profile";
     }
 
@@ -96,6 +94,7 @@ public class ProfileController {
         if (!jwtUtils.validateToken(jwtToken)) {
             return "redirect:/login-sso";
         }
+
         UUID userId = userService.getUserIdFromToken(jwtToken);
         CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
         model.addAttribute("seller", seller);
@@ -112,8 +111,10 @@ public class ProfileController {
         if (!jwtUtils.validateToken(jwtToken)) {
             return "redirect:/login-sso";
         }
+
         UUID userId = userService.getUserIdFromToken(jwtToken);
         CreateUserResponseDTO seller = userService.editUser(userId, jwtToken, createUserResponseDTO);
+
         model.addAttribute("userDTO", seller);
         return "profile/profile";
     }
@@ -125,7 +126,6 @@ public class ProfileController {
 
     @GetMapping("/profile/edit/password")
     public String changePasswordPage(Model model) {
-        System.out.println("masuk change page");
         model.addAttribute("changePasswordDTO", new ChangePasswordResponseDTO());
         return "profile/change-password";
     }
@@ -149,5 +149,4 @@ public class ProfileController {
             return "redirect:/profile/edit/password";
         }
     }
-    
 }

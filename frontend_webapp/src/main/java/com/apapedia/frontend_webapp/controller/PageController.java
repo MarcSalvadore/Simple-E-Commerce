@@ -49,15 +49,15 @@ public class PageController {
     
             Attributes attributes = serviceResponse.getAuthenticationSuccess().getAttributes();
             String username = serviceResponse.getAuthenticationSuccess().getUser();
-    
             Authentication authentication = new UsernamePasswordAuthenticationToken(username, "ta_hmy_9", null);
             SecurityContext securityContext = SecurityContextHolder.getContext();
+            
             securityContext.setAuthentication(authentication);
     
             String name = attributes.getNama();
             String token = userService.getToken(username, name);
-
             HttpSession httpSession = request.getSession(true);
+
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("token", token);
             
@@ -76,10 +76,13 @@ public class PageController {
     @GetMapping("/logout-sso")
     public ModelAndView logoutSSO(HttpServletRequest request, HttpServletResponse response){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+
         request.getSession().invalidate();
+        
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +36,7 @@ public class UserController {
     JwtUtils jwtUtils;
 
     public UserController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://user-web:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -63,7 +64,6 @@ public class UserController {
 
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
             return new RedirectView("/login-sso");
-            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
             return new RedirectView("/register");
@@ -74,6 +74,7 @@ public class UserController {
     public RedirectView deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
         String token = (String) session.getAttribute("token");
         UUID userId = userService.getUserIdFromToken(token);
+
         try {
             userService.deleteUser(userId, token);
             model.addAttribute("message", "User successfully deleted");
@@ -82,7 +83,5 @@ public class UserController {
             model.addAttribute("error", "Error deleting user: " + e.getMessage());
             return new RedirectView("/profile");
         }
-    }
-
-    
+    }  
 }
