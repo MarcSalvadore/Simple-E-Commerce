@@ -76,5 +76,4 @@ public class UserRestServiceImpl implements UserRestService {
        userModel.setIsDeleted(true);
        userDb.save(userModel);
     }
-    
 }
