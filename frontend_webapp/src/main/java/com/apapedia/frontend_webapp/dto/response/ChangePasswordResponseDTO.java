@@ -11,4 +11,3 @@ public class ChangePasswordResponseDTO {
     private String currentPassword;
     private String newPassword;
 }
-
