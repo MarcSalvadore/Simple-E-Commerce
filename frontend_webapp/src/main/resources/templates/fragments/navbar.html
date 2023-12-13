@@ -6,6 +6,7 @@
 </head>
 
 <body>
+<<<<<<< HEAD
     <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -43,6 +44,40 @@
             </ul>
         </div>
     </nav>
+=======
+  <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand fw-bold text-light ms-3" href="/">APAPEDIA</a>
+      </div>
+      <!-- menu di tengah kalo udah login -->
+      <ul class="nav navbar-nav">
+        <!-- menu ini di tengah kalo buka halaman catalog page pas udh login -->
+        <li class="nav-item"><a class="nav-link text-light ms-3" href="#">Order History</a></li>
+      </ul>
+      <!-- search produk di tengah kalo belum login -->
+      <form class="form-inline my-2 my-lg-0 d-flex">
+        <input class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
+        <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
+      </form>
+      <!-- tombol login logout di pojok kanan atas kalo belum login -->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item"><a type="button" class="btn btn-outline-success text-light ms-3" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li class="nav-item"><a type="button" class="btn btn-success text-light ms-3" th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      </ul>
+      <!-- menu profile di pojok kanan atas kalo udah login -->
+      <li class="nav navbar-nav navbar-right dropdown">
+        <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Hello, <span th:text="${#authentication.getName()}">Username</span>!
+        </a>
+        <ul class="dropdown-menu dropdown-menu-light">
+            <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+            <li><a class="dropdown-item" th:href="@{/}">Logout</a></li>
+        </ul>
+    </li>
+    </div>
+  </nav> 
+>>>>>>> ef7fd3c (regis + login done)
 </body>
 
 </html>

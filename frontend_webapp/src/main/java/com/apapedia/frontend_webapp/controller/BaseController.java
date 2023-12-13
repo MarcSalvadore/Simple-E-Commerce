@@ -5,17 +5,14 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
-import com.apapedia.frontend_webapp.security.xml.ServiceResponse;
 import com.apapedia.frontend_webapp.service.UserService;
 import com.apapedia.frontend_webapp.setting.Setting;
 

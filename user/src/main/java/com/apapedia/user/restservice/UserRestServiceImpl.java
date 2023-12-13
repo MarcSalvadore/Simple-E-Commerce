@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
+import com.apapedia.user.dto.response.CurrentUserResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
