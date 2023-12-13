@@ -64,10 +64,12 @@ public class CatalogController {
         }
 
         var productDTO = new CreateCatalogRequestDTO();
-        String uri = Setting.SERVER_CATALOG_URL + "/api/category/viewall";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ReadCategoryResponseDTO[]> res = restTemplate.getForEntity(uri, ReadCategoryResponseDTO[].class);
-        ReadCategoryResponseDTO[] listCategory = res.getBody();
+        ReadCategoryResponseDTO[] listCategory = this.webClient
+            .get()
+            .uri("/api/category/viewall")
+            .retrieve()
+            .bodyToMono(ReadCategoryResponseDTO[].class)
+            .block();
 
         model.addAttribute("productDTO", productDTO);
         model.addAttribute("listCategory", listCategory);
@@ -111,7 +113,6 @@ public class CatalogController {
         return "redirect:/";
     }
 
-    // masi blm bener
     @GetMapping("update-product/{idCatalog}")
     public String formUpdateProduct(@PathVariable UUID idCatalog, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -125,27 +126,27 @@ public class CatalogController {
             }
         }
 
-        // ambil data catalog lama untuk dimunculkan diform
-        String uri = Setting.SERVER_CATALOG_URL + "/api/catalog/detail/" + idCatalog; // Assuming there's an endpoint to get a
-                                                                             // specific catalog by ID
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ReadCatalogResponseDTO> res = restTemplate.getForEntity(uri, ReadCatalogResponseDTO.class);
-        ReadCatalogResponseDTO catalog = res.getBody();
+        ReadCatalogResponseDTO catalog = this.webClient
+            .get()
+            .uri("/api/catalog/detail")
+            .retrieve()
+            .bodyToMono(ReadCatalogResponseDTO.class)
+            .block();
 
         var productDTO = new UpdateCatalogRequestDTO();
+
         productDTO.setProductName(catalog.getProductName());
         productDTO.setPrice(catalog.getPrice());
         productDTO.setProductDescription(catalog.getProductDescription());
         productDTO.setStock(catalog.getStock());
 
-        // untuk dropdown category
-        String uriCategory = Setting.SERVER_CATALOG_URL + "/api/category/viewall";
-        RestTemplate restTemplateCategory = new RestTemplate();
-        ResponseEntity<ReadCategoryResponseDTO[]> resCategory = restTemplateCategory.getForEntity(uriCategory,
-                ReadCategoryResponseDTO[].class);
-        ReadCategoryResponseDTO[] listCategory = resCategory.getBody();
+        ReadCategoryResponseDTO[] listCategory = this.webClient
+            .get()
+            .uri("/api/category/viewall")
+            .retrieve()
+            .bodyToMono(ReadCategoryResponseDTO[].class)
+            .block();
 
-        //
         model.addAttribute("productDTO", productDTO);
         model.addAttribute("listCategory", listCategory);
         return "catalog/form-update-product";
@@ -178,10 +179,8 @@ public class CatalogController {
 
         productRequestDTO.setId(idCatalog);
         productRequestDTO.setSeller(userService.getUserIdFromToken(jwtToken));
-        System.out.println(productRequestDTO);
         productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
 
-        // System.out.println(productRequestDTO);
 
         String uri = Setting.SERVER_CATALOG_URL + "/api/catalog/update";
         RestTemplate restTemplate = new RestTemplate();
@@ -191,5 +190,4 @@ public class CatalogController {
         redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
         return "redirect:/";
     }
-
 }
