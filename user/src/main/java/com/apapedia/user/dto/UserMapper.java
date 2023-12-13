@@ -12,9 +12,9 @@ import com.apapedia.user.model.UserModel;
 public interface UserMapper {
     UserModel updateUserRequestDTOToUser(UpdateUserRequestDTO updateUserRequestDTO);
 
-    @Mapping(target = "role", ignore = true)
-    UserModel createUserRequestDTOToUserModel(CreateUserRequestDTO createUserRequestDTO);
+    // @Mapping(target = "role", ignore = true)
+    // UserModel createUserRequestDTOToUserModel(CreateUserRequestDTO createUserRequestDTO);
     
-    @Mapping(target = "role", ignore = true)
-    CreateUserResponseDTO createUserResponseDTOToUserModel(UserModel userModel);
+    // @Mapping(target = "role", ignore = true)
+    // CreateUserResponseDTO createUserResponseDTOToUserModel(UserModel userModel);
 }
