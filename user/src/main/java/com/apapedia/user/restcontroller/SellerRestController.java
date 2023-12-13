@@ -15,11 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.response.ReadWithdrawResponseDTO;
+import com.apapedia.user.dto.response.CreateUserResponseDTO;
+import com.apapedia.user.model.Seller;
+import com.apapedia.user.model.UserModel;
 import com.apapedia.user.restservice.SellerRestService;
 import com.apapedia.user.restservice.UserRestService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class SellerRestController {
