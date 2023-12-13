@@ -141,7 +141,7 @@ class _LoginState extends State<Login>{
                                         if(_formKey.currentState!.validate()){
                                           _formKey.currentState!.save();
                                           final response = await http.post(Uri.parse(
-                                              "http://10.0.2.2:8081/api/auth/login-customer"
+                                              "https://apap-082.cs.ui.ac.id/api/auth/login-customer"
                                           ),
                                               headers: <String, String> {
                                                 'Content-Type' : 'application/json;charset=UTF-8'

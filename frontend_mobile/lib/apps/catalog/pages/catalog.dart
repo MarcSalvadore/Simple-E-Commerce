@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/components/appbar.dart';
 import 'package:frontend_mobile/components/drawer.dart';
@@ -15,6 +17,10 @@ class Catalog extends StatefulWidget {
 }
 
 class _CatalogState extends State<Catalog> {
+  String productName = "";
+  int price = 0;
+  late File imageFile;
+
   List<Map<String, dynamic>> catalogData = [
     {
       'name': 'Stone Island x New Balance',
