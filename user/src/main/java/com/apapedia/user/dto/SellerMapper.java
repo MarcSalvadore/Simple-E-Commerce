@@ -11,5 +11,4 @@ import com.apapedia.user.model.Seller;
 public interface SellerMapper {
     Seller createSellerRequestDTOToSeller(CreateUserRequestDTO createSellerRequestDTO);
     CreateUserResponseDTO createUserResponseDTOToUserModel(Seller seller);
-
 }

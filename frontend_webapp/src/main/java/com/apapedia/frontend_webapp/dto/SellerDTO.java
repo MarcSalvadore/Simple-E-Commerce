@@ -9,7 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 
+<<<<<<<< HEAD:frontend_webapp/src/main/java/com/apapedia/frontend_webapp/dto/SellerDTO.java
 public class SellerDTO {
+========
+public class CreateUserRequestDTO {
+>>>>>>>> 82f6558 (feat: update user):user/src/main/java/com/apapedia/user/dto/request/CreateUserRequestDTO.java
     @NotBlank(message = "Nama tidak boleh kosong")
     private String name;
 
