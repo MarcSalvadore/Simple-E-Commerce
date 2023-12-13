@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.security.xml.ServiceResponse;
 import com.apapedia.frontend_webapp.service.UserService;
 import com.apapedia.frontend_webapp.setting.Setting;
 

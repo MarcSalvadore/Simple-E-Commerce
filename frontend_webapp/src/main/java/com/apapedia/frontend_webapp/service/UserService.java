@@ -7,7 +7,7 @@ import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 
 public interface UserService {
-    String getToken(String username, String name);
+    String getToken(String username, String password);
     CreateUserResponseDTO getUserDetails(UUID id, String token);
     UUID getUserIdFromToken(String token);
     String getUsernameFromToken(String token);

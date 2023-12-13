@@ -7,16 +7,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 import com.apapedia.frontend_webapp.service.UserService;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +40,7 @@ public class UserController {
     JwtUtils jwtUtils;
 
     public UserController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://user-web:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -82,8 +87,5 @@ public class UserController {
             model.addAttribute("error", "Error deleting user: " + e.getMessage());
             return new RedirectView("/profile");
         }
-    }
-
-    
+    }    
 }
-
