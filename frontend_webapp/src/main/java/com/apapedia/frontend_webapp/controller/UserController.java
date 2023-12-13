@@ -85,5 +85,11 @@ public class UserController {
         }
     }
 
-    
+    @GetMapping("login")
+    public String formLogin(Model model){
+        // var user = new CreateUserRequestDTO();
+
+        // model.addAttribute("userDTO", user);
+        return "user/login";
+    }
 }
