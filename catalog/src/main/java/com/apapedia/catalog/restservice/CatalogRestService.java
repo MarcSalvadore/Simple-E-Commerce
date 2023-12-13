@@ -23,6 +23,7 @@ public interface CatalogRestService {
 
     // Catalog #7
     List<Catalog> getRestCatalogByName(String name);
+    List<Catalog> getRestCatalogBySellerAndName(UUID sellerId, String name);
 
     // Catalog #9
     List<Catalog> getCatalogListSorted(String sortBy, String sortOrder);
