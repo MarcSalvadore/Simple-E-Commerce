@@ -3,9 +3,6 @@ package com.apapedia.frontend_webapp.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,18 +13,21 @@ import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import io.jsonwebtoken.Claims;
+
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final WebClient webClient;
-    
+
     @Autowired
     JwtUtils jwtService;
 
     public UserServiceImpl(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://user-web:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -128,4 +128,3 @@ public class UserServiceImpl implements UserService {
                 .block();
     }
 }
-

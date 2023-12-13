@@ -34,10 +34,7 @@ public class SellerRestController {
     @Autowired
     SellerRestService sellerRestService;
 
-    @Autowired
-    UserRestService userRestService;
-
-    @PostMapping(value = "/seller/create")
+    @PostMapping(value = "/seller/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> restAddSeller(@Valid @RequestBody CreateUserRequestDTO sellerDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
                 return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);

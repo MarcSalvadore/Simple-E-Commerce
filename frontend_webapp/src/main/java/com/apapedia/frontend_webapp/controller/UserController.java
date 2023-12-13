@@ -5,15 +5,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -21,8 +17,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
-import com.apapedia.frontend_webapp.setting.Setting;
-import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +35,7 @@ public class UserController {
     JwtUtils jwtUtils;
 
     public UserController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
+        this.webClient = webClientBuilder.baseUrl("http://user-web:8081")
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -90,31 +84,5 @@ public class UserController {
         }
     }
 
-    @GetMapping("login")
-    public String formLogin(Model model){
-        var user  = new LoginJwtRequestDTO();
-        model.addAttribute("userDTO", user);
-        return "user/login";
-    }
-
-    @PostMapping("login")
-    public RedirectView formLogin(@Valid @ModelAttribute LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder(); //Menginisiasi error message
-
-            //Mengambil setiap error message yang ada
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                String defaultMessage = error.getDefaultMessage();
-                errorMessage.append(defaultMessage).append("<br>"); //Menampilkan error message dengan tampilan ke bawah
-            }
-
-            redirectAttributes.addFlashAttribute("error", errorMessage);
-            return new RedirectView("/login");
-        }
-        String uri = "http://localhost:8081/api/login";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<LoginJwtRequestDTO> res = restTemplate.postForEntity(uri, loginJwtRequestDTO, LoginJwtRequestDTO.class);
-
-        return new RedirectView("/");
-    }
+    
 }
