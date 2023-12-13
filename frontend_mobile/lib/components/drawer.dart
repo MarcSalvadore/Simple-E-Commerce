@@ -57,9 +57,9 @@ Drawer buildDrawer(BuildContext context){
             leading: const Icon(Icons.shopping_bag),
             onTap: (){
               Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Order(
-                    title: "Order History"
+                context, 
+                MaterialPageRoute(builder: (context) => const Order_History(
+                  title: "Order History"
                 )),
               );
             },
