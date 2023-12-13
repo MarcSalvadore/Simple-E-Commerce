@@ -82,7 +82,13 @@ public class CatalogRestServiceImpl implements CatalogRestService {
     @Override
     @Transactional
     public List<Catalog> getRestCatalogByName(String name) {
-        return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalse(name);
+        return catalogDb.findByProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductName(name);
+    }
+
+    @Override
+    @Transactional
+    public List<Catalog> getRestCatalogBySellerAndName(UUID sellerId, String name) {
+        return catalogDb.findBySellerAndProductNameContainingIgnoreCaseAndIsDeletedFalseOrderByProductName(sellerId, name);
     }
 
 

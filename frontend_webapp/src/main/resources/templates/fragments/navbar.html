@@ -16,11 +16,6 @@
                 <li class="nav-item" ><a class="nav-link text-light ms-3" th:href="@{/order/history/56ca1e54-80a6-11ee-b962-0242ac120301}">Order History</a></li>
             </ul>
 
-            <form class="form-inline my-2 my-lg-0 d-flex">
-                <input class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
-                <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
-            </form>
-
             <ul class="nav navbar-nav navbar-right" th:if="${username == null}">
                 <li class="nav-item">
                     <a type="button" class="btn btn-outline-success text-light ms-3" th:href="@{/login-sso}">

@@ -25,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class UserModel {
+public class UserModel{
     @Id
     private UUID id = UUID.randomUUID();
     
@@ -38,7 +38,7 @@ public class UserModel {
     private String username;
 
     @NotNull
-    @Column(name = "password", nullable = false, unique = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @NotNull

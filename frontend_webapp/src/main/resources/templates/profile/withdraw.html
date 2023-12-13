@@ -3,8 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Withdraw</title>
 </head>
 
@@ -25,6 +25,7 @@
                             </div>
                             <div class="form-group text-center">
                                 <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Withdraw</button>
+                                <a type="button" th:href="@{/profile}" class="btn btn-danger btn-lg btn-block mt-4">Cancel</a>
                             </div>
                         </form>
                     </div>

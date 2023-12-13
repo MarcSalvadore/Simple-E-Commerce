@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Register</title>
 </head>
 
@@ -48,9 +48,6 @@
                             <div class="form-group text-center">
                                 <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Submit</button>
                             </div>
-                            <!-- <div class="form-group text-center">
-                                <a type="button" class="mt-4" th:href="@{/login-sso}">Already have an account? Login</a>
-                            </div> -->
                         </form>
                     </div>
                 </div>

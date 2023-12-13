@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,7 +30,7 @@ public class BaseController {
     JwtUtils jwtUtils;
 
     public BaseController(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8082")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_CATALOG_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -40,7 +41,6 @@ public class BaseController {
 
         if (session != null) {
             String jwtToken = (String) session.getAttribute("token");
-            System.out.println(jwtToken);
 
             if (jwtUtils.validateToken(jwtToken)) {
                 String username = userService.getUsernameFromToken(jwtToken);
@@ -57,7 +57,7 @@ public class BaseController {
                     .bodyToMono(ReadCatalogResponseDTO[].class)
                     .block();
 
-                // model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
+                model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
                 model.addAttribute("listCatalog", listCatalog);
             } 
         } else {
@@ -68,7 +68,7 @@ public class BaseController {
                 .bodyToMono(ReadCatalogResponseDTO[].class)
                 .block();
 
-            // model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
+            model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
             model.addAttribute("listCatalog", listCatalog);
         }
 
@@ -83,21 +83,32 @@ public class BaseController {
             String jwtToken = (String) session.getAttribute("token");
 
             if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
                 UUID sellerId = userService.getUserIdFromToken(jwtToken);
+                model.addAttribute("username", username);
 
                 ReadCatalogResponseDTO[] listCatalog = this.webClient
                     .get()
-                    .uri("/api/catalog/search?query=" + productName + "&sellerId=" + sellerId)
+                    .uri(uriBuilder -> uriBuilder
+                        .path("/api/catalog/search")
+                        .queryParam("query", productName)
+                        .queryParam("sellerId", sellerId)
+                        .build())
                     .retrieve().bodyToMono(ReadCatalogResponseDTO[].class).block();
 
+                model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
                 model.addAttribute("listCatalog", listCatalog);
             }
         } else {
             ReadCatalogResponseDTO[] listCatalog = this.webClient
                 .get()
-                .uri("/api/catalog/search?query=" + productName)
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/catalog/search")
+                        .queryParam("query", productName)
+                        .build())
                 .retrieve().bodyToMono(ReadCatalogResponseDTO[].class).block();
 
+            model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
             model.addAttribute("listCatalog", listCatalog);
         }
 

@@ -3,18 +3,21 @@ package com.apapedia.frontend_webapp.controller;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.apapedia.frontend_webapp.dto.request.CreateUserRequestDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,12 +27,21 @@ import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
+    private final WebClient webClient;
+
     @Autowired
     UserService userService;
 
     @Autowired
     JwtUtils jwtUtils;
 
+    public UserController(WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .build();
+    }
+
+    // Register seller
     @GetMapping("/register")
     public String formRegister(Model model){
         var user = new CreateUserRequestDTO();
@@ -38,18 +50,25 @@ public class UserController {
         return "user/register";
     }
 
-    @PostMapping("/register")
-    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, RedirectAttributes redirectAttributes){
+    @PostMapping(value = "/register")
+    private String registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
         try {
-            String uri = "http://localhost:8081/api/seller/create";
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.postForEntity(uri, userRequestDTO, String.class);
+            var response = this.webClient
+                .post()
+                .uri("/api/seller/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userRequestDTO)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return new RedirectView("/login-sso");
+            return "redirect:/login-sso";
             
         } catch (Exception e) {
+            System.out.println("masuk ke exception");
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
-            return new RedirectView("/register");
+            return "redirect:/register";
         }
     }
 
@@ -66,6 +85,4 @@ public class UserController {
             return new RedirectView("/profile");
         }
     }
-
-    
 }

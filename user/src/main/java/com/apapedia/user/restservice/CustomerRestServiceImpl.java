@@ -23,13 +23,10 @@ public class CustomerRestServiceImpl implements CustomerRestService {
     @Autowired
     UserRestService userRestService;
 
-    @Autowired
-    BCryptPasswordEncoder encoder;
-
     @Override
     public void createRestCustomer(Customer customer) { 
         customer.setRole(EnumRole.CUSTOMER);
-        String hashedPass = encoder.encode(customer.getPassword());
+        String hashedPass = encrypt(customer.getPassword());
         customer.setPassword(hashedPass);
 
         //Jika user sudah dihapus dan ingin mendaftar lagi dengan username atau email yang sama
@@ -60,4 +57,8 @@ public class CustomerRestServiceImpl implements CustomerRestService {
         }
     }
 
+    public String encrypt(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
 }

@@ -22,6 +22,7 @@ public class WebSecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/logout-sso")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/logout")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/catalog/search")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/add-product")).authenticated()
                 .requestMatchers(new AntPathRequestMatcher("/update-product")).authenticated()
                 .requestMatchers(new AntPathRequestMatcher("/profile")).authenticated()

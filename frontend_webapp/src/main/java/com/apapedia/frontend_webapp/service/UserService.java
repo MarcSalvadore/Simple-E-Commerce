@@ -16,3 +16,4 @@ public interface UserService {
     CreateUserResponseDTO editUser(UUID id, String token, CreateUserResponseDTO createUserResponseDTO);
     void changePassword(UUID id, String token, ChangePasswordResponseDTO changePasswordResponseDTO);
 }
+

@@ -33,7 +33,11 @@ public class WebSecurityConfig {
             .securityMatcher("/api/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/auth/login-seller", "/api/auth/login-customer").permitAll()
+                .requestMatchers("/api/login").permitAll()
+                .requestMatchers("/api/auth/login-seller").permitAll()
+                .requestMatchers("/api/seller/create").permitAll()
+                .requestMatchers("/api/customer/create").permitAll()
+                .requestMatchers("/api/auth/login-customer").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
