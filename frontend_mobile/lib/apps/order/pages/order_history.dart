@@ -55,7 +55,7 @@ class _CartPageState extends State<CartPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Items in Cart: $itemCount',
+              'Items in Cart:',
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),

@@ -223,20 +223,8 @@ class _RegisterState extends State<Register> {
                                       'balance': 0,
                                     }),
                                   );
-                                  print("STATUS");
-                                  print(response.statusCode);
                                   if (response.statusCode == 200) {
-                                    print("BERHASIL REGISTER");
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
-                                    // A.show(
-                                    //   context: context,
-                                    //   type: QuickAlertType.success,
-                                    //   title: 'Account has Been Created!',
-                                    //   text: 'Please login',
-                                    //   confirmBtnText: "Login",
-                                    //   onConfirmBtnTap: 	() => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage())),
-                                    //   barrierDismissible: false,
-                                    // );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
