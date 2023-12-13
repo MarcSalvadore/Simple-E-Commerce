@@ -2,21 +2,17 @@ package com.apapedia.user.restcontroller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
+import com.apapedia.user.dto.request.ChangePasswordRequestDTO;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.LoginCustomerResponseDTO;
@@ -38,9 +35,6 @@ import com.apapedia.user.restservice.UserRestService;
 import com.apapedia.user.security.UserDetailsServiceImpl;
 import com.apapedia.user.security.jwt.JwtUtils;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -61,7 +55,6 @@ public class UserRestController {
     @Autowired
     JwtUtils jwtUtils;
 
-    //User details
     @GetMapping(value = "/user/{id}")
     private UserModel getUser(@PathVariable("id") UUID id){
         try {
@@ -73,20 +66,24 @@ public class UserRestController {
         }
     }
 
-    //Edit profile
-    @PutMapping(value = "user/update")
-    private UserModel updateUser(@Valid @RequestBody UpdateUserRequestDTO userDTO, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()){
-            throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
-        } else {
-            UserModel userFromDto = userMapper.updateUserRequestDTOToUser(userDTO);
-            UserModel user = userRestService.updateRestUser(userFromDto);
-            return user;
+    @PutMapping(value = "/user/{id}/update")
+    private ResponseEntity<?> updateUser(@Valid @PathVariable("id") UUID id, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        try {
+            UserModel userFromDTO = userMapper.updateUserRequestDTOToUser(updateUserRequestDTO);
+            UserModel updatedUser = userRestService.updateRestUser(userFromDTO);
+            
+            if (updatedUser != null) {
+                return ResponseEntity.ok(updatedUser);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Update failed. Check if the provided data is valid or try again later.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Update failed due to an unexpected error. Please try again later.");
         }
     }
 
-    //Login customer
     @PostMapping("/auth/login-customer")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult) {
         try {
@@ -109,7 +106,6 @@ public class UserRestController {
         }
     }
 
-    //Login seller
     @PostMapping("/auth/login-seller")
     public ResponseEntity<?> loginSeller(@RequestBody LoginJwtRequestDTO loginJwtRequestDTO) {
         try {
@@ -122,13 +118,35 @@ public class UserRestController {
         }
     }
 
-    //Delete user
     @DeleteMapping("user/{id}/delete")
     public ResponseEntity<String> deleteCatalog(@PathVariable("id") UUID id) {
         var seller = userRestService.getUserById(id);
         userRestService.deleteSeller(seller);
         return ResponseEntity.ok("User has been deleted");
     }
-    
+
+    @PutMapping("/user/{id}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable("id") UUID userId, @RequestBody ChangePasswordRequestDTO changePasswordRequestDTO) {
+        try {
+            boolean isCurrentPasswordCorrect = userRestService.isCurrentPasswordCorrect(userId, changePasswordRequestDTO.getCurrentPassword());
+
+            if (!isCurrentPasswordCorrect) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Current password is incorrect.");
+            }
+            if (changePasswordRequestDTO.getCurrentPassword().equals(changePasswordRequestDTO.getNewPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New password must be different from the current password.");
+            }
+            userRestService.changeUserPassword(userId, changePasswordRequestDTO.getNewPassword());
+            return ResponseEntity.ok("Password changed successfully.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password change failed due to an unexpected error. Please try again later.");
+        }
+    }
+
 }
+    
+
+
+
 

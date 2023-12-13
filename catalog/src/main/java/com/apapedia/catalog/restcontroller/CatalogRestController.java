@@ -29,6 +29,7 @@ import com.apapedia.catalog.dto.request.UpdateCatalogRequestDTO;
 import com.apapedia.catalog.model.Catalog;
 import com.apapedia.catalog.restservice.CatalogRestService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -119,11 +120,13 @@ public class CatalogRestController {
 
     // Catalog 7
     @GetMapping("/catalog/search")
-    private List<Catalog> getCatalogByName(@RequestParam(name="query", required=false) String search){
+    private List<Catalog> getCatalogByName(@RequestParam(name = "sellerId", required = false) UUID sellerId, @RequestParam(name="query", required=false) String search){
         List<Catalog> listCatalog = new ArrayList<>();
 
         if (search != null && !search.isEmpty()) {
             listCatalog = catalogRestService.getRestCatalogByName(search);
+        } else if (search != null && !search.isEmpty() && sellerId != null) {
+            listCatalog = catalogRestService.getRestCatalogBySellerAndName(sellerId, search);
         } else {
             listCatalog = catalogRestService.getAllCatalog();
         }

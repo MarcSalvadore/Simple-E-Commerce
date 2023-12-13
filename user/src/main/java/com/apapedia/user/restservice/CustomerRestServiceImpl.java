@@ -31,5 +31,4 @@ public class CustomerRestServiceImpl implements CustomerRestService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
-
 }

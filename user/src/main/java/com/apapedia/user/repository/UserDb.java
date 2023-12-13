@@ -11,6 +11,7 @@ import com.apapedia.user.model.UserModel;
 @Repository
 public interface UserDb extends JpaRepository<UserModel, UUID> {
     UserModel findByUsername(String username);
+    UserModel findByEmail(String email);
     Seller findByUsernameAndIsDeleted(String username, boolean isDeleted);
     Seller findByEmailAndIsDeleted(String email, boolean isDeleted);
 }

@@ -34,7 +34,7 @@ public class WebSecurityConfig {
             .securityMatcher("/api/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/auth/login-seller", "/api/auth/login-customer").permitAll()
+                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/auth/login-seller").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -57,3 +57,4 @@ public class WebSecurityConfig {
         return config.getAuthenticationManager();
     }
 }
+
