@@ -34,19 +34,33 @@ public class ProfileController {
     @GetMapping("/profile")
     public String profilePage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
-        String jwtToken = (String) session.getAttribute("token");
+        System.out.println("ini session");
+        System.out.println(session);
+        if (session != null) {
 
-        System.out.println("INI TOKEN");
-        System.out.println(jwtToken);
-        if (!jwtUtils.validateToken(jwtToken)) {
-            return "redirect:/logout-sso";
+            String jwtToken = (String) session.getAttribute("token");
+            System.out.println(jwtToken);
+
+            if (!jwtUtils.validateToken(jwtToken)) {
+                return "redirect:/logout-sso";
+            }
+            UUID userId = userService.getUserIdFromToken(jwtToken);
+            CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
+            model.addAttribute("userDTO", seller);
+            
+            return "profile/profile";
         }
-
-        UUID userId = userService.getUserIdFromToken(jwtToken);
-        CreateUserResponseDTO seller = userService.getUserDetails(userId, jwtToken);
-        model.addAttribute("userDTO", seller);
+        return "home";
         
-        return "profile/profile";
+        // String jwtToken = (String) session.getAttribute("token");
+
+        // System.out.println("INI TOKEN");
+        // System.out.println(jwtToken);
+        // if (!jwtUtils.validateToken(jwtToken)) {
+        //     return "redirect:/logout-sso";
+        // }
+
+        
     }
 
     @GetMapping("/withdraw")

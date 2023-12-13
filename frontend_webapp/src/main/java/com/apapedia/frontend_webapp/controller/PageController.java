@@ -78,8 +78,14 @@ public class PageController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+        request.getSession().removeAttribute("token");
         request.getSession().invalidate();
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "error/403"; 
     }
 
 

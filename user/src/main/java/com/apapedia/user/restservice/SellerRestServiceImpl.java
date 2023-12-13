@@ -31,12 +31,13 @@ public class SellerRestServiceImpl implements SellerRestService {
         seller.setRole(EnumRole.SELLER);
         String hashedPass = encoder.encode(seller.getPassword());
         seller.setPassword(hashedPass);
-        sellerDb.save(seller);
+        // sellerDb.save(seller);
 
         Seller existingDeletedSellerByUsername = userDb.findByUsernameAndIsDeleted(seller.getUsername(), true);
         Seller existingDeletedSellerByEmail = userDb.findByEmailAndIsDeleted(seller.getEmail(), true);
 
         if (existingDeletedSellerByUsername != null) {
+            System.out.println("yes");
             Seller existingSeller = existingDeletedSellerByUsername;
             existingSeller.setIsDeleted(false);
             existingSeller.setEmail(seller.getEmail());
