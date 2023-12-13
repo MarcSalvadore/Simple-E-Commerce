@@ -24,7 +24,7 @@ class _RegisterState extends State<Register> {
   Future<bool> registerCustomer(String nama, String username, String password,
       String email, int umur) async {
     final response = await http.post(
-      Uri.parse("http://10.0.2.2:8081/customer/create"),
+      Uri.parse("http://apap-081.cs.ui.ac.id/customer/create"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

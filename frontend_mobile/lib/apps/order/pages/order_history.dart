@@ -54,10 +54,10 @@ class _CartPageState extends State<CartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Items in Cart: $itemCount',
-              style: TextStyle(fontSize: 20),
-            ),
+            // const Text(
+            //   'Items in Cart: $itemCount',
+            //   style: TextStyle(fontSize: 20),
+            // ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

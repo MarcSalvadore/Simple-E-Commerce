@@ -56,12 +56,12 @@ Drawer buildDrawer(BuildContext context){
             title: const Text('Order History'),
             leading: const Icon(Icons.shopping_bag),
             onTap: (){
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Order(
-                    title: "Order History"
-                )),
-              );
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const Order(
+              //       title: "Order History"
+              //   )),
+              // );
             },
           ),
           Divider(color: Colors.white),
