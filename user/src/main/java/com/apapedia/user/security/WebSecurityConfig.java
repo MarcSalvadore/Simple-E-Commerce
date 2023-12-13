@@ -35,9 +35,6 @@ public class WebSecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/auth/login-seller").permitAll()
-                //MASIH BELUM BENER
-                .requestMatchers("/api/seller/**").hasAuthority("SELLER")
-                .requestMatchers("/api/customer/**").hasAuthority("CUSTOMER")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

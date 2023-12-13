@@ -13,6 +13,7 @@
             </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             <ul class="nav navbar-nav" th:if="${username != null}">
                 <li class="nav-item" ><a class="nav-link text-light ms-3" th:href="@{/order/history/56ca1e54-80a6-11ee-b962-0242ac120301}">Order History</a></li>
             </ul>
@@ -23,28 +24,31 @@
                         <span class="glyphicon glyphicon-log-in"></span> Sign In
 =======
             <!-- Check if the username is present in the session -->
+=======
+>>>>>>> 5a815dd (feat: login sso, logout sso, profile, delete user)
             <ul class="nav navbar-nav" th:if="${username != null}">
-                <!-- Menu in the center when on the catalog page after logging in -->
                 <li class="nav-item"><a class="nav-link text-light ms-3" href="#">Order History</a></li>
             </ul>
 
-            <!-- Check if the username is not present in the session -->
-            <form class="form-inline my-2 my-lg-0 d-flex" th:if="${username == null}">
+            <form class="form-inline my-2 my-lg-0 d-flex">
                 <input class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
                 <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
             </form>
 
-            <!-- Check if the username is not present in the session -->
             <ul class="nav navbar-nav navbar-right" th:if="${username == null}">
-                <!-- Login button in the top right corner if not logged in -->
                 <li class="nav-item">
                     <a type="button" class="btn btn-outline-success text-light ms-3" th:href="@{/login-sso}">
+<<<<<<< HEAD
                         <span class="glyphicon glyphicon-log-in"></span> Login
 >>>>>>> 6f07735 (changes)
+=======
+                        <span class="glyphicon glyphicon-log-in"></span> Sign In
+>>>>>>> 5a815dd (feat: login sso, logout sso, profile, delete user)
                     </a>
                 </li>
             </ul>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             <ul class="nav navbar-nav navbar-right" th:if="${username != null}">
 =======
@@ -52,6 +56,9 @@
             <ul class="nav navbar-nav navbar-right" th:if="${username != null}">
                 <!-- Display username and logout option in the top right corner if logged in -->
 >>>>>>> 6f07735 (changes)
+=======
+            <ul class="nav navbar-nav navbar-right" th:if="${username != null}">
+>>>>>>> 5a815dd (feat: login sso, logout sso, profile, delete user)
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                         style="color:white;">
@@ -60,12 +67,16 @@
                     <ul class="dropdown-menu dropdown-menu-light">
                         <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <li><a type="button" class="dropdown-item" th:href="@{/logout-sso}">Sign Out</a></li>
 =======
                         <form id="logoutForm" action="/logout" method="post">
                             <button class="dropdown-item" type="submit">Sign Out</button>
                         </form>
 >>>>>>> 6f07735 (changes)
+=======
+                        <li><a type="button" class="dropdown-item" th:href="@{/logout-sso}">Sign Out</a></li>
+>>>>>>> 5a815dd (feat: login sso, logout sso, profile, delete user)
                     </ul>
                 </li>
             </ul>
