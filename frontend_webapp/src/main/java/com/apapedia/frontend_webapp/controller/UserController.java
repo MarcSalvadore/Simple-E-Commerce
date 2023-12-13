@@ -64,6 +64,7 @@ public class UserController {
 
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
             return new RedirectView("/login-sso");
+            
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
             return new RedirectView("/register");
@@ -71,17 +72,17 @@ public class UserController {
     }
 
     @PostMapping("/user/delete")
-    public RedirectView deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
+    public String deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
         String token = (String) session.getAttribute("token");
         UUID userId = userService.getUserIdFromToken(token);
 
         try {
             userService.deleteUser(userId, token);
             model.addAttribute("message", "User successfully deleted");
-            return new RedirectView("/logout-sso");
+            return "redirect:/logout-sso";
         } catch (Exception e) {
             model.addAttribute("error", "Error deleting user: " + e.getMessage());
-            return new RedirectView("/profile");
+            return "redirect:/profile";
         }
     }  
 }

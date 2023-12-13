@@ -1,106 +1,106 @@
-# version: '3.3'
-# services:
-#   catalog-web:
-#     build:
-#       context: ./catalog
-#     restart: always
-#     ports:
-#       - "10083:8082"
-#     volumes:
-#       - ./file-storage:/file-storage
-#       - ./log:/log
-#     depends_on:
-#       - db
-#     networks:
-#       - frontend-network
-#       - backend-network
-
-#   order-web:
-#     build:
-#       context: ./order
-#     restart: always
-#     ports:
-#       - "10084:8083"
-#     volumes:
-#       - ./file-storage:/file-storage
-#       - ./log:/log
-#     env_file:
-#       - .env
-#     depends_on:
-#       - db
-#     networks:
-#       - frontend-network
-#       - backend-network
-  
-#   user-web:
-#     build:
-#       context: ./user
-#     restart: always
-#     ports:
-#       - "10082:8081"
-#     volumes:
-#       - ./file-storage:/file-storage
-#       - ./log:/log
-#     env_file:
-#       - .env
-#     depends_on:
-#       - db
-#     networks:
-#       - frontend-network
-#       - backend-network
-  
-#   frontend-web:
-#     build:
-#       context: ./frontend_webapp
-#     restart: always
-#     ports:
-#       - "10085:8084"
-#     volumes:
-#       - ./file-storage:/file-storage
-#       - ./log:/log
-#     depends_on:
-#       - catalog-web
-#       - order-web
-#       - user-web
-#     networks:
-#       - frontend-network
-#       - backend-network
-
-#   db:
-#     image: postgres:14-alpine
-#     ports:
-#       - '15082:5432'
-#     restart: 'no'
-#     environment:
-#       - POSTGRES_USER=postgres
-#       - POSTGRES_PASSWORD=secret99
-#     volumes:
-#       - db:/var/lib/postgresql/data
-#     networks:
-#       - backend-network
-      
-# volumes:
-#   db:
-#     driver: local
-
-# networks:
-#   frontend-network:
-#     driver: bridge
-#   backend-network:
-#     driver: bridge
-
-version: '3.8'
+version: '3.3'
 services:
+  catalog-web:
+    build:
+      context: ./catalog
+    restart: always
+    ports:
+      - "10083:8082"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+
+  order-web:
+    build:
+      context: ./order
+    restart: always
+    ports:
+      - "10084:8083"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+  
+  user-web:
+    build:
+      context: ./user
+    restart: always
+    ports:
+      - "10082:8081"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - frontend-network
+      - backend-network
+  
+  frontend-web:
+    build:
+      context: ./frontend_webapp
+    restart: always
+    ports:
+      - "10085:8084"
+    volumes:
+      - ./file-storage:/file-storage
+      - ./log:/log
+    depends_on:
+      - catalog-web
+      - order-web
+      - user-web
+    networks:
+      - frontend-network
+      - backend-network
+
   db:
     image: postgres:14-alpine
     ports:
-      - '15001:5432'
+      - '15082:5432'
     restart: 'no'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret99
-    volumes: 
+    volumes:
       - db:/var/lib/postgresql/data
+    networks:
+      - backend-network
+      
 volumes:
   db:
     driver: local
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge
+
+# version: '3.8'
+# services:
+#   db:
+#     image: postgres:14-alpine
+#     ports:
+#       - '15001:5432'
+#     restart: 'no'
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=secret99
+#     volumes: 
+#       - db:/var/lib/postgresql/data
+# volumes:
+#   db:
+#     driver: local
