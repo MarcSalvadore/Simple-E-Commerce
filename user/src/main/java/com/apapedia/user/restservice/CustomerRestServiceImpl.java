@@ -1,5 +1,7 @@
 package com.apapedia.user.restservice;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,13 @@ public class CustomerRestServiceImpl implements CustomerRestService {
     @Autowired
     UserRestService userRestService;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     @Override
     public void createRestCustomer(Customer customer) { 
         customer.setRole(EnumRole.CUSTOMER);
-        String hashedPass = encrypt(customer.getPassword());
+        String hashedPass = encoder.encode(customer.getPassword());
         customer.setPassword(hashedPass);
 
         //Jika user sudah dihapus dan ingin mendaftar lagi dengan username atau email yang sama
@@ -57,8 +62,13 @@ public class CustomerRestServiceImpl implements CustomerRestService {
         }
     }
 
-    public String encrypt(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
+    @Override
+    public Customer topUp(UUID id, Long amount) {
+        Customer customer = customerDb.findById(id).get();
+        if (customer != null) {
+            customer.setBalance(amount);
+            return customer;
+        }
+        return null; 
     }
 }

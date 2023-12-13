@@ -89,4 +89,21 @@ public class SellerRestServiceImpl implements SellerRestService {
 
     @Override
     public List<Seller> retrieveAllSeller() { return sellerDb.findAll(); }
+
+    @Override
+    public boolean topUp(UUID idSeller, Long amount) {
+        Seller seller = getSellerbyId(idSeller);
+
+        if (seller != null) {
+            Long balance = seller.getBalance();
+
+            seller.setBalance(balance + amount);
+            sellerDb.save(seller);
+
+            return true;
+        }
+
+        return false;
+
+    }
 }
