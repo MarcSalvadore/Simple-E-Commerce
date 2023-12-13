@@ -39,8 +39,6 @@ class _LoginState extends State<Login>{
       passwordController.dispose();
       super.dispose();
     }
-
-
     @override
     Widget build(BuildContext context){
       return PopScope(
@@ -132,7 +130,6 @@ class _LoginState extends State<Login>{
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 50),
-                                        // backgroundColor: ColorPallete.primary,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10),
                                         ),
@@ -150,19 +147,11 @@ class _LoginState extends State<Login>{
                                                 'username' : usernameController.text,
                                                 'password' : passwordController.text,
                                               }));
-                                          print("STATUS");
-                                          print(response.statusCode);
                                           if(response.statusCode == 200){
-                                              print("BERHASIL LOGIN");
                                               final Map parsed = json.decode(response.body);
                                               final String jwtToken = parsed['token'];
-                                              final String userId = parsed['id'];
-
                                               final SharedPreferences prefs = await _prefs;
                                               prefs.setString('jwtToken', jwtToken);
-                                              prefs.setString('username', usernameController.text);
-                                              prefs.setString('userId', userId);
-
                                               Navigator.push(
                                                 context, MaterialPageRoute(builder: (context) => const Catalog(title: 'Catalog',)),
                                               );
@@ -192,13 +181,10 @@ class _LoginState extends State<Login>{
                                       onPressed: () {
                                         Navigator.push(
                                           context, MaterialPageRoute(builder: (context) => const Register(title: 'Register',)),
-                                        ); // Use the route name for navigation
+                                        );
                                       },
                                       child: const Text(
                                         "Don't have an account yet? Register here",
-                                        // style: TextStyle(
-                                        //   fontSize:
-                                        // ),
                                       ),
                                     ),
                                   ],

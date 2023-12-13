@@ -33,8 +33,8 @@ public class SellerRestServiceImpl implements SellerRestService {
         seller.setPassword(hashedPass);
 
         //Jika user sudah dihapus dan ingin mendaftar lagi dengan username atau email yang sama
-        Seller existingDeletedSellerByUsername = userDb.findByUsernameAndIsDeleted(seller.getUsername(), true);
-        Seller existingDeletedSellerByEmail = userDb.findByEmailAndIsDeleted(seller.getEmail(), true);
+        Seller existingDeletedSellerByUsername = userDb.findSellerByUsernameAndIsDeleted(seller.getUsername(), true);
+        Seller existingDeletedSellerByEmail = userDb.findSellerByEmailAndIsDeleted(seller.getEmail(), true);
 
         if (existingDeletedSellerByUsername != null) {
             Seller existingSeller = existingDeletedSellerByUsername;
@@ -89,4 +89,21 @@ public class SellerRestServiceImpl implements SellerRestService {
 
     @Override
     public List<Seller> retrieveAllSeller() { return sellerDb.findAll(); }
+
+    @Override
+    public boolean topUp(UUID idSeller, Long amount) {
+        Seller seller = getSellerbyId(idSeller);
+
+        if (seller != null) {
+            Long balance = seller.getBalance();
+
+            seller.setBalance(balance + amount);
+            sellerDb.save(seller);
+
+            return true;
+        }
+
+        return false;
+
+    }
 }
