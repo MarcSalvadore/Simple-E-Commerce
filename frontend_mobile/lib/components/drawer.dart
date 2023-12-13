@@ -58,7 +58,7 @@ Drawer buildDrawer(BuildContext context){
             onTap: (){
               Navigator.pushReplacement(
                 context, 
-                MaterialPageRoute(builder: (context) => const Order(
+                MaterialPageRoute(builder: (context) => const Order_History(
                   title: "Order History"
                 )),
               );

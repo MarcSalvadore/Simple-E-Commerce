@@ -1,91 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile/components/appbar.dart';
+import 'package:frontend_mobile/components/drawer.dart';
 
-void main() => runApp(MyApp());
+class Order_History extends StatefulWidget {
+  const Order_History({Key? key, required String title}) : super(key: key);
 
-class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Customer Cart',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CartPage(),
-    );
-  }
+  State<Order_History> createState() => _OrderHistoryState();
 }
 
-class CartPage extends StatefulWidget {
-  @override
-  _CartPageState createState() => _CartPageState();
-}
+class _OrderHistoryState extends State<Order_History> {
+  // Menyimpan status order sebagai integer (0-5)
+  List<int> orderStatus = [1, 0]; // Contoh status order, sesuaikan dengan data sebenarnya
 
-class _CartPageState extends State<CartPage> {
-  int itemCount = 0;
-
-  void _incrementItemCount() {
-    setState(() {
-      itemCount++;
-    });
-  }
-
-  void _decrementItemCount() {
-    if (itemCount > 0) {
-      setState(() {
-        itemCount--;
-      });
-    }
-  }
-
-  void _placeOrder() {
-    // Implement order placement logic here
-    // This is where you would navigate to the order history page
-    // For simplicity, we'll print a message to the console
-    print('Placing order for $itemCount items');
-  }
+  // Dropdown items for order status
+  List<String> statusOptions = [
+    "Menunggu konfirmasi penjual",
+    "Dikonfirmasi penjual",
+    "Menunggu kurir",
+    "Dalam perjalanan",
+    "Barang diterima",
+    "Selesai",
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cart'), // Use const here
-      ),
+      appBar: const CustomAppBar(title: "Order Page"),
+      drawer: buildDrawer(context),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Items in Cart: $itemCount',
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: _decrementItemCount,
-                  child: const Text('-'), // Use const here
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Card(
+            elevation: 4,
+            child: Column(
+              children: [
+                const ListTile(
+                  title: Text("Order History", style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
-                const SizedBox(width: 20),
-                Text(
-                  '$itemCount',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(width: 20),
+                _buildOrderItem(0),
+                _buildOrderItem(1),
+                const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: _incrementItemCount,
-                  child: const Text('+'), // Use const here
+                  onPressed: () {
+                    // Implementasi untuk melihat detail order atau navigasi ke halaman lain
+                  },
+                  child: const Text("View Details"),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _placeOrder,
-              child: const Text('Order'), // Use const here
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildOrderItem(int index) {
+    return ListTile(
+      title: Text("Order #${index + 1}"),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Status: ${_getStatusText(orderStatus[index])}"),
+          _buildStatusDropdown(index),
+        ],
+      ),
+      trailing: ElevatedButton(
+        onPressed: () {
+          // Tidak perlu panggil _updateOrderStatus() di sini
+        },
+        child: const Text("Update Status"),
+      ),
+    );
+  }
+
+  Widget _buildStatusDropdown(int index) {
+    return DropdownButton<int>(
+      value: orderStatus[index],
+      items: statusOptions
+          .asMap()
+          .entries
+          .map(
+            (entry) => DropdownMenuItem<int>(
+              value: entry.key,
+              child: Text(entry.value),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        _updateOrderStatus(index, value!);
+      },
+    );
+  }
+
+  void _updateOrderStatus(int index, int value) {
+    // Implementasi logika untuk mengubah status order berdasarkan dropdown value
+    setState(() {
+      orderStatus[index] = value;
+    });
+  }
+
+  String _getStatusText(int status) {
+    return statusOptions[status];
   }
 }
