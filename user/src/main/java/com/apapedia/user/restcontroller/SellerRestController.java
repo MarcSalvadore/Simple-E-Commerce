@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
+import com.apapedia.user.dto.request.ReadTopUpRequestDTO;
 import com.apapedia.user.dto.response.ReadWithdrawResponseDTO;
 import com.apapedia.user.restservice.SellerRestService;
 import com.apapedia.user.restservice.UserRestService;
@@ -51,4 +52,16 @@ public class SellerRestController {
 
         return null;
     }
+
+    @PostMapping(value = "/topup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String restTopUp(@RequestBody ReadTopUpRequestDTO topUpRequestDTO) {
+        boolean res = sellerRestService.topUp(topUpRequestDTO.getIdSeller(), topUpRequestDTO.getAmount());
+
+        if (res) {
+            return "Top-up berhasil!";
+        }
+
+        return null;
+    }
+
 }

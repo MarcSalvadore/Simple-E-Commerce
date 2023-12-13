@@ -10,4 +10,5 @@ public interface SellerRestService {
     boolean withdraw(UUID idSeller, Long amount);
     Seller getSellerbyId(UUID id);
     List<Seller> retrieveAllSeller();
+    boolean topUp(UUID idSeller, Long amount);
 }

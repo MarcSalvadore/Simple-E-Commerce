@@ -97,7 +97,7 @@ public class UserRestController {
 
 
             String jwt = jwtUtils.generateJwtToken(user.getId(),loginCustomerRequestDTO.getUsername(), user.getRole().toString());
-            return ResponseEntity.ok(new LoginCustomerResponseDTO(jwt,user.getId().toString()));
+            return ResponseEntity.ok(new LoginCustomerResponseDTO(jwt));
 
         } catch (AuthenticationException e) {
             Map<String, String> response = new HashMap<>();
