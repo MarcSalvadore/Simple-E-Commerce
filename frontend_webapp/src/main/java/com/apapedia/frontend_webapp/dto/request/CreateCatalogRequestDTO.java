@@ -40,7 +40,7 @@ public class CreateCatalogRequestDTO {
     private byte[] image;
     
     @NotNull
-    private String category;
+    private ReadCategoryResponseDTO category;
 
     @NotNull(message = "Stok Produk tidak boleh ksoong")
     @PositiveOrZero(message = "Stok harus positif")

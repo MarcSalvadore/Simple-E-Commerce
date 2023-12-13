@@ -41,7 +41,7 @@
   
                       Category: <br>
                       <select class="form-control" name="category" th:field="*{category.id}">
-                        <option th:each="category: ${listCategory}" th:value="${category.name}" th:text="${category.name}"></option>
+                        <option th:each="category: ${listCategory}" th:value="${category.id}" th:text="${category.name}"></option>
                         <!-- <input type="hidden" th:field="${category.name}" /> -->
                       </select>
                       <br><br>

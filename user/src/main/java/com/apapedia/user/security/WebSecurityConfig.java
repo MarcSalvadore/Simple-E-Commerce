@@ -30,11 +30,14 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
             .securityMatcher("/api/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/auth/login-seller").permitAll()
+                .requestMatchers("/api/login").permitAll()
+                .requestMatchers("/api/auth/login-seller").permitAll()
+                .requestMatchers("/api/seller/create").permitAll()
+                .requestMatchers("/api/customer/create").permitAll()
+                .requestMatchers("/api/auth/login-customer").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -57,4 +60,3 @@ public class WebSecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-

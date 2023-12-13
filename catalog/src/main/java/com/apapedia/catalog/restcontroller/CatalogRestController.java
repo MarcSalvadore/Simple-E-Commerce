@@ -123,10 +123,10 @@ public class CatalogRestController {
     private List<Catalog> getCatalogByName(@RequestParam(name = "sellerId", required = false) UUID sellerId, @RequestParam(name="query", required=false) String search){
         List<Catalog> listCatalog = new ArrayList<>();
 
-        if (search != null && !search.isEmpty()) {
-            listCatalog = catalogRestService.getRestCatalogByName(search);
-        } else if (search != null && !search.isEmpty() && sellerId != null) {
+        if (search != null && !search.isEmpty() && sellerId != null) {
             listCatalog = catalogRestService.getRestCatalogBySellerAndName(sellerId, search);
+        } else if (search != null && !search.isEmpty()) {
+            listCatalog = catalogRestService.getRestCatalogByName(search);
         } else {
             listCatalog = catalogRestService.getAllCatalog();
         }

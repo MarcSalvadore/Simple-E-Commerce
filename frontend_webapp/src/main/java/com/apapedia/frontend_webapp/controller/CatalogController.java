@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apapedia.frontend_webapp.dto.request.CreateCatalogRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.UpdateCatalogRequestDTO;
+import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCategoryResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
@@ -111,6 +112,30 @@ public class CatalogController {
         redirectAttributes.addFlashAttribute("success", "Produk telah ditambahkan");
         redirectAttributes.addFlashAttribute("productDTO", response);
         return "redirect:/";
+    }
+
+    @GetMapping("/detail-catalog")
+    public String detailCatalog(@PathVariable UUID idCatalog, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            String jwtToken = (String) session.getAttribute("token");
+
+            if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
+                model.addAttribute("username", username);
+            }
+        }
+
+        ReadCatalogResponseDTO response = this.webClient
+            .get()
+            .uri("/api/catalog/detail/{id}", idCatalog)
+            .retrieve()
+            .bodyToMono(ReadCatalogResponseDTO.class)
+            .block();
+        
+        model.addAttribute("username", response);
+        return "detail";
     }
 
     @GetMapping("update-product/{idCatalog}")

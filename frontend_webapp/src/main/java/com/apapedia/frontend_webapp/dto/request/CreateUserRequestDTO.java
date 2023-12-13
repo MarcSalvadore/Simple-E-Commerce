@@ -25,4 +25,5 @@ public class CreateUserRequestDTO {
     @NotBlank(message = "Alamat tidak boleh kosong")
     private String address;
     
+    private String category;
 }

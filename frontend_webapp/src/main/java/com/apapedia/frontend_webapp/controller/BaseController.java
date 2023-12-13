@@ -52,6 +52,7 @@ public class BaseController {
                 ReadCatalogResponseDTO[] listCatalog = this.webClient
                     .get()
                     .uri("/api/catalog/viewall/{id}", sellerId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .retrieve()
                     .bodyToMono(ReadCatalogResponseDTO[].class)
                     .block();
@@ -82,21 +83,32 @@ public class BaseController {
             String jwtToken = (String) session.getAttribute("token");
 
             if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
                 UUID sellerId = userService.getUserIdFromToken(jwtToken);
+                model.addAttribute("username", username);
 
                 ReadCatalogResponseDTO[] listCatalog = this.webClient
                     .get()
-                    .uri("/api/catalog/search?query=" + productName + "&sellerId=" + sellerId)
+                    .uri(uriBuilder -> uriBuilder
+                        .path("/api/catalog/search")
+                        .queryParam("query", productName)
+                        .queryParam("sellerId", sellerId)
+                        .build())
                     .retrieve().bodyToMono(ReadCatalogResponseDTO[].class).block();
 
+                model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
                 model.addAttribute("listCatalog", listCatalog);
             }
         } else {
             ReadCatalogResponseDTO[] listCatalog = this.webClient
                 .get()
-                .uri("/api/catalog/search?query=" + productName)
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/catalog/search")
+                        .queryParam("query", productName)
+                        .build())
                 .retrieve().bodyToMono(ReadCatalogResponseDTO[].class).block();
 
+            model.addAttribute("imageLink", Setting.SERVER_IMAGE_URL);
             model.addAttribute("listCatalog", listCatalog);
         }
 

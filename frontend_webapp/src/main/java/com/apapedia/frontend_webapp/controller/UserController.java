@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    private RedirectView registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
+    private String registerSeller(@Valid @ModelAttribute CreateUserRequestDTO userRequestDTO, HttpSession session, RedirectAttributes redirectAttributes){
         try {
             var response = this.webClient
                 .post()
@@ -63,25 +63,26 @@ public class UserController {
                 .block();
 
             redirectAttributes.addFlashAttribute("success", "Registration successful!");
-            return new RedirectView("/login-sso");
+            return "redirect:/login-sso";
             
         } catch (Exception e) {
+            System.out.println("masuk ke exception");
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
-            return new RedirectView("/register");
+            return "redirect:/register";
         }
     }
 
     @PostMapping("/user/delete")
-    public String deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
+    public RedirectView deleteUser(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session) {
         String token = (String) session.getAttribute("token");
         UUID userId = userService.getUserIdFromToken(token);
         try {
             userService.deleteUser(userId, token);
             model.addAttribute("message", "User successfully deleted");
-            return "redirect:/logout-sso";
+            return new RedirectView("/logout-sso");
         } catch (Exception e) {
             model.addAttribute("error", "Error deleting user: " + e.getMessage());
-            return "redirect:/profile";
+            return new RedirectView("/profile");
         }
-    }    
+    }
 }
