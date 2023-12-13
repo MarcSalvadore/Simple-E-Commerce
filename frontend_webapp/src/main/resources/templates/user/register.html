@@ -42,6 +42,13 @@
                                 </select>
                             </div>
                             <div class="form-group mt-2">
+                                <label>Category</label>
+                                <select th:field="*{category}" class="form-control form-control-lg" name="category">
+                                  <option value="Biasa">Biasa</option>
+                                  <option value="Official Store">Official Store</option>
+                                </select>
+                            </div>
+                            <div class="form-group mt-2">
                                 <label>Address</label>
                                 <input required="true" th:field="*{address}" class="form-control form-control-lg" type="text" name="address" placeholder="Enter your address">
                             </div>

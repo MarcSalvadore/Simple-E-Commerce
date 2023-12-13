@@ -13,6 +13,6 @@ public class CreateUserRequestDTO {
     private String password;
     private String email;
     private String address;
+    @NotBlank(message = "Kategori tidak boleh kosong")
     private String category;
-    private String role;
 }
