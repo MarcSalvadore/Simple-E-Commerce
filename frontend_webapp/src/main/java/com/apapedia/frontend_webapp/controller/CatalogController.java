@@ -153,13 +153,14 @@ public class CatalogController {
 
         ReadCatalogResponseDTO catalog = this.webClient
             .get()
-            .uri("/api/catalog/detail")
+            .uri("/api/catalog/detail/{idCatalog}", idCatalog)
             .retrieve()
             .bodyToMono(ReadCatalogResponseDTO.class)
             .block();
 
         var productDTO = new UpdateCatalogRequestDTO();
 
+        productDTO.setId(idCatalog);
         productDTO.setProductName(catalog.getProductName());
         productDTO.setPrice(catalog.getPrice());
         productDTO.setProductDescription(catalog.getProductDescription());
@@ -179,16 +180,13 @@ public class CatalogController {
 
     @PostMapping("update-product")
     public String updateProduct(
-            @PathVariable UUID idCatalog,
             @Valid @ModelAttribute UpdateCatalogRequestDTO productRequestDTO,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession(false);
-        String jwtToken = (String) session.getAttribute("token");;
-        System.out.println(productRequestDTO);
+        String jwtToken = (String) session.getAttribute("token");
         
-
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
 
@@ -199,13 +197,11 @@ public class CatalogController {
 
             redirectAttributes.addFlashAttribute("productDTO", productRequestDTO);
             redirectAttributes.addFlashAttribute("error", errorMessage);
-            return "redirect:/update-product/" + idCatalog;
+            return "redirect:/update-product/" + productRequestDTO.getId();
         }
 
-        productRequestDTO.setId(idCatalog);
         productRequestDTO.setSeller(userService.getUserIdFromToken(jwtToken));
         productRequestDTO.setImage(productRequestDTO.getImageFile().getBytes());
-
 
         String uri = Setting.SERVER_CATALOG_URL + "/api/catalog/update";
         RestTemplate restTemplate = new RestTemplate();

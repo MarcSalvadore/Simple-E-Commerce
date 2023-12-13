@@ -80,7 +80,6 @@ public class CatalogRestController {
 
     @PutMapping(value = "catalog/update")
     private Catalog updateRestCatalog(@Valid @RequestBody UpdateCatalogRequestDTO catalogDTO, BindingResult bindingResult){
-        System.out.println("MASUK KE BE UPDATE");
         if (bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      

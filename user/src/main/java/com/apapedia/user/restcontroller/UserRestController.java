@@ -26,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.apapedia.user.dto.UserMapper;
 import com.apapedia.user.dto.request.ChangePasswordRequestDTO;
+import com.apapedia.user.dto.request.LoginCustomerRequestDTO;
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
 import com.apapedia.user.dto.request.UpdateUserRequestDTO;
 import com.apapedia.user.dto.response.LoginCustomerResponseDTO;
@@ -85,17 +86,17 @@ public class UserRestController {
     }
 
     @PostMapping("/auth/login-customer")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginJwtRequestDTO loginJwtRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginCustomerRequestDTO loginCustomerRequestDTO, BindingResult bindingResult) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginJwtRequestDTO.getUsername(), loginJwtRequestDTO.getPassword()));
+                    new UsernamePasswordAuthenticationToken(loginCustomerRequestDTO.getUsername(), loginCustomerRequestDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginJwtRequestDTO.getUsername());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginCustomerRequestDTO.getUsername());
             UserModel user = userRestService.getUserByUsername(userDetails.getUsername());
 
 
-            String jwt = jwtUtils.generateJwtToken(user.getId(),loginJwtRequestDTO.getUsername(), user.getRole().toString());
+            String jwt = jwtUtils.generateJwtToken(user.getId(),loginCustomerRequestDTO.getUsername(), user.getRole().toString());
             return ResponseEntity.ok(new LoginCustomerResponseDTO(jwt,user.getId().toString()));
 
         } catch (AuthenticationException e) {

@@ -8,7 +8,6 @@ import java.util.List;
 public interface SellerRestService {
     void createRestSeller(Seller seller);
     boolean withdraw(UUID idSeller, Long amount);
-    boolean topUp(UUID idSeller, Long amount);
     Seller getSellerbyId(UUID id);
     List<Seller> retrieveAllSeller();
 }
