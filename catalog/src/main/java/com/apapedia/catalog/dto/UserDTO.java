@@ -1,21 +1,21 @@
-package com.apapedia.frontend_webapp.dto.response;
-
+package com.apapedia.catalog.dto;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class UpdateUserResponseDTO {
+public class UserDTO {
     private UUID id;
     private String name;
     private String username;
     private String password;
     private String email;
     private String address;
-    private String category;
-    // private String role;
+    private String category; 
+    private Long balance;  
+    private Boolean isDeleted;
 }

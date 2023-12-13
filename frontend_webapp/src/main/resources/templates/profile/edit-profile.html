@@ -23,6 +23,12 @@
                     <div class="card-body">
                         <h1 class="h2 text-center">Edit Profile</h1>
                         <form th:action="@{/profile/edit}"th:object="${seller}" method="post">
+                            <input class="form-control" type="hidden" th:field="*{id}" />
+                            <input class="form-control" type="hidden" th:field="*{balance}" />
+                            <input class="form-control" type="hidden" th:field="*{category}" />
+                            <input class="form-control" type="hidden" th:field="*{isDeleted}" />
+                            <input class="form-control" type="hidden" th:field="*{password}" />
+                            
                             <div class="form-group mt-2">
                                 <label>Name</label>
                                 <input class="form-control form-control-lg" type="text" name="name" th:field="*{name}">
