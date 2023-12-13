@@ -34,47 +34,16 @@ dependencies {
 	compileOnly("org.projectlombok:lombok:1.18.26")
 	annotationProcessor('org.projectlombok:lombok:1.18.26')
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> d24b401865dfb4ff612a2fdf4d9b104606d9bff4
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-<<<<<<< HEAD
-<<<<<<< HEAD
-	implementation 'jakarta.xml.bind:jakarta.xml.bind-api-parent:4.0.0'
-<<<<<<< HEAD
-	// implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.2'
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-<<<<<<< HEAD
-	// implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	// implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
->>>>>>> ef7fd3c (regis + login done)
-=======
-=======
-	implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.2'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
->>>>>>> 6f07735 (changes)
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
-<<<<<<< HEAD
->>>>>>> ec37b5b (current user +logout)
-=======
->>>>>>> 67a2857 (test commit)
-=======
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
->>>>>>> 74460e2 (update user masih salah)
-=======
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api-parent:4.0.0'
 	implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
->>>>>>> d24b401865dfb4ff612a2fdf4d9b104606d9bff4
 }
 
 tasks.named('test') {
