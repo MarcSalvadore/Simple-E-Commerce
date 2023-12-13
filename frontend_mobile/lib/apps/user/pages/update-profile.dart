@@ -63,8 +63,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
     Map<String, dynamic>? decodedToken = decodeJwtToken(_jwtToken!);
     String? _userId = decodedToken?['userId'];
-    print("INI TOKEN");
-    print(_jwtToken);
     Map<String, String> headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $_jwtToken',
@@ -84,8 +82,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         headers: headers,
         body: jsonEncode(requestBody),
       );
-      print("TEST");
-      print(requestBody);
       if (response.statusCode == 200) {
         print("User profile updated successfully");
         Navigator.pop(context);

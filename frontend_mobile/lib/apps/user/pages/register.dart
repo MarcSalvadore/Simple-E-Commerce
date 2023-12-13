@@ -199,6 +199,7 @@ class _RegisterState extends State<Register> {
                               style: ElevatedButton.styleFrom(
                                 fixedSize:
                                 Size(MediaQuery.of(context).size.width * 0.8, 50),
+                                // backgroundColor: ColorPallete.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -222,10 +223,7 @@ class _RegisterState extends State<Register> {
                                       'balance': 0,
                                     }),
                                   );
-                                  print("STATUS");
-                                  print(response.statusCode);
                                   if (response.statusCode == 200) {
-                                    print("BERHASIL REGISTER");
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => Login(title: 'Login')));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -251,10 +249,13 @@ class _RegisterState extends State<Register> {
                               onPressed: () {
                                 Navigator.push(
                                   context, MaterialPageRoute(builder: (context) => const Login(title: 'Login',)),
-                                );
+                                ); // Use the route name for navigation
                               },
                               child: const Text(
                                 "Already have an account? Sign in here",
+                                // style: TextStyle(
+                                //   fontSize:
+                                // ),
                               ),
                             ),
                           ],

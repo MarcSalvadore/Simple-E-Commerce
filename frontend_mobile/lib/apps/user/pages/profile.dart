@@ -52,7 +52,7 @@ class _ProfileState extends State<Profile> {
     setState(() {
       prefs.remove('jwtToken');
     });
-    Navigator.pop(context, MaterialPageRoute(builder: (context) => Catalog(title: 'Catalog')));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Catalog(title: 'Catalog')));
   }
 
   @override

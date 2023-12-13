@@ -71,7 +71,6 @@ public class PageController {
 
     @GetMapping("/login-sso")
     public ModelAndView loginSSO(){
-        System.out.println("masuk ke login sso");
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
     }
 

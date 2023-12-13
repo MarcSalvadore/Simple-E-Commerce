@@ -47,7 +47,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         },
         body: jsonEncode(requestData),
       );
-      print(requestData);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

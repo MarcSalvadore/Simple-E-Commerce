@@ -66,7 +66,6 @@ public class UserController {
             return "redirect:/login-sso";
             
         } catch (Exception e) {
-            System.out.println("masuk ke exception");
             redirectAttributes.addFlashAttribute("error", "Registration failed. Please try again.");
             return "redirect:/register";
         }
