@@ -116,4 +116,4 @@ public class UserRestServiceImpl implements UserRestService {
         user.setPassword(hashedPassword);
         userDb.save(user);
     }
-}
+ }
