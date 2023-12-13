@@ -38,7 +38,7 @@ class _ProfileState extends State<Profile> {
     String? _userId = decodedToken?['userId'];
 
     var res = await http.get(
-      Uri.parse("http://10.0.2.2:8081/api/user/$_userId"),
+      Uri.parse("https://apap-082.cs.ui.ac.id/api/user/$_userId"),
       headers: <String, String>{
         'Content-Type': 'application/json;charset=UTF-8',
         'Authorization': 'Bearer $_jwtToken'
