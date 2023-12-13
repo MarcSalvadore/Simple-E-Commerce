@@ -61,12 +61,21 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="d-flex justify-content-center mt-3 mb-3 mr-3">
                 <form th:action="@{/user/delete}" method="post" class="mr-4">
                     <button type="submit" class="btn btn-outline-danger btn-md">Delete Account</button>
                 </form>
                 <a type="button" class="btn btn-danger btn-md" style="margin-left: 4px;" th:href="@{/logout-sso}">Sign Out</a>
             </div>                                        
+=======
+            <div class="text-center">
+                <button class="btn btn-outline-danger btn-md justify-content-center mt-3 mb-3">Delete Account</button>
+                    <form id="logoutForm" action="/logout" method="post">
+                        <button type="submit" class="btn btn-danger btn-md justify-content-center mt-3 mb-3">Sign Out</button>
+                    </form>
+            </div>
+>>>>>>> ec37b5b (current user +logout)
         </div>
     </div>
 </body>

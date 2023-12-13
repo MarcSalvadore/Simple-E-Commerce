@@ -5,14 +5,15 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
-import com.apapedia.user.dto.response.CurrentUserResponseDTO;
 import com.apapedia.user.model.UserModel;
 import com.apapedia.user.repository.UserDb;
 import com.apapedia.user.security.jwt.JwtUtils;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -23,6 +24,9 @@ public class UserRestServiceImpl implements UserRestService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    BCryptPasswordEncoder encoder;
 
     @Override
     public void createRestUser(UserModel user) { userDb.save(user); }
@@ -44,22 +48,37 @@ public class UserRestServiceImpl implements UserRestService {
     public UserModel updateRestUser(UserModel userFromDto) {
         UserModel user = getUserById(userFromDto.getId());
 
-        if(user != null) {
-            user.setName(userFromDto.getName());
-            user.setName(userFromDto.getUsername());
-            user.setEmail(userFromDto.getEmail());
-            user.setPassword(userFromDto.getPassword());
-            user.setAddress(userFromDto.getAddress());
-
-            userDb.save(user);
+        if (user != null) {
+            if (!isPasswordSame(userFromDto.getPassword(), user.getPassword())) {
+                user.setName(userFromDto.getName());
+                user.setUsername(userFromDto.getUsername());
+                user.setEmail(userFromDto.getEmail());
+                user.setAddress(userFromDto.getAddress());
+    
+                if (!encoder.matches(userFromDto.getPassword(), user.getPassword())) {
+                    user.setPassword(encoder.encode(userFromDto.getPassword()));
+                }
+    
+                userDb.save(user);
+                return user;
+            } else {
+                throw new IllegalArgumentException("New password must be different from the old password");
+                
+            }
         }
-
-        return user;
+        return null; 
+        
+        
     }
 
     @Override
     public UserModel getUserByUsername(String username) {
-        return userDb.findByUsername(username);
+        for(UserModel user : retrieveAllUser()) {
+            if (user.getUsername().equals(username) && user.getIsDeleted() != true) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -76,5 +95,25 @@ public class UserRestServiceImpl implements UserRestService {
     public void deleteSeller(UserModel userModel) {
        userModel.setIsDeleted(true);
        userDb.save(userModel);
+    }
+    
+    private boolean isPasswordSame(String newPassword, String existingPassword) {
+        return encoder.matches(newPassword, existingPassword);
+    }
+
+    @Override
+    public boolean isCurrentPasswordCorrect(UUID userId, String currentPassword) {
+        UserModel user = userDb.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                return encoder.matches(currentPassword, user.getPassword());
+    }
+
+    @Override
+    public void changeUserPassword(UUID userId, String newPassword) {
+        UserModel user = userDb.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        String hashedPassword = encoder.encode(newPassword);
+        user.setPassword(hashedPassword);
+        userDb.save(user);
     }
 }

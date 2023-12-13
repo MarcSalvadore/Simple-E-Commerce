@@ -3,8 +3,8 @@ package com.apapedia.user.restservice;
 import java.util.List;
 import java.util.UUID;
 
+
 import com.apapedia.user.dto.request.LoginJwtRequestDTO;
-import com.apapedia.user.dto.response.CurrentUserResponseDTO;
 import com.apapedia.user.model.UserModel;
 
 public interface UserRestService {
@@ -15,4 +15,6 @@ public interface UserRestService {
     UserModel getUserByUsername(String username);
     String loginSeller(LoginJwtRequestDTO loginJwtRequestDTO);
     void deleteSeller(UserModel userModel);
+    boolean isCurrentPasswordCorrect(UUID userId, String currentPassword);
+    void changeUserPassword(UUID userId, String newPassword);
 }

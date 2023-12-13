@@ -34,7 +34,7 @@ public class WebSecurityConfig {
             .securityMatcher("/api/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login").permitAll()
+                .requestMatchers("/api/seller/create", "/api/customer/create", "/api/login", "/api/logout").permitAll()
                 .requestMatchers("/api/seller/**").hasAuthority("SELLER")
                 .requestMatchers("/api/customer/**").hasAuthority("CUSTOMER")
                 .anyRequest().authenticated()
