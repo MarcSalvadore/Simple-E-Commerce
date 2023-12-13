@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +15,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.apapedia.frontend_webapp.dto.request.UpdateOrderStatusRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadOrderResponseDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class OrderController {
-    
+    private final WebClient webClient;
+
+    public OrderController(WebClient.Builder webClientBuilder){
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8083")
+                    .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .build();
+    }
     @GetMapping("/order/history/{sellerId}")
-    public String orderHistoryPage(@PathVariable UUID sellerId, Model model) {
+    public String orderHistoryPage(HttpServletRequest request, @PathVariable UUID sellerId, Model model) {
+        HttpSession session = request.getSession(false);
+
+        
+
         String uri = "http://localhost:8083/api/order/seller/" + sellerId;
         RestTemplate restTemplate = new RestTemplate();
         ParameterizedTypeReference<List<ReadOrderResponseDTO>> responseType = new ParameterizedTypeReference<List<ReadOrderResponseDTO>>() {};

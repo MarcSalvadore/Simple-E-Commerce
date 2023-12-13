@@ -31,17 +31,18 @@ public class SellerRestServiceImpl implements SellerRestService {
         seller.setRole(EnumRole.SELLER);
         String hashedPass = encoder.encode(seller.getPassword());
         seller.setPassword(hashedPass);
-        // sellerDb.save(seller);
 
-        Seller existingDeletedSellerByUsername = userDb.findByUsernameAndIsDeleted(seller.getUsername(), true);
-        Seller existingDeletedSellerByEmail = userDb.findByEmailAndIsDeleted(seller.getEmail(), true);
+        //Jika user sudah dihapus dan ingin mendaftar lagi dengan username atau email yang sama
+        Seller existingDeletedSellerByUsername = userDb.findSellerByUsernameAndIsDeleted(seller.getUsername(), true);
+        Seller existingDeletedSellerByEmail = userDb.findSellerByEmailAndIsDeleted(seller.getEmail(), true);
 
         if (existingDeletedSellerByUsername != null) {
-            System.out.println("yes");
             Seller existingSeller = existingDeletedSellerByUsername;
             existingSeller.setIsDeleted(false);
             existingSeller.setEmail(seller.getEmail());
             existingSeller.setPassword(hashedPass); 
+            existingSeller.setName(seller.getName());
+            existingSeller.setAddress(seller.getAddress());
             sellerDb.save(existingSeller);
 
         } else if (existingDeletedSellerByEmail != null) {
@@ -49,6 +50,9 @@ public class SellerRestServiceImpl implements SellerRestService {
             existingSeller.setIsDeleted(false);
             existingSeller.setUsername(seller.getUsername());
             existingSeller.setPassword(hashedPass); 
+            existingSeller.setEmail(seller.getEmail());
+            existingSeller.setAddress(seller.getAddress());
+            existingSeller.setName(seller.getName());
             sellerDb.save(existingSeller);
 
         } else {

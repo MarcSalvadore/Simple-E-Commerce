@@ -14,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.service.UserService;
-import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -38,7 +37,6 @@ public class BaseController {
     @GetMapping("/")
     public String home(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        System.out.println(session);
 
         if (session != null) {
             String jwtToken = (String) session.getAttribute("token");

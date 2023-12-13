@@ -38,7 +38,7 @@ public class UserModel {
     private String username;
 
     @NotNull
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false, unique = false)
     private String password;
 
     @NotNull

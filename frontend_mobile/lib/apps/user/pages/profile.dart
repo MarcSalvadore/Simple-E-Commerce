@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:frontend_mobile/apps/catalog/pages/catalog.dart';
 import 'package:frontend_mobile/apps/user/models/customer.dart';
 import 'package:frontend_mobile/apps/user/pages/login.dart';
+import 'package:frontend_mobile/apps/user/pages/settings.dart';
 import 'package:frontend_mobile/apps/user/pages/topup.dart';
 import 'package:frontend_mobile/apps/user/pages/update-profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key, required String title}) : super(key: key);
@@ -19,10 +21,22 @@ class _ProfileState extends State<Profile> {
   late Future<Customer> futureCustomer;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  Map<String, dynamic>? decodeJwtToken(String jwtToken) {
+    try {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
+      return decodedToken;
+    } catch (error) {
+      print('Error decoding JWT: $error');
+      return null;
+    }
+  }
   Future<Customer> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? _jwtToken = prefs.getString('jwtToken');
-    String? _userId = prefs.getString('userId');
+
+    Map<String, dynamic>? decodedToken = decodeJwtToken(_jwtToken!);
+    String? _userId = decodedToken?['userId'];
+
     var res = await http.get(
       Uri.parse("http://10.0.2.2:8081/api/user/$_userId"),
       headers: <String, String>{
@@ -37,16 +51,8 @@ class _ProfileState extends State<Profile> {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       prefs.remove('jwtToken');
-      prefs.remove('username');
-      prefs.remove('userId');
     });
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Catalog(title: 'Catalog')));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    futureCustomer = getUserData();
+    Navigator.pop(context, MaterialPageRoute(builder: (context) => Catalog(title: 'Catalog')));
   }
 
   @override
@@ -111,10 +117,10 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => UpdateProfilePage(title: 'UpdateProfilePage')),
+                                  MaterialPageRoute(builder: (context) => SettingsPage()),
                                 );
                               },
-                              child: Text("Edit Profile"),
+                              child: Text("Settings"),
                             ),
                             Divider(),
                             Text(
@@ -155,6 +161,12 @@ class _ProfileState extends State<Profile> {
         }
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    futureCustomer = getUserData();
   }
 
   Widget buildProfileInfo(String title, String value) {
