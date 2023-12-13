@@ -59,16 +59,19 @@ public class PageController {
             HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("token", token);
+            System.out.println("token");
             
             return new ModelAndView("redirect:/");
         }
             catch (Exception e) {
+            System.out.println("gagal login: " + e.getMessage());
             return new ModelAndView("redirect:/register");
         }
     }
 
     @GetMapping("/login-sso")
     public ModelAndView loginSSO(){
+        System.out.println("masuk ke login sso");
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
     }
 
@@ -81,8 +84,4 @@ public class PageController {
         request.getSession().invalidate();
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }
-
-
-
-
 }

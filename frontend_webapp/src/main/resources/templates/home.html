@@ -3,8 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
     <title>Home</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -15,7 +15,10 @@
         <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
         <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
         <div class="text-center pt-5">
-            <h2>List Catalog</h2>
+            <form th:action="@{/catalog/search}" method="get" class="form-inline my-2 my-lg-0 d-flex">
+                <input name="productName" class="form-control ms-3" type="search" placeholder="Search Product" aria-label="Search">
+                <button class="btn btn-dark text-light ms-3" type="submit">Search</button>
+            </form>
             <a type="button" class="btn btn-primary m-2" th:if="${username != null}" href="/add-product">Add Product</a>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -72,7 +75,5 @@
         </script>
     </div>
 </body>
-
-
 
 </html>

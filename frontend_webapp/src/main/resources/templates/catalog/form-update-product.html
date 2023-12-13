@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <object th:include="~{fragments/common :: js}" th:remove="tag"></object>
-    <object th:include="~{fragments/common :: css}" th:remove="tag"></object>
-    <title>Edit Product</title>
+    <object th:insert="~{fragments/common :: js}" th:remove="tag"></object>
+    <object th:insert="~{fragments/common :: css}" th:remove="tag"></object>
+    <title>Add Product</title>
 </head>
 
 <body>
@@ -18,7 +18,7 @@
                 <div class="justify-content-center">
                     <h2>Update Product</h2>
                     <br>
-                    <form th:action="@{'/update-product/'+ ${idCatalog}}" th:object="${productDTO}" enctype="multipart/form-data" method="POST">
+                    <form th:action="@{/update-product}" th:object="${productDTO}" enctype="multipart/form-data" method="POST">
                       <!-- <input class="form-control" type="text" th:field="*{id}" readonly="readonly" /> -->
                       <input class="form-control" type="hidden" th:field="*{id}" />
                       Name: <br>

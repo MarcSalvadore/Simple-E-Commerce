@@ -29,6 +29,7 @@ import com.apapedia.catalog.dto.request.UpdateCatalogRequestDTO;
 import com.apapedia.catalog.model.Catalog;
 import com.apapedia.catalog.restservice.CatalogRestService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -40,7 +41,7 @@ public class CatalogRestController {
     @Autowired
     CatalogRestService catalogRestService;
 
-    @PostMapping(value = "/catalog/add")
+    @PostMapping(value = "/catalog/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Catalog restAddCatalog(@Valid @RequestBody CreateCatalogRequestDTO catalogDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
@@ -79,7 +80,6 @@ public class CatalogRestController {
 
     @PutMapping(value = "catalog/update")
     private Catalog updateRestCatalog(@Valid @RequestBody UpdateCatalogRequestDTO catalogDTO, BindingResult bindingResult){
-        System.out.println("MASUK KE BE UPDATE");
         if (bindingResult.hasFieldErrors()){
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");      
@@ -119,10 +119,12 @@ public class CatalogRestController {
 
     // Catalog 7
     @GetMapping("/catalog/search")
-    private List<Catalog> getCatalogByName(@RequestParam(name="query", required=false) String search){
+    private List<Catalog> getCatalogByName(@RequestParam(name = "sellerId", required = false) UUID sellerId, @RequestParam(name="query", required=false) String search){
         List<Catalog> listCatalog = new ArrayList<>();
 
-        if (search != null && !search.isEmpty()) {
+        if (search != null && !search.isEmpty() && sellerId != null) {
+            listCatalog = catalogRestService.getRestCatalogBySellerAndName(sellerId, search);
+        } else if (search != null && !search.isEmpty()) {
             listCatalog = catalogRestService.getRestCatalogByName(search);
         } else {
             listCatalog = catalogRestService.getAllCatalog();

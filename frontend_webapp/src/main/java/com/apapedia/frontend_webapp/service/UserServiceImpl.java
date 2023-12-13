@@ -1,21 +1,22 @@
 package com.apapedia.frontend_webapp.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.UUID;
 
-import org.glassfish.jaxb.core.annotation.OverrideAnnotationOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 import com.apapedia.frontend_webapp.dto.TokenDTO;
 import com.apapedia.frontend_webapp.dto.request.LoginJwtRequestDTO;
 import com.apapedia.frontend_webapp.dto.request.WithdrawRequestDTO;
+import com.apapedia.frontend_webapp.dto.response.ChangePasswordResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.setting.Setting;
 
 import io.jsonwebtoken.Claims;
 
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtService;
 
     public UserServiceImpl(WebClient.Builder webClientBuilder){
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081")
+        this.webClient = webClientBuilder.baseUrl(Setting.SERVER_USER_URL)
                     .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .build();
     }
@@ -101,5 +102,30 @@ public class UserServiceImpl implements UserService {
         }
 
         return "Withdraw gagal";
+    }
+
+    @Override
+    public CreateUserResponseDTO editUser(UUID id, String token, CreateUserResponseDTO requestBody) {
+        var response = this.webClient
+            .put()
+            .uri("/api/user/{id}/update", id)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+            .body(BodyInserters.fromValue(requestBody))
+            .retrieve()
+            .bodyToMono(CreateUserResponseDTO.class)
+            .block();
+        return response;
+    }
+
+    @Override
+    public void changePassword(UUID id, String token, ChangePasswordResponseDTO changePasswordResponseDTO) {
+        this.webClient
+                .put()
+                .uri("/api/user/{id}/change-password", id)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .body(BodyInserters.fromValue(changePasswordResponseDTO))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 }

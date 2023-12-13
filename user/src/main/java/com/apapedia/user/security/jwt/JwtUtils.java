@@ -31,7 +31,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("userId", id.toString())  // Add UUID as a custom claim
-                .claim("role", role)    
+                .claim("ROLE", role)    
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

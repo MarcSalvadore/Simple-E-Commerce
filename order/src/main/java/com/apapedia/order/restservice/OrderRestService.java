@@ -35,5 +35,5 @@ public interface OrderRestService {
     void updateOrderStatus(UUID orderId, int newStatus);
     Map<String, Long> chartTop5SoldProduct(UUID sellerId);
     List<Order> getMonthlyOrderBySeller(UUID sellerId, LocalDate startDate, LocalDate endDate);
-    void completeOrder(UUID orderId);
+    List<Order> getCompletedOrdersBySellerId(UUID sellerId);
 }
