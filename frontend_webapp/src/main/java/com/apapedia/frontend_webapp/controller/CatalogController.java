@@ -152,7 +152,7 @@ public class CatalogController {
         return "catalog/form-update-product";
     }
 
-    @PostMapping("update-product/{idCatalog}")
+    @PostMapping("update-product")
     public String updateProduct(
             @PathVariable UUID idCatalog,
             @Valid @ModelAttribute UpdateCatalogRequestDTO productRequestDTO,

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-// import com.apapedia.order.dto.CartItemMapper;
 import com.apapedia.order.dto.CartMapper;
 import com.apapedia.order.model.Cart;
 import com.apapedia.order.model.CartItem;

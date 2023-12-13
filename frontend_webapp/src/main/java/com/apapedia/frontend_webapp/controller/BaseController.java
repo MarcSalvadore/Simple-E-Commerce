@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.apapedia.frontend_webapp.dto.response.CreateUserResponseDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadCatalogResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
 import com.apapedia.frontend_webapp.security.xml.ServiceResponse;
@@ -24,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BaseController {
-    private final WebClient webClient;
+    public final WebClient webClient;
 
     @Autowired
     UserService userService;
@@ -51,10 +53,11 @@ public class BaseController {
 
                 // Jika user login, dapatkan seller ID dari token
                 UUID sellerId = userService.getUserIdFromToken(jwtToken);
-
-                ReadCatalogResponseDTO[] listCatalog = this.webClient
+                // endpoint viewall catalog by seller id
+                ReadCatalogResponseDTO[] response = this.webClient
                     .get()
                     .uri("/api/catalog/viewall/{id}", sellerId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .retrieve()
                     .bodyToMono(ReadCatalogResponseDTO[].class)
                     .block();

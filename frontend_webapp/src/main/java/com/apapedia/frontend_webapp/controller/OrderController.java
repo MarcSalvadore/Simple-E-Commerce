@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import com.apapedia.frontend_webapp.dto.request.UpdateOrderStatusRequestDTO;
 import com.apapedia.frontend_webapp.dto.response.ReadOrderResponseDTO;
 import com.apapedia.frontend_webapp.security.jwt.JwtUtils;
+import com.apapedia.frontend_webapp.service.UserService;
 import com.apapedia.frontend_webapp.setting.Setting;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,9 +33,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class OrderController {
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserService userService;
     
     @GetMapping("/order/history/{sellerId}")
-    public String orderHistoryPage(@PathVariable UUID sellerId, HttpServletRequest request, Model model) {
+    public String orderHistoryPage(@PathVariable UUID sellerId, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            String jwtToken = (String) session.getAttribute("token");
+
+            if (jwtUtils.validateToken(jwtToken)) {
+                String username = userService.getUsernameFromToken(jwtToken);
+                model.addAttribute("username", username);
+            }
+        }
+        
         String uri = Setting.SERVER_ORDER_URL + "/api/order/seller/" + sellerId;
         RestTemplate restTemplate = new RestTemplate();
         ParameterizedTypeReference<List<ReadOrderResponseDTO>> responseType = new ParameterizedTypeReference<List<ReadOrderResponseDTO>>() {};
