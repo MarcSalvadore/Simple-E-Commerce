@@ -66,7 +66,8 @@ public class CustomerRestServiceImpl implements CustomerRestService {
     public Customer topUp(UUID id, Long amount) {
         Customer customer = customerDb.findById(id).get();
         if (customer != null) {
-            customer.setBalance(amount);
+            customer.setBalance(customer.getBalance() + amount);
+            customerDb.save(customer);
             return customer;
         }
         return null; 
