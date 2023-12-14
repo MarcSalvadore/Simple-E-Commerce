@@ -129,7 +129,6 @@ public class ProfileController {
 
     @GetMapping("/profile/edit/password")
     public String changePasswordPage(Model model) {
-        System.out.println("masuk change page");
         model.addAttribute("changePasswordDTO", new ChangePasswordResponseDTO());
         return "profile/change-password";
     }
