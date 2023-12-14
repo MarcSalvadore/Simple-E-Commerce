@@ -59,12 +59,10 @@ public class PageController {
             HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
             httpSession.setAttribute("token", token);
-            System.out.println("token");
-            
+
             return new ModelAndView("redirect:/");
         }
             catch (Exception e) {
-            System.out.println("gagal login: " + e.getMessage());
             return new ModelAndView("redirect:/register");
         }
     }
