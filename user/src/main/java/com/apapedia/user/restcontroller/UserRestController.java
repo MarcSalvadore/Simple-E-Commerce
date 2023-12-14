@@ -72,7 +72,6 @@ public class UserRestController {
         try {
             UserModel userFromDTO = userMapper.updateUserRequestDTOToUser(updateUserRequestDTO);
             UserModel updatedUser = userRestService.updateRestUser(userFromDTO);
-            
             if (updatedUser != null) {
                 return ResponseEntity.ok(updatedUser);
             } else {

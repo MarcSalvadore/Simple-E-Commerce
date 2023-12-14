@@ -1,11 +1,15 @@
 package com.apapedia.user.restcontroller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +18,11 @@ import com.apapedia.user.dto.SellerMapper;
 import com.apapedia.user.dto.request.CreateUserRequestDTO;
 import com.apapedia.user.dto.request.ReadTopUpRequestDTO;
 import com.apapedia.user.dto.response.ReadWithdrawResponseDTO;
+import com.apapedia.user.model.Customer;
+import com.apapedia.user.model.Seller;
 import com.apapedia.user.restservice.SellerRestService;
 import com.apapedia.user.restservice.UserRestService;
+import com.github.javafaker.Bool;
 
 import jakarta.validation.Valid;
 
@@ -42,14 +49,13 @@ public class SellerRestController {
         }
     }
 
-    @PostMapping(value = "/withdraw", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String restWithdraw(@RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
-        boolean res = sellerRestService.withdraw(withdrawResponseDTO.getIdSeller(), withdrawResponseDTO.getAmount());
-        
+    @PutMapping(value = "/withdraw/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> restWithdraw(@PathVariable("id") UUID id, @RequestBody ReadWithdrawResponseDTO withdrawResponseDTO) {
+    
+        var res = sellerRestService.withdraw(id, withdrawResponseDTO.getAmount());
         if (res) {
-            return "Withdraw berhasil!";
+            return ResponseEntity.ok("Withdraw berhasil");
         }
-
         return null;
     }
 
