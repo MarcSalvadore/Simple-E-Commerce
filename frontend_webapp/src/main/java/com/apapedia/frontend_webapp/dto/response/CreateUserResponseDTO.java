@@ -13,7 +13,10 @@ public class CreateUserResponseDTO {
     private UUID id;
     private String name;
     private String username;
+    private String password;
     private String email;
     private String address;
-    private Long balance;
+    private String category; 
+    private Long balance;  
+    private Boolean isDeleted;
 }

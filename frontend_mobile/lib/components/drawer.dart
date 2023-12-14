@@ -19,9 +19,9 @@ Drawer buildDrawer(BuildContext context){
             leading: const Icon(Icons.login),
             onTap: (){
               Navigator.pushReplacement(
-                context, 
+                context,
                 MaterialPageRoute(builder: (context) => const Login(
-                  title: "Log in"
+                    title: "Log in"
                 )),
               );
             },
@@ -32,9 +32,9 @@ Drawer buildDrawer(BuildContext context){
             leading: const Icon(Icons.library_books),
             onTap: (){
               Navigator.pushReplacement(
-                context, 
+                context,
                 MaterialPageRoute(builder: (context) => const Catalog(
-                  title: "Catalog"
+                    title: "Catalog"
                 )),
               );
             },
@@ -45,9 +45,9 @@ Drawer buildDrawer(BuildContext context){
             leading: const Icon(Icons.shopping_cart),
             onTap: (){
               Navigator.pushReplacement(
-                context, 
+                context,
                 MaterialPageRoute(builder: (context) => const Cart(
-                  title: "Cart"
+                    title: "Cart"
                 )),
               );
             },
@@ -84,14 +84,14 @@ Drawer buildDrawer(BuildContext context){
             leading: const Icon(Icons.person),
             onTap: (){
               Navigator.pushReplacement(
-                context, 
+                context,
                 MaterialPageRoute(builder: (context) => const Profile(
-                  title: "Profile"
+                    title: "Profile"
                 )),
               );
             },
           ),
-          
+
         ],
       ),
     ),
