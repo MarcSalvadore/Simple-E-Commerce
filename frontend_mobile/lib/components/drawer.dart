@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile/apps/catalog/pages/catalog.dart';
 import 'package:frontend_mobile/apps/order/pages/cart.dart';
+import 'package:frontend_mobile/apps/order/pages/cart_page.dart';
 import 'package:frontend_mobile/apps/order/pages/order_history.dart';
 import 'package:frontend_mobile/apps/user/pages/login.dart';
 import 'package:frontend_mobile/apps/user/pages/profile.dart';
@@ -60,6 +61,19 @@ Drawer buildDrawer(BuildContext context){
                 context, 
                 MaterialPageRoute(builder: (context) => const Order_History(
                   title: "Order History"
+                )),
+              );
+            },
+          ),
+          Divider(color: Colors.white),
+          ListTile(
+            title: const Text('Cart Page'),
+            leading: const Icon(Icons.shopping_bag),
+            onTap: (){
+              Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(builder: (context) => const Cart_Page(
+                  title: "Cart Page"
                 )),
               );
             },
