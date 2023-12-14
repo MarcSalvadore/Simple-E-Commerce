@@ -71,7 +71,6 @@ public class PageController {
 
     @GetMapping("/login-sso")
     public ModelAndView loginSSO(){
-        System.out.println("masuk ke login sso");
         return new ModelAndView("redirect:" + Setting.SERVER_LOGIN + Setting.CLIENT_LOGIN);
     }
 
@@ -81,6 +80,7 @@ public class PageController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
+        request.getSession().removeAttribute("token");
         request.getSession().invalidate();
         return new ModelAndView("redirect:" + Setting.SERVER_LOGOUT + Setting.CLIENT_LOGOUT);
     }

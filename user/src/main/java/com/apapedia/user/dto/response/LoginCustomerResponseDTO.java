@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginCustomerResponseDTO {
     String token;
-    String id;
+    // String id;
 }
